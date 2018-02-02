@@ -12,63 +12,51 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/wc2-css.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/font-awesome-4.5.0/css/font-awesome.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/pure/0.6.0/pure.css') }}" rel="stylesheet">
+
 </head>
 <body>
+    <div id="banner" align="center" style="padding-top:5px;"></div>
     <div id="app">
-        <nav class="navbar navbar-default navbar-static-top">
-            <div class="container">
-                <div class="navbar-header">
+        <nav id="nav_bar">
+            <ul>
+                <li>
+                    <a href="wc2-index.php">
+                        <i class="fa fa-home"></i>&nbsp;Home</a>
+                </li>
+                <li>
+                    <a href="wc2-applications.php">
+                        <i class="fa fa-laptop"></i>&nbsp;Applications</a>
+                </li>
+                <li>
+                    <a href="wc2-departments.php">
+                        <i class="fa fa-group"></i>&nbsp;Departments</a>
+                </li>
+                <li>
+                    <a href="wc2-preferences.php">
+                        <i class="fa fa-cogs"></i>&nbsp;Preferences</a>
+                </li>
+                <li>
+                    <a href="https://webmail.nassaucountyny.gov/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fwebmail.nassaucountyny.gov%2fowa%2f" target="_blank">
+                        <i class="fa fa-envelope"></i>&nbsp;Email</a>
+                </li>
+                <li>
+                    <a href="wc2-documents.php">
+                        <i class="fa fa-file"></i>&nbsp;Documents</a>
+                </li>
+                <li>
+                    <a href="wc2-links.php">
+                        <i class="fa fa-list"></i>&nbsp;Links</a>
+                </li>
+                <li>
+                    <a href="wc2-help.php"><i class="fa fa-info-circle"></i>&nbsp;Help</a>
+                </li>
 
-                    <!-- Collapsed Hamburger -->
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse" aria-expanded="false">
-                        <span class="sr-only">Toggle Navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
+                <li style="float:right"><a href="{{ route('login') }}"><i class="fa fa-power-off"></i>&nbsp;Login</a></li>
 
-                    <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ config('app.name', 'Laravel') }}
-                    </a>
-                </div>
-
-                <div class="collapse navbar-collapse" id="app-navbar-collapse">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="nav navbar-nav">
-                        &nbsp;
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="nav navbar-nav navbar-right">
-                        <!-- Authentication Links -->
-                        @guest
-                            <li><a href="{{ route('login') }}">Login</a></li>
-                            <li><a href="{{ route('register') }}">Register</a></li>
-                        @else
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
-
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a href="{{ route('logout') }}"
-                                            onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                            Logout
-                                        </a>
-
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                            {{ csrf_field() }}
-                                        </form>
-                                    </li>
-                                </ul>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
+            </ul>
         </nav>
 
         @yield('content')
