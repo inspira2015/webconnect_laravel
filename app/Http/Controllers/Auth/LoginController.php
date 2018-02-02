@@ -30,6 +30,8 @@ class LoginController extends Controller
      */
     protected $redirectTo = '/home';
 
+    protected $emailDomain = '@nassaucountyny.gov';
+
     /**
      * Create a new controller instance.
      *
@@ -42,8 +44,9 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
+        $credentials = $this->prepareCredentialArry($request->only(['username', 'password']));
 
-        if (Auth::attempt($request->only(['username', 'password']))) {
+        if (Auth::attempt($credentials)) {
         
             // Returns \App\User model configured in `config/auth.php`.
             $user = Auth::user();
@@ -54,6 +57,20 @@ class LoginController extends Controller
     
         return redirect()->to('login')
             ->withMessage('Hmm... Your username or password is incorrect');
+    }
+
+    private function prepareCredentialArry(array $credentials)
+    {
+        $userName = $this->safeAddeEmailDomail($credentials['username']);
+        return ['username' => $userName, 'password' => $credentials['password']];
+    }
+
+    private function safeAddeEmailDomail($username)
+    {
+        if (strpos($username, $this->emailDomain) == false) {
+            return $username . $this->emailDomain;
+        }
+        return $username;
     }
 
 }
