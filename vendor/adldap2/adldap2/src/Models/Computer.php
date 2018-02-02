@@ -2,29 +2,18 @@
 
 namespace Adldap\Models;
 
-use Adldap\Models\Concerns\HasDescription;
-use Adldap\Models\Concerns\HasUserAccountControl;
-use Adldap\Models\Concerns\HasLastLogonAndLogOff;
-use Adldap\Models\Concerns\HasCriticalSystemObject;
+use Adldap\Models\Traits\HasDescription;
+use Adldap\Models\Traits\HasLastLogonAndLogOff;
+use Adldap\Models\Traits\HasCriticalSystemObject;
 
-/**
- * Class Computer
- *
- * Represents an LDAP computer / server.
- *
- * @package Adldap\Models
- */
 class Computer extends Entry
 {
-    use HasCriticalSystemObject,
-        HasDescription,
-        HasLastLogonAndLogOff,
-        HasUserAccountControl;
+    use HasCriticalSystemObject, HasDescription, HasLastLogonAndLogOff;
 
     /**
      * Returns the computers operating system.
      *
-     * @link https://msdn.microsoft.com/en-us/library/ms679076(v=vs.85).aspx
+     * https://msdn.microsoft.com/en-us/library/ms679076(v=vs.85).aspx
      *
      * @return string
      */
@@ -36,7 +25,7 @@ class Computer extends Entry
     /**
      * Returns the computers operating system version.
      *
-     * @link https://msdn.microsoft.com/en-us/library/ms679079(v=vs.85).aspx
+     * https://msdn.microsoft.com/en-us/library/ms679079(v=vs.85).aspx
      *
      * @return string
      */
@@ -48,7 +37,7 @@ class Computer extends Entry
     /**
      * Returns the computers operating system service pack.
      *
-     * @link https://msdn.microsoft.com/en-us/library/ms679078(v=vs.85).aspx
+     * https://msdn.microsoft.com/en-us/library/ms679078(v=vs.85).aspx
      *
      * @return string
      */
@@ -70,7 +59,7 @@ class Computer extends Entry
     /**
      * Returns the computers bad password time.
      *
-     * @link https://msdn.microsoft.com/en-us/library/ms675243(v=vs.85).aspx
+     * https://msdn.microsoft.com/en-us/library/ms675243(v=vs.85).aspx
      *
      * @return string
      */
@@ -82,7 +71,7 @@ class Computer extends Entry
     /**
      * Returns the computers account expiry date.
      *
-     * @link https://msdn.microsoft.com/en-us/library/ms675098(v=vs.85).aspx
+     * https://msdn.microsoft.com/en-us/library/ms675098(v=vs.85).aspx
      *
      * @return string
      */

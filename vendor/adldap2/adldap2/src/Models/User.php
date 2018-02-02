@@ -3,27 +3,19 @@
 namespace Adldap\Models;
 
 use DateTime;
+use Exception;
 use Adldap\Utilities;
 use Adldap\AdldapException;
-use Adldap\Models\Concerns\HasMemberOf;
-use Adldap\Models\Concerns\HasDescription;
-use Adldap\Models\Concerns\HasUserAccountControl;
-use Adldap\Models\Concerns\HasLastLogonAndLogOff;
+use Adldap\Objects\AccountControl;
+use Adldap\Objects\BatchModification;
+use Adldap\Models\Traits\HasMemberOf;
+use Adldap\Models\Traits\HasDescription;
+use Adldap\Models\Traits\HasLastLogonAndLogOff;
 use Illuminate\Contracts\Auth\Authenticatable;
 
-/**
- * Class User
- *
- * Represents an LDAP user.
- *
- * @package Adldap\Models
- */
 class User extends Entry implements Authenticatable
 {
-    use HasDescription,
-        HasMemberOf,
-        HasLastLogonAndLogOff,
-        HasUserAccountControl;
+    use HasDescription, HasMemberOf, HasLastLogonAndLogOff;
 
     /**
      * Get the name of the unique identifier for the user.
@@ -32,7 +24,7 @@ class User extends Entry implements Authenticatable
      */
     public function getAuthIdentifierName()
     {
-        return $this->schema->objectGuid();
+        return $this->schema->objectSid();
     }
 
     /**
@@ -42,7 +34,7 @@ class User extends Entry implements Authenticatable
      */
     public function getAuthIdentifier()
     {
-        return $this->getConvertedGuid();
+        return $this->getConvertedSid();
     }
 
     /**
@@ -90,7 +82,7 @@ class User extends Entry implements Authenticatable
     /**
      * Returns the users department.
      *
-     * @link https://msdn.microsoft.com/en-us/library/ms675490(v=vs.85).aspx
+     * https://msdn.microsoft.com/en-us/library/ms675490(v=vs.85).aspx
      *
      * @return string
      */
@@ -136,7 +128,7 @@ class User extends Entry implements Authenticatable
     /**
      * Returns the users title.
      *
-     * @link https://msdn.microsoft.com/en-us/library/ms680037(v=vs.85).aspx
+     * https://msdn.microsoft.com/en-us/library/ms680037(v=vs.85).aspx
      *
      * @return string
      */
@@ -160,7 +152,7 @@ class User extends Entry implements Authenticatable
     /**
      * Returns the users first name.
      *
-     * @link https://msdn.microsoft.com/en-us/library/ms675719(v=vs.85).aspx
+     * https://msdn.microsoft.com/en-us/library/ms675719(v=vs.85).aspx
      *
      * @return mixed
      */
@@ -184,7 +176,7 @@ class User extends Entry implements Authenticatable
     /**
      * Returns the users last name.
      *
-     * @link https://msdn.microsoft.com/en-us/library/ms679872(v=vs.85).aspx
+     * https://msdn.microsoft.com/en-us/library/ms679872(v=vs.85).aspx
      *
      * @return mixed
      */
@@ -316,28 +308,6 @@ class User extends Entry implements Authenticatable
     }
 
     /**
-     * Get the users post office box.
-     *
-     * @return mixed
-     */
-    public function getPostOfficeBox()
-    {
-        return $this->getFirstAttribute($this->schema->postOfficeBox());
-    }
-
-    /**
-     * Sets the users post office box.
-     *
-     * @param string|int $box
-     *
-     * @return $this
-     */
-    public function setPostOfficeBox($box)
-    {
-        return $this->setFirstAttribute($this->schema->postOfficeBox(), $box);
-    }
-
-    /**
      * Returns the users physical delivery office name.
      *
      * @return string
@@ -362,7 +332,7 @@ class User extends Entry implements Authenticatable
     /**
      * Returns the users telephone number.
      *
-     * @link https://msdn.microsoft.com/en-us/library/ms680027(v=vs.85).aspx
+     * https://msdn.microsoft.com/en-us/library/ms680027(v=vs.85).aspx
      *
      * @return string
      */
@@ -381,30 +351,6 @@ class User extends Entry implements Authenticatable
     public function setTelephoneNumber($number)
     {
         return $this->setFirstAttribute($this->schema->telephone(), $number);
-    }
-
-    /**
-     * Returns the users facsimile number.
-     *
-     * @link https://msdn.microsoft.com/en-us/library/ms675675(v=vs.85).aspx
-     *
-     * @return string
-     */
-    public function getFacsimileNumber()
-    {
-        return $this->getFirstAttribute($this->schema->facsimile());
-    }
-
-    /**
-     * Sets the users facsimile number.
-     *
-     * @param string $number
-     *
-     * @return $this
-     */
-    public function setFacsimileNumber($number)
-    {
-        return $this->setFirstAttribute($this->schema->facsimile(), $number);
     }
 
     /**
@@ -432,7 +378,7 @@ class User extends Entry implements Authenticatable
     /**
      * Returns the users company.
      *
-     * @link https://msdn.microsoft.com/en-us/library/ms675457(v=vs.85).aspx
+     * https://msdn.microsoft.com/en-us/library/ms675457(v=vs.85).aspx
      *
      * @return string
      */
@@ -456,7 +402,7 @@ class User extends Entry implements Authenticatable
     /**
      * Returns the users primary email address.
      *
-     * @link https://msdn.microsoft.com/en-us/library/ms676855(v=vs.85).aspx
+     * https://msdn.microsoft.com/en-us/library/ms676855(v=vs.85).aspx
      *
      * @return string
      */
@@ -483,7 +429,7 @@ class User extends Entry implements Authenticatable
     /**
      * Returns the users email addresses.
      *
-     * @link https://msdn.microsoft.com/en-us/library/ms676855(v=vs.85).aspx
+     * https://msdn.microsoft.com/en-us/library/ms676855(v=vs.85).aspx
      *
      * @return array
      */
@@ -507,7 +453,7 @@ class User extends Entry implements Authenticatable
     /**
      * Returns the users other mailbox attribute.
      *
-     * @link https://msdn.microsoft.com/en-us/library/ms679091(v=vs.85).aspx
+     * https://msdn.microsoft.com/en-us/library/ms679091(v=vs.85).aspx
      *
      * @return array
      */
@@ -531,61 +477,13 @@ class User extends Entry implements Authenticatable
     /**
      * Returns the users mailbox store DN.
      *
-     * @link https://msdn.microsoft.com/en-us/library/aa487565(v=exchg.65).aspx
+     * https://msdn.microsoft.com/en-us/library/aa487565(v=exchg.65).aspx
      *
      * @return string
      */
     public function getHomeMdb()
     {
         return $this->getFirstAttribute($this->schema->homeMdb());
-    }
-
-    /**
-     * Sets the users home drive.
-     * 
-     * @link https://msdn.microsoft.com/en-us/library/ms676191(v=vs.85).aspx
-     * 
-     * @return $this
-     */
-    public function setHomeDrive($drive)
-    {
-        return $this->setAttribute($this->schema->homeDrive(), $drive);
-    }
-
-    /**
-     * Specifies the drive letter to which to map the UNC path specified by homeDirectory.
-     * 
-     * @link https://msdn.microsoft.com/en-us/library/ms676191(v=vs.85).aspx
-     *
-     * @return string|null
-     */
-    public function getHomeDrive()
-    {
-        return $this->getFirstAttribute($this->schema->homeDrive());
-    }
-
-    /**
-     * Sets the users home directory.
-     * 
-     * @link https://msdn.microsoft.com/en-us/library/ms676190(v=vs.85).aspx
-     * 
-     * @return $this
-     */
-    public function setHomeDirectory($directory)
-    {
-        return $this->setAttribute($this->schema->homeDirectory(), $directory);
-    }
-
-    /**
-     * The home directory for the account.
-     * 
-     * @link https://msdn.microsoft.com/en-us/library/ms676190(v=vs.85).aspx
-     *
-     * @return string|null
-     */
-    public function getHomeDirectory()
-    {
-        return $this->getFirstAttribute($this->schema->homeDirectory());
     }
 
     /**
@@ -603,7 +501,7 @@ class User extends Entry implements Authenticatable
      *
      * This is usually their email address.
      *
-     * @link https://msdn.microsoft.com/en-us/library/ms680857(v=vs.85).aspx
+     * https://msdn.microsoft.com/en-us/library/ms680857(v=vs.85).aspx
      *
      * @return string
      */
@@ -625,39 +523,9 @@ class User extends Entry implements Authenticatable
     }
 
     /**
-     * Returns an array of workstations the user is assigned to.
-     *
-     * @return array
-     */
-    public function getUserWorkstations()
-    {
-        $workstations = $this->getFirstAttribute($this->schema->userWorkstations());
-
-        return array_filter(explode(',', $workstations));
-    }
-
-    /**
-     * Sets the workstations the user can login to.
-     *
-     * @param string|array $workstations The names of the workstations the user can login to.
-     *                                   Must be an array of names, or a comma separated
-     *                                   list of names.
-     *
-     * @return $this
-     */
-    public function setUserWorkstations($workstations = [])
-    {
-        if (is_array($workstations)) {
-            $workstations = implode(',', $workstations);
-        }
-
-        return $this->setFirstAttribute($this->schema->userWorkstations(), $workstations);
-    }
-
-    /**
      * Returns the users proxy addresses.
      *
-     * @link https://msdn.microsoft.com/en-us/library/ms679424(v=vs.85).aspx
+     * https://msdn.microsoft.com/en-us/library/ms679424(v=vs.85).aspx
      *
      * @return array
      */
@@ -671,7 +539,7 @@ class User extends Entry implements Authenticatable
      *
      * This will remove all proxy addresses on the user and insert the specified addresses.
      *
-     * @link https://msdn.microsoft.com/en-us/library/ms679424(v=vs.85).aspx
+     * https://msdn.microsoft.com/en-us/library/ms679424(v=vs.85).aspx
      *
      * @param array $addresses
      *
@@ -701,7 +569,7 @@ class User extends Entry implements Authenticatable
     /**
      * Returns the users script path if the user has one.
      *
-     * @link https://msdn.microsoft.com/en-us/library/ms679656(v=vs.85).aspx
+     * https://msdn.microsoft.com/en-us/library/ms679656(v=vs.85).aspx
      *
      * @return string
      */
@@ -787,6 +655,28 @@ class User extends Entry implements Authenticatable
     }
 
     /**
+     * Returns the users user account control integer.
+     *
+     * @return string
+     */
+    public function getUserAccountControl()
+    {
+        return $this->getFirstAttribute($this->schema->userAccountControl());
+    }
+
+    /**
+     * Sets the users account control property.
+     *
+     * @param int|string|AccountControl $accountControl
+     *
+     * @return $this
+     */
+    public function setUserAccountControl($accountControl)
+    {
+        return $this->setAttribute($this->schema->userAccountControl(), (string) $accountControl);
+    }
+
+    /**
      * Returns the users profile file path.
      *
      * @return string
@@ -831,7 +721,7 @@ class User extends Entry implements Authenticatable
     /**
      * Sets the users account expiry date.
      *
-     * @link https://msdn.microsoft.com/en-us/library/ms675098(v=vs.85).aspx
+     * https://msdn.microsoft.com/en-us/library/ms675098(v=vs.85).aspx
      *
      * @param float $expiryTime
      *
@@ -868,54 +758,17 @@ class User extends Entry implements Authenticatable
     /**
      * Returns the users thumbnail photo base 64 encoded.
      *
-     * Suitable for inserting into an HTML image element.
-     *
      * @return null|string
      */
     public function getThumbnailEncoded()
     {
-        $data = base64_decode($this->getThumbnail());
+        $thumb = $this->getThumbnail();
 
-        if ($data) {
-            // In case we don't have the file info extension enabled,
-            // we'll set the jpeg mime type as default.
-            $mime = 'image/jpeg';
-
-            $image = base64_encode($data);
-
-            if (function_exists('finfo_open')) {
-                $finfo = finfo_open();
-
-                $mime = finfo_buffer($finfo, $data, FILEINFO_MIME_TYPE);
-
-                return "data:$mime;base64,$image";
-            }
-
-            return "data:$mime;base64,$image";
-        }
+        return is_null($thumb) ? $thumb : 'data:image/jpeg;base64,'.base64_encode($thumb);
     }
 
     /**
-     * Sets the users thumbnail photo.
-     *
-     * @param string $data
-     * @param bool   $encode
-     *
-     * @return $this
-     */
-    public function setThumbnail($data, $encode = true)
-    {
-        if ($encode && !base64_decode($data, $strict = true)) {
-            // If the string we're given is not base 64 encoded, then
-            // we will encode it before setting it on the user.
-            $data = base64_encode($data);
-        }
-
-        return $this->setAttribute($this->schema->thumbnail(), $data);
-    }
-
-    /**
-     * Returns the users JPEG photo.
+     * Returns the users jpeg photo.
      *
      * @return mixed
      */
@@ -925,7 +778,7 @@ class User extends Entry implements Authenticatable
     }
 
     /**
-     * Returns the users JPEG photo.
+     * Returns the users jpeg photo.
      *
      * @return null|string
      */
@@ -934,22 +787,6 @@ class User extends Entry implements Authenticatable
         $jpeg = $this->getJpegPhoto();
 
         return is_null($jpeg) ? $jpeg : 'data:image/jpeg;base64,'.base64_encode($jpeg);
-    }
-
-    /**
-     * Sets the users JPEG photo.
-     *
-     * @param string $string
-     *
-     * @return $this
-     */
-    public function setJpegPhoto($string)
-    {
-        if (!base64_decode($string, $strict = true)) {
-            $string = base64_encode($string);
-        }
-
-        return $this->setAttribute($this->schema->jpegPhoto(), $string);
     }
 
     /**
@@ -1087,17 +924,15 @@ class User extends Entry implements Authenticatable
     {
         $this->validateSecureConnection();
 
-        $mod = $this->newBatchModification(
+        return $this->addModification(new BatchModification(
             $this->schema->unicodePassword(),
             LDAP_MODIFY_BATCH_REPLACE,
             [Utilities::encodePassword($password)]
-        );
-
-        return $this->addModification($mod);
+        ));
     }
 
     /**
-     * Change the password of the current user. This must be performed over SSL / TLS.
+     * Change the password of the current user. This must be performed over SSL.
      *
      * Throws an exception on failure.
      *
@@ -1121,21 +956,21 @@ class User extends Entry implements Authenticatable
         $modifications = [];
 
         if ($replaceNotRemove) {
-            $modifications[] = $this->newBatchModification(
+            $modifications[] = new BatchModification(
                 $attribute,
                 LDAP_MODIFY_BATCH_REPLACE,
                 [Utilities::encodePassword($newPassword)]
             );
         } else {
             // Create batch modification for removing the old password.
-            $modifications[] = $this->newBatchModification(
+            $modifications[] = new BatchModification(
                 $attribute,
                 LDAP_MODIFY_BATCH_REMOVE,
                 [Utilities::encodePassword($oldPassword)]
             );
 
             // Create batch modification for adding the new password.
-            $modifications[] = $this->newBatchModification(
+            $modifications[] = new BatchModification(
                 $attribute,
                 LDAP_MODIFY_BATCH_ADD,
                 [Utilities::encodePassword($newPassword)]
@@ -1170,6 +1005,26 @@ class User extends Entry implements Authenticatable
         }
 
         return $result;
+    }
+
+    /**
+     * Returns if the user is disabled.
+     *
+     * @return bool
+     */
+    public function isDisabled()
+    {
+        return ($this->getUserAccountControl() & AccountControl::ACCOUNTDISABLE) === AccountControl::ACCOUNTDISABLE;
+    }
+
+    /**
+     * Returns if the user is enabled.
+     *
+     * @return bool
+     */
+    public function isEnabled()
+    {
+        return $this->getUserAccountControl() === null ? false : !$this->isDisabled();
     }
 
     /**

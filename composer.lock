@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "64501f9652b04ad84b93486cb8cd48a5",
+    "content-hash": "f5e71b1ef195faa0ee53a8c7ef8fd27a",
     "packages": [
         {
             "name": "adldap2/adldap2",
-            "version": "v8.1.2",
+            "version": "v7.0.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Adldap2/Adldap2.git",
-                "reference": "a2038fbbe1e456431737d98f0d41f2cfa6f25a35"
+                "reference": "d40f983d58dbecd516856786474893c5fb4b7297"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Adldap2/Adldap2/zipball/a2038fbbe1e456431737d98f0d41f2cfa6f25a35",
-                "reference": "a2038fbbe1e456431737d98f0d41f2cfa6f25a35",
+                "url": "https://api.github.com/repos/Adldap2/Adldap2/zipball/d40f983d58dbecd516856786474893c5fb4b7297",
+                "reference": "d40f983d58dbecd516856786474893c5fb4b7297",
                 "shasum": ""
             },
             "require": {
@@ -26,7 +26,7 @@
                 "php": ">=5.5.9"
             },
             "require-dev": {
-                "mockery/mockery": "~0.9|~1.0",
+                "mockery/mockery": "~0.9",
                 "phpunit/phpunit": "~4.8|~5.6"
             },
             "type": "library",
@@ -46,7 +46,7 @@
                     "role": "Developer"
                 }
             ],
-            "description": "A PHP LDAP Package for humans.",
+            "description": "A PHP LDAP Package for Active Directory Manipulation.",
             "keywords": [
                 "active directory",
                 "ad",
@@ -56,43 +56,32 @@
                 "ldap",
                 "windows"
             ],
-            "time": "2018-01-31T17:50:51+00:00"
+            "time": "2017-05-16T13:46:45+00:00"
         },
         {
             "name": "adldap2/adldap2-laravel",
-            "version": "v4.0.5",
+            "version": "v3.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Adldap2/Adldap2-Laravel.git",
-                "reference": "ead96469830f267a68fade0f40a0da59c04091be"
+                "reference": "01821b19b807b02a958c8bc77a96f22d735d4213"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Adldap2/Adldap2-Laravel/zipball/ead96469830f267a68fade0f40a0da59c04091be",
-                "reference": "ead96469830f267a68fade0f40a0da59c04091be",
+                "url": "https://api.github.com/repos/Adldap2/Adldap2-Laravel/zipball/01821b19b807b02a958c8bc77a96f22d735d4213",
+                "reference": "01821b19b807b02a958c8bc77a96f22d735d4213",
                 "shasum": ""
             },
             "require": {
-                "adldap2/adldap2": "^8.0",
-                "php": ">=7.0"
+                "adldap2/adldap2": "7.0.*",
+                "php": ">=5.6"
             },
             "require-dev": {
-                "mockery/mockery": "~1.0",
+                "mockery/mockery": "0.9.*",
                 "orchestra/testbench": "~3.2",
-                "phpunit/phpunit": "~6.0"
+                "phpunit/phpunit": "~5.6"
             },
             "type": "project",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Adldap\\Laravel\\AdldapServiceProvider",
-                        "Adldap\\Laravel\\AdldapAuthServiceProvider"
-                    ],
-                    "aliases": {
-                        "Adldap": "Adldap\\Laravel\\Facades\\Adldap"
-                    }
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Adldap\\Laravel\\": "src/"
@@ -109,7 +98,7 @@
                 "laravel",
                 "ldap"
             ],
-            "time": "2018-01-22T17:04:38+00:00"
+            "time": "2017-03-14T20:54:56+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -1851,16 +1840,16 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.6.0",
+            "version": "v1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "2ec8b39c38cb16674bbf3fea2b6ce5bf117e1296"
+                "reference": "78be803ce01e55d3491c1397cf1c64beb9c1b63b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/2ec8b39c38cb16674bbf3fea2b6ce5bf117e1296",
-                "reference": "2ec8b39c38cb16674bbf3fea2b6ce5bf117e1296",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/78be803ce01e55d3491c1397cf1c64beb9c1b63b",
+                "reference": "78be803ce01e55d3491c1397cf1c64beb9c1b63b",
                 "shasum": ""
             },
             "require": {
@@ -1872,7 +1861,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.6-dev"
+                    "dev-master": "1.7-dev"
                 }
             },
             "autoload": {
@@ -1906,20 +1895,20 @@
                 "portable",
                 "shim"
             ],
-            "time": "2017-10-11T12:05:26+00:00"
+            "time": "2018-01-30T19:27:44+00:00"
         },
         {
             "name": "symfony/polyfill-php70",
-            "version": "v1.6.0",
+            "version": "v1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php70.git",
-                "reference": "0442b9c0596610bd24ae7b5f0a6cdbbc16d9fcff"
+                "reference": "3532bfcd8f933a7816f3a0a59682fc404776600f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php70/zipball/0442b9c0596610bd24ae7b5f0a6cdbbc16d9fcff",
-                "reference": "0442b9c0596610bd24ae7b5f0a6cdbbc16d9fcff",
+                "url": "https://api.github.com/repos/symfony/polyfill-php70/zipball/3532bfcd8f933a7816f3a0a59682fc404776600f",
+                "reference": "3532bfcd8f933a7816f3a0a59682fc404776600f",
                 "shasum": ""
             },
             "require": {
@@ -1929,7 +1918,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.6-dev"
+                    "dev-master": "1.7-dev"
                 }
             },
             "autoload": {
@@ -1965,7 +1954,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2017-10-11T12:05:26+00:00"
+            "time": "2018-01-30T19:27:44+00:00"
         },
         {
             "name": "symfony/process",
@@ -3221,16 +3210,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "6.5.5",
+            "version": "6.5.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "83d27937a310f2984fd575686138597147bdc7df"
+                "reference": "3330ef26ade05359d006041316ed0fa9e8e3cefe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/83d27937a310f2984fd575686138597147bdc7df",
-                "reference": "83d27937a310f2984fd575686138597147bdc7df",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3330ef26ade05359d006041316ed0fa9e8e3cefe",
+                "reference": "3330ef26ade05359d006041316ed0fa9e8e3cefe",
                 "shasum": ""
             },
             "require": {
@@ -3301,7 +3290,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-12-17T06:31:19+00:00"
+            "time": "2018-02-01T05:57:37+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -3409,21 +3398,21 @@
         },
         {
             "name": "sebastian/comparator",
-            "version": "2.1.2",
+            "version": "2.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/comparator.git",
-                "reference": "11c07feade1d65453e06df3b3b90171d6d982087"
+                "reference": "34369daee48eafb2651bea869b4b15d75ccc35f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/11c07feade1d65453e06df3b3b90171d6d982087",
-                "reference": "11c07feade1d65453e06df3b3b90171d6d982087",
+                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/34369daee48eafb2651bea869b4b15d75ccc35f9",
+                "reference": "34369daee48eafb2651bea869b4b15d75ccc35f9",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.0",
-                "sebastian/diff": "^2.0",
+                "sebastian/diff": "^2.0 || ^3.0",
                 "sebastian/exporter": "^3.1"
             },
             "require-dev": {
@@ -3469,7 +3458,7 @@
                 "compare",
                 "equality"
             ],
-            "time": "2018-01-12T06:34:42+00:00"
+            "time": "2018-02-01T13:46:46+00:00"
         },
         {
             "name": "sebastian/diff",

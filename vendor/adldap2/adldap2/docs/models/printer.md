@@ -3,6 +3,7 @@
 ## List of Available 'Getter' Methods:
 
 ```php
+$printer->getPrinterName();
 
 $printer->getPrinterName();
 

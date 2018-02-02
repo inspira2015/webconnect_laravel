@@ -6,9 +6,10 @@
 [![Latest Stable Version](https://img.shields.io/packagist/v/adldap2/adldap2.svg?style=flat-square)](https://packagist.org/packages/adldap2/adldap2)
 [![License](https://img.shields.io/packagist/l/adldap2/adldap2.svg?style=flat-square)](https://packagist.org/packages/adldap2/adldap2)
 
-Working with LDAP doesn't need to be hard.
+## Description
 
-Adldap2 is a tested PHP package that provides LDAP authentication and directory management tools using the Active Record pattern.
+Working with Active Directory doesn't need to be hard. Adldap2 is a tested PHP package that provides LDAP
+authentication and Active Directory management tools using the Active Record pattern.
 
 ## Index
 
@@ -29,6 +30,7 @@ Adldap2 is a tested PHP package that provides LDAP authentication and directory 
     - [User](docs/models/user.md)
  - [Working with Distinguished Names](docs/distinguished-names.md)
  - [Schema](docs/schema.md)
+ - [Upgrading](docs/upgrading.md)
  - [Troubleshooting](docs/troubleshooting.md)
 
 ## Installation
@@ -39,7 +41,7 @@ To use Adldap2, your server must support:
 
 - PHP 5.5.9 or greater
 - PHP LDAP Extension
-- An LDAP Server
+- An Active Directory Server
 
 > **Note**: OpenLDAP support is experimental, success may vary.
 
@@ -54,16 +56,15 @@ If your AD server requires SSL, your server must support the following libraries
 
 ### Installing
 
-Adldap2 utilizes composer for installation.
+Adldap2 utilizes composer for installation. Insert `"adldap2/adldap2": "7.0.*"` in your `composer.json` file:
 
-Run the following command in the root directory of your project:
-
+```json
+"require": {
+    "adldap2/adldap2": "7.0.*"
+},
 ```
-composer require adldap2/adldap2
-```
 
-> **Note**: If you're upgrading from an earlier release, please take a look
-> at the [release notes](https://github.com/Adldap2/Adldap2/releases).
+Then run the `composer update` command in the root of your project.
 
 ## Implementations
 

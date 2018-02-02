@@ -9,7 +9,7 @@ trait HasLdapUser
     /**
      * The LDAP User that is bound to the current model.
      *
-     * @var User|null
+     * @var null|\Adldap\Models\User
      */
     public $ldap;
 

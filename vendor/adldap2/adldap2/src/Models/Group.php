@@ -4,16 +4,10 @@ namespace Adldap\Models;
 
 use InvalidArgumentException;
 use Adldap\Utilities;
-use Adldap\Models\Concerns\HasMemberOf;
-use Adldap\Models\Concerns\HasDescription;
+use Adldap\Objects\BatchModification;
+use Adldap\Models\Traits\HasMemberOf;
+use Adldap\Models\Traits\HasDescription;
 
-/**
- * Class Group
- *
- * Represents an LDAP group (security / distribution).
- *
- * @package Adldap\Models
- */
 class Group extends Entry
 {
     use HasDescription, HasMemberOf;
@@ -21,7 +15,7 @@ class Group extends Entry
     /**
      * Returns all users apart of the current group.
      *
-     * @link https://msdn.microsoft.com/en-us/library/ms677097(v=vs.85).aspx
+     * https://msdn.microsoft.com/en-us/library/ms677097(v=vs.85).aspx
      *
      * @return \Illuminate\Support\Collection
      */
@@ -73,30 +67,6 @@ class Group extends Entry
     }
 
     /**
-     * Adds multiple entries to the current group.
-     *
-     * @param array $members
-     *
-     * @return bool
-     */
-    public function addMembers(array $members)
-    {
-        $members = array_map(function ($member) {
-            return $member instanceof Model
-                ? $member->getDn()
-                : $member;
-        }, $members);
-
-        $mod = $this->newBatchModification(
-            $this->schema->member(),
-            LDAP_MODIFY_BATCH_ADD,
-            $members
-        );
-
-        return $this->addModification($mod)->save();
-    }
-
-    /**
      * Adds an entry to the current group.
      *
      * @param string|Entry $entry
@@ -115,13 +85,13 @@ class Group extends Entry
             );
         }
 
-        $mod = $this->newBatchModification(
+        $this->addModification(new BatchModification(
             $this->schema->member(),
             LDAP_MODIFY_BATCH_ADD,
             [$entry]
-        );
+        ));
 
-        return $this->addModification($mod)->save();
+        return $this->save();
     }
 
     /**
@@ -143,13 +113,13 @@ class Group extends Entry
             );
         }
 
-        $mod = $this->newBatchModification(
+        $this->addModification(new BatchModification(
             $this->schema->member(),
             LDAP_MODIFY_BATCH_REMOVE,
             [$entry]
-        );
+        ));
 
-        return $this->addModification($mod)->save();
+        return $this->save();
     }
 
     /**
@@ -159,18 +129,16 @@ class Group extends Entry
      */
     public function removeMembers()
     {
-        $mod = $this->newBatchModification(
+        return $this->addModification(new BatchModification(
             $this->schema->member(),
             LDAP_MODIFY_BATCH_REMOVE_ALL
-        );
-
-        return $this->addModification($mod)->save();
+        ))->save();
     }
 
     /**
      * Returns the group type integer.
      *
-     * @link https://msdn.microsoft.com/en-us/library/ms675935(v=vs.85).aspx
+     * https://msdn.microsoft.com/en-us/library/ms675935(v=vs.85).aspx
      *
      * @return string
      */

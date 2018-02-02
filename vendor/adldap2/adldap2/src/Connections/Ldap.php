@@ -4,13 +4,6 @@ namespace Adldap\Connections;
 
 use Adldap\AdldapException;
 
-/**
- * Class Ldap
- *
- * A class that abstracts PHP's LDAP functions and stores the bound connection.
- *
- * @package Adldap\Connections
- */
 class Ldap implements ConnectionInterface
 {
     use LdapFunctionSupportTrait;
@@ -356,9 +349,9 @@ class Ldap implements ConnectionInterface
             return ldap_control_paged_result_response($this->getConnection(), $result, $cookie);
         }
 
-        throw new AdldapException(
-            'LDAP Pagination is not supported on your current PHP installation.'
-        );
+        $message = 'LDAP Pagination is not supported on your current PHP installation.';
+
+        throw new AdldapException($message);
     }
 
     /**

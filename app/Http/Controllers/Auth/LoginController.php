@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Adldap\Laravel\Facades\Adldap;
+use Illuminate\Http\Request;
+use Auth;
 
 class LoginController extends Controller
 {
@@ -36,4 +39,24 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    public function login(Request $request)
+    {
+        $user = 'dgomez@nassaucountyny.gov';
+        $pass = 'P3Admin8##';
+
+
+        if (Auth::attempt($request->only(['username', 'password']))) {
+        
+            // Returns \App\User model configured in `config/auth.php`.
+            $user = Auth::user();
+        
+            return redirect()->to('home')
+                ->withMessage('Logged in!');
+        }
+    
+        return redirect()->to('login')
+            ->withMessage('Hmm... Your username or password is incorrect');
+    }
+
 }

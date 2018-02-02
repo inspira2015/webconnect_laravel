@@ -5,13 +5,6 @@ namespace Adldap\Auth;
 use Adldap\Connections\ConnectionInterface;
 use Adldap\Configuration\DomainConfiguration;
 
-/**
- * Class Guard
- *
- * Binds users to the current connection.
- *
- * @package Adldap\Auth
- */
 class Guard implements GuardInterface
 {
     /**
@@ -42,26 +35,23 @@ class Guard implements GuardInterface
 
         try {
             $this->bind($username, $password);
-
-            $result = true;
         } catch (BindException $e) {
-            // We'll catch the BindException here to allow
-            // developers to use a simple if / else
+            // We'll catch the BindException here to return false
+            // to allow developers to use a simple if / else
             // using the attempt method.
-            $result = false;
+            return false;
         }
 
         // If we're not allowed to bind as the user,
         // we'll rebind as administrator.
         if ($bindAsUser === false) {
-            // We won't catch any BindException here so we can
-            // catch rebind failures. However this shouldn't
-            // occur if our credentials are correct
-            // in the first place.
-            $this->bindAsAdministrator();
+            // We won't catch any BindException here so
+            // developers can catch rebind failures.
+            //$this->bindAsAdministrator();
         }
 
-        return $result;
+        // No bind exceptions, authentication passed.
+        return true;
     }
 
     /**
@@ -70,13 +60,18 @@ class Guard implements GuardInterface
     public function bind($username, $password, $prefix = null, $suffix = null)
     {
         // We'll allow binding with a null username and password
-        // if they're empty. This will allow us to anonymously
+        // if their empty. This will allow us to anonymously
         // bind to our servers if needed.
         $username = $username ?: null;
         $password = $password ?: null;
 
         if ($username) {
-            $username = $this->applyPrefixAndSuffix($username, $prefix, $suffix);
+            // If the username isn't empty, we'll append the configured
+            // account prefix and suffix to bind to the LDAP server.
+            $prefix = $prefix ?: $this->configuration->get('account_prefix');
+            $suffix = $suffix ?: $this->configuration->get('account_suffix');
+
+            $username = $prefix.$username.$suffix;
         }
 
         // We'll mute any exceptions / warnings here. All we need to know
@@ -97,28 +92,6 @@ class Guard implements GuardInterface
             $this->configuration->get('admin_account_prefix'),
             $this->configuration->get('admin_account_suffix')
         );
-    }
-
-    /**
-     * Applies the prefix and suffix to the given username.
-     *
-     * Applies the configured account prefix and suffix if they are null.
-     *
-     * @param string      $username
-     * @param string|null $prefix
-     * @param string|null $suffix
-     *
-     * @return string
-     *
-     * @throws \Adldap\Configuration\ConfigurationException If account_suffix or account_prefix do not
-     *                                                      exist in the providers domain configuration
-     */
-    protected function applyPrefixAndSuffix($username, $prefix = null, $suffix = null)
-    {
-        $prefix = is_null($prefix) ? $this->configuration->get('account_prefix') : $prefix;
-        $suffix = is_null($suffix) ? $this->configuration->get('account_suffix') : $suffix;
-
-        return $prefix.$username.$suffix;
     }
 
     /**

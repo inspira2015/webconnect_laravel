@@ -3,17 +3,7 @@
 namespace Adldap\Laravel\Auth;
 
 use Adldap\Models\User;
-use Adldap\Laravel\Facades\Resolver;
-use Adldap\Laravel\Commands\Import;
-use Adldap\Laravel\Commands\SyncPassword;
-use Adldap\Laravel\Events\Imported;
-use Adldap\Laravel\Events\AuthenticationRejected;
-use Adldap\Laravel\Events\AuthenticationSuccessful;
-use Adldap\Laravel\Events\DiscoveredWithCredentials;
-use Adldap\Laravel\Events\AuthenticatedWithCredentials;
-use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Config;
+use Adldap\Laravel\Traits\HasLdapUser;
 use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Auth\UserProvider;
@@ -60,7 +50,9 @@ class DatabaseUserProvider extends Provider
         $this->model = $model;
         $this->hasher = $hasher;
 
-        $this->setFallback(new EloquentUserProvider($hasher, $model));
+        $this->setFallback(
+            new EloquentUserProvider($hasher, $model)
+        );
     }
 
     /**
@@ -68,7 +60,13 @@ class DatabaseUserProvider extends Provider
      */
     public function retrieveById($identifier)
     {
-        return $this->fallback->retrieveById($identifier);
+        $model = $this->fallback->retrieveById($identifier);
+
+        if ($model && $this->isBindingUserToModel($model)) {
+            $model->setLdapUser($this->getResolver()->byModel($model));
+        }
+
+        return $model;
     }
 
     /**
@@ -76,7 +74,13 @@ class DatabaseUserProvider extends Provider
      */
     public function retrieveByToken($identifier, $token)
     {
-        return $this->fallback->retrieveByToken($identifier, $token);
+        $model = $this->fallback->retrieveByToken($identifier, $token);
+
+        if ($model && $this->isBindingUserToModel($model)) {
+            $model->setLdapUser($this->getResolver()->byModel($model));
+        }
+
+        return $model;
     }
 
     /**
@@ -98,18 +102,17 @@ class DatabaseUserProvider extends Provider
     public function retrieveByCredentials(array $credentials)
     {
         // Retrieve the LDAP user who is authenticating.
-        $user = Resolver::byCredentials($credentials);
+        $user = $this->getResolver()->byCredentials($credentials);
 
         if ($user instanceof User) {
             // Set the currently authenticating LDAP user.
             $this->user = $user;
 
-            Event::fire(new DiscoveredWithCredentials($user));
+            $this->handleDiscoveredWithCredentials($user);
 
             // Import / locate the local user account.
-            return Bus::dispatch(
-                new Import($user, $this->createModel(), $credentials)
-            );
+            return $this->getImporter()
+                ->run($user, $this->createModel(), $credentials);
         }
 
         if ($this->isFallingBack()) {
@@ -122,39 +125,46 @@ class DatabaseUserProvider extends Provider
      */
     public function validateCredentials(Authenticatable $model, array $credentials)
     {
-        if ($this->user instanceof User) {
-            // If an LDAP user was discovered, we can go
-            // ahead and try to authenticate them.
-            if (Resolver::authenticate($this->user, $credentials)) {
-                Event::fire(new AuthenticatedWithCredentials($this->user, $model));
+        // We'll check if we have an LDAP user, and then make sure
+        // they pass authentication before going further.
+        if (
+            $this->user instanceof User &&
+            $this->getResolver()->authenticate($this->user, $credentials)
+        ) {
+            $this->handleAuthenticatedWithCredentials($this->user, $model);
 
-                // Here we will perform authorization on the LDAP user. If all
-                // validation rules pass, we will allow the authentication
-                // attempt. Otherwise, it is automatically rejected.
-                if ($this->passesValidation($this->user, $model)) {
-                    // Here we can now synchronize / set the users password since
-                    // they have successfully passed authentication
-                    // and our validation rules.
-                    Bus::dispatch(new SyncPassword($model, $credentials));
-
-                    $model->save();
-
-                    if ($model->wasRecentlyCreated) {
-                        // If the model was recently created, they
-                        // have been imported successfully.
-                        Event::fire(new Imported($this->user, $model));
-                    }
-
-                    Event::fire(new AuthenticationSuccessful($this->user, $model));
-
-                    return true;
+            // Here we will perform authorization on the LDAP user. If all
+            // validation rules pass, we will allow the authentication
+            // attempt. Otherwise, it is automatically rejected.
+            if ($this->newValidator($this->getRules($this->user, $model))->passes()) {
+                // We'll check if we've been given a password and that
+                // syncing password is enabled. Otherwise we'll
+                // use a random 16 character string.
+                if ($this->isSyncingPasswords()) {
+                    $password = $credentials['password'];
+                } else {
+                    $password = str_random();
                 }
 
-                Event::fire(new AuthenticationRejected($this->user, $model));
-            }
+                // If the model has a set mutator for the password then we'll
+                // assume that we're using a custom encryption method for
+                // passwords. Otherwise we'll bcrypt it normally.
+                $model->password = $model->hasSetMutator('password') ?
+                    $password : bcrypt($password);
 
-            // LDAP Authentication failed.
-            return false;
+                // All of our validation rules have passed and we can
+                // finally save the model in case of changes.
+                $model->save();
+
+                // If binding to the eloquent model is configured, we
+                // need to make sure it's available during the
+                // same authentication request.
+                if ($this->isBindingUserToModel($model)) {
+                    $model->setLdapUser($this->user);
+                }
+
+                return true;
+            }
         }
 
         if ($this->isFallingBack() && $model->exists) {
@@ -191,16 +201,28 @@ class DatabaseUserProvider extends Provider
     }
 
     /**
-     * Perform all missing method calls on the underlying EloquentUserProvider fallback.
+     * Binds the LDAP User instance to the Eloquent model.
      *
-     * @param string $name
-     * @param array  $arguments
+     * @param Authenticatable $model
      *
-     * @return mixed
+     * @return bool
      */
-    public function __call($name, $arguments)
+    protected function isBindingUserToModel(Authenticatable $model)
     {
-        return call_user_func_array([$this->fallback, $name], $arguments);
+        return array_key_exists(
+            HasLdapUser::class,
+            class_uses_recursive(get_class($model))
+        );
+    }
+
+    /**
+     * Determines if passwords are being syncronized.
+     *
+     * @return bool
+     */
+    public function isSyncingPasswords()
+    {
+        return config('adldap_auth.password_sync', true);
     }
 
     /**
@@ -208,8 +230,8 @@ class DatabaseUserProvider extends Provider
      *
      * @return bool
      */
-    protected function isFallingBack() : bool
+    protected function isFallingBack()
     {
-        return Config::get('adldap_auth.login_fallback', false);
+        return config('adldap_auth.login_fallback', false);
     }
 }

@@ -173,54 +173,21 @@ class Utilities
     /**
      * Convert a binary SID to a string SID.
      *
-     * @author Chad Sikorra
+     * @param string $binSid A Binary SID
      *
-     * @link https://github.com/ChadSikorra
-     * @link https://stackoverflow.com/questions/39533560/php-ldap-get-user-sid
-     *
-     * @param string $value The Binary SID
-     *
-     * @return string|null
+     * @return string
      */
-    public static function binarySidToString($value)
+    public static function binarySidToString($binSid)
     {
-        // Revision - 8bit unsigned int (C1)
-        // Count - 8bit unsigned int (C1)
-        // 2 null bytes
-        // ID - 32bit unsigned long, big-endian order
-        $sid = @unpack('C1rev/C1count/x2/N1id', $value);
+        $sidHex = unpack('H*hex', $binSid)['hex'];
 
-        if (!isset($sid['id']) || !isset($sid['rev'])) {
-            return;
-        }
+        $subAuths = unpack('H2/H2/n/N/V*', $binSid);
 
-        $revisionLevel = $sid['rev'];
+        $revLevel = hexdec(substr($sidHex, 0, 2));
 
-        $identifierAuthority = $sid['id'];
+        $authIdent = hexdec(substr($sidHex, 4, 12));
 
-        $subs = isset($sid['count']) ? $sid['count'] : 0;
-
-        $sidHex = $subs ? bin2hex($value) : '';
-
-        $subAuthorities = [];
-
-        // The sub-authorities depend on the count, so only get as
-        // many as the count, regardless of data beyond it.
-        for ($i = 0; $i < $subs; $i++) {
-            $data = implode('', array_reverse(
-                str_split(
-                    substr($sidHex, 16 + ($i * 8), 8),
-                    2
-                )
-            ));
-
-            $subAuthorities[] = hexdec($data);
-        }
-
-        // Tack on the 'S-' and glue it all together...
-        return 'S-'.$revisionLevel.'-'.$identifierAuthority.implode(
-            preg_filter('/^/', '-', $subAuthorities)
-        );
+        return 'S-'.$revLevel.'-'.$authIdent.'-'.implode('-', $subAuths);
     }
 
     /**
@@ -228,7 +195,7 @@ class Utilities
      *
      * @param string $binGuid
      *
-     * @return string|null
+     * @return string
      */
     public static function binaryGuidToString($binGuid)
     {
@@ -258,13 +225,31 @@ class Utilities
      */
     public static function stringGuidToHex($string)
     {
-        $hex = '\\' . substr($string, 6, 2) . '\\' . substr($string, 4, 2) . '\\' . substr($string, 2, 2) . '\\' . substr($string, 0, 2);
-        $hex = $hex . '\\' . substr($string, 11, 2) . '\\' . substr($string, 9, 2);
-        $hex = $hex . '\\' . substr($string, 16, 2) . '\\' . substr($string, 14, 2);
-        $hex = $hex . '\\' . substr($string, 19, 2) . '\\' . substr($string, 21, 2);
-        $hex = $hex . '\\' . substr($string, 24, 2) . '\\' . substr($string, 26, 2) . '\\' . substr($string, 28, 2) . '\\' . substr($string, 30, 2) . '\\' . substr($string, 32, 2) . '\\' . substr($string, 34, 2);
+        $hex = '\\'.substr($string, 6, 2).'\\'.substr($string, 4, 2).'\\'.substr($string, 2, 2).'\\'.substr($string, 0, 2);
+        $hex = $hex .'\\'. substr($string, 11, 2).'\\'.substr($string, 9, 2);
+        $hex = $hex .'\\'. substr($string, 16, 2).'\\'.substr($string, 14, 2);
+        $hex = $hex .'\\'. substr($string, 19, 2).'\\'.substr($string, 21, 2);
+        $hex = $hex .'\\'. substr($string, 24, 2).'\\'. substr($string, 26, 2).'\\'. substr($string, 28, 2).'\\'. substr($string, 30, 2).'\\'. substr($string, 32, 2).'\\'. substr($string, 34, 2);
 
         return $hex;
+    }
+
+    /**
+     * Converts a little-endian hex number to one that hexdec() can convert.
+     *
+     * @param string $hex A hex code
+     *
+     * @return string
+     */
+    public static function littleEndian($hex)
+    {
+        $result = '';
+
+        for ($x = strlen($hex) - 2; $x >= 0; $x = $x - 2) {
+            $result .= substr($hex, $x, 2);
+        }
+
+        return $result;
     }
 
     /**
@@ -313,19 +298,9 @@ class Utilities
      */
     public static function isValidSid($sid)
     {
-        return (bool) preg_match("/^S-\d(-\d{1,10}){1,16}$/i", $sid);
-    }
+        preg_match("/S-1-5-21-\d+-\d+\-\d+\-\d+/", $sid, $matches);
 
-    /**
-     * Validates that the inserted string is an object GUID.
-     *
-     * @param string $guid
-     *
-     * @return bool
-     */
-    public static function isValidGuid($guid)
-    {
-        return (bool) preg_match('/^([0-9a-fA-F]){8}(-([0-9a-fA-F]){4}){3}-([0-9a-fA-F]){12}$/', $guid);
+        return count($matches) > 0;
     }
 
     /**

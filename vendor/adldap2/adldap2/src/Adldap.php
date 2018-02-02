@@ -30,26 +30,22 @@ class Adldap implements AdldapInterface
      */
     public function __construct(array $providers = [])
     {
-        foreach ($providers as $name => $config) {
-            $this->addProvider($config, $name);
-        }
-
-        if ($default = key($providers)) {
-            $this->setDefaultProvider($default);
+        foreach ($providers as $name => $configuration) {
+            $this->addProvider($configuration, $name);
         }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function addProvider($config = [], $name = 'default', ConnectionInterface $connection = null, SchemaInterface $schema = null)
+    public function addProvider($configuration = [], $name = 'default', ConnectionInterface $connection = null, SchemaInterface $schema = null)
     {
-        if ($this->isValidConfig($config)) {
-            $config = new Provider($config, $connection, $schema);
+        if (is_array($configuration) || $configuration instanceof DomainConfiguration) {
+            $configuration = new Provider($configuration, $connection, $schema);
         }
 
-        if ($config instanceof ProviderInterface) {
-            $this->providers[$name] = $config;
+        if ($configuration instanceof ProviderInterface) {
+            $this->providers[$name] = $configuration;
 
             return $this;
         }
@@ -57,18 +53,6 @@ class Adldap implements AdldapInterface
         throw new InvalidArgumentException(
             "You must provide a configuration array or an instance of Adldap\Connections\ProviderInterface."
         );
-    }
-
-    /**
-     * Determines if the given config is valid.
-     *
-     * @param mixed $config
-     *
-     * @return bool
-     */
-    protected function isValidConfig($config)
-    {
-        return is_array($config) || $config instanceof DomainConfiguration;
     }
 
     /**

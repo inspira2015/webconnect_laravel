@@ -38,7 +38,8 @@ Confirming the display of users to will show a table of users that will be impor
 +------------------------------+----------------------+----------------------------------------------+
 ```
 
-After it has displayed all users, you will then be asked:
+After it has displayed all user, you will then be asked:
+
 
 ```bash
  Would you like these users to be imported / synchronized? (yes/no) [no]:
@@ -63,7 +64,7 @@ Found user 'John Doe'.
 
 ### Filter
 
-The `--filter` (or `-f`) option allows you to enter in a raw filter in combination with your scopes inside your `config/adldap_auth.php` file:
+The `--filter` option allows you to enter in a raw filter in combination with your scopes inside your `config/adldap_auth.php` file:
 
 ```bash
 php artisan adldap:import --filter "(cn=John Doe)"
@@ -71,19 +72,27 @@ php artisan adldap:import --filter "(cn=John Doe)"
 Found user 'John Doe'.
 ```
 
-### No Logging
+### Log
 
-The `--no-log` option allows you to disable logging during the command.
+The `--log` option allows you to enable / disable logging during the command.
 
-By default, this is enabled.
+> **Note**: By default, logging is enabled.
 
 ```bash
-php artisan adldap:import --no-log
+php artisan adldap:import --log false
+```
+
+### Connection
+
+The `--connection` option allows you import users with a different connection specified in your `config/adldap.php` file.
+
+```bash
+php artisan adldap:import --connection other-connection
 ```
 
 ### Delete
 
-The `--delete` (or `-d`) option allows you to soft-delete deactivated LDAP users. No users will
+The `--delete` option allows you to soft-delete deactivated AD users. No users will
 be deleted if your User model does not have soft-deletes enabled.
 
 ```bash
@@ -92,47 +101,13 @@ php artisan adldap:import --delete
 
 ### Restore
 
-The `--restore` (or `-r`) option allows you to restore soft-deleted re-activated LDAP users.
+The `--restore` option allows you to restore soft-deleted re-activated AD users.
 
 ```bash
 php artisan adldap:import --restore
 ```
 
 > **Note**: Usually the `--restore` and `--delete` options are used in tandem to allow full synchronization.
-
-### No Interaction
-
-To run the import command via a schedule, use the `--no-interaction` flag:
-
-```php
-php artisan adldap:import --no-interaction
-```
-
-Users will be imported automatically with no prompts.
-
-You can also call the command from the Laravel Scheduler, or other commands:
-
-```php
-// Importing one user
-$schedule->command('adldap:import sbauman', ['--no-interaction'])
-            ->everyMinute();
-```
-
-```php
-// Importing all users
-$schedule->command('adldap:import', ['--no-interaction'])
-            ->everyMinute();
-```
-
-```php
-// Importing users with a filter
-$dn = 'CN=Accounting,OU=SecurityGroups,DC=Acme,DC=Org';
-
-$filter = sprintf('(memberof:1.2.840.113556.1.4.1941:=%s)', $dn);
-
-$schedule->command('adldap:import', ['--no-interaction', '--filter' => $filter])
-    ->everyMinute();
-```
 
 ## Tips
 

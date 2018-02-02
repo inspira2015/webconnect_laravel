@@ -2,22 +2,21 @@
 
 namespace Adldap\Laravel\Tests;
 
-use Adldap\Laravel\Commands\Import;
+use Adldap\Laravel\Auth\Importer;
 use Adldap\Laravel\Tests\Models\User;
 
 class DatabaseImporterTest extends DatabaseTestCase
 {
-    /** @test */
-    public function ldap_users_are_imported()
+    public function test_run()
     {
         $user = $this->makeLdapUser([
             'cn' => 'John Doe',
             'userprincipalname' => 'jdoe@email.com',
         ]);
 
-        $importer = new Import($user, new User());
+        $importer = new Importer();
 
-        $model = $importer->handle();
+        $model = $importer->run($user, new User());
 
         $this->assertEquals($user->getCommonName(), $model->name);
         $this->assertEquals($user->getUserPrincipalName(), $model->email);

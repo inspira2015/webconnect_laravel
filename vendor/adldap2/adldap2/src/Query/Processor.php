@@ -6,6 +6,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Adldap\Models\Entry;
 use Adldap\Models\Model;
+use Adldap\Objects\Paginator;
 use Adldap\Schemas\SchemaInterface;
 use Adldap\Connections\ConnectionInterface;
 
@@ -108,12 +109,12 @@ class Processor
      */
     public function newLdapEntry(array $attributes = [])
     {
-        $objectClass = $this->schema->objectClass();
+        $attribute = $this->schema->objectClass();
 
-        if (array_key_exists($objectClass, $attributes) && array_key_exists(0, $attributes[$objectClass])) {
+        if (array_key_exists($attribute, $attributes) && array_key_exists(0, $attributes[$attribute])) {
             // Retrieve all of the object classes from the LDAP
             // entry and lowercase them for comparisons.
-            $classes = array_map('strtolower', $attributes[$objectClass]);
+            $classes = array_map('strtolower', $attributes[$attribute]);
 
             // Retrieve the model mapping.
             $models = $this->map();
@@ -188,13 +189,13 @@ class Processor
     public function map()
     {
         return [
-            $this->schema->objectClassComputer()    => $this->schema->computerModel(),
-            $this->schema->objectClassContact()     => $this->schema->contactModel(),
-            $this->schema->objectClassPerson()      => $this->schema->userModel(),
-            $this->schema->objectClassGroup()       => $this->schema->groupModel(),
-            $this->schema->objectClassContainer()   => $this->schema->containerModel(),
-            $this->schema->objectClassPrinter()     => $this->schema->printerModel(),
-            $this->schema->objectClassOu()          => $this->schema->organizationalUnitModel(),
+            $this->schema->objectClassComputer()    => \Adldap\Models\Computer::class,
+            $this->schema->objectClassContact()     => \Adldap\Models\Contact::class,
+            $this->schema->objectClassPerson()      => \Adldap\Models\User::class,
+            $this->schema->objectClassGroup()       => \Adldap\Models\Group::class,
+            $this->schema->objectClassContainer()   => \Adldap\Models\Container::class,
+            $this->schema->objectClassPrinter()     => \Adldap\Models\Printer::class,
+            $this->schema->objectClassOu()          => \Adldap\Models\OrganizationalUnit::class,
         ];
     }
 
