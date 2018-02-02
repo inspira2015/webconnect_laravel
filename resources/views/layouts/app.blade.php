@@ -12,17 +12,17 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/wc2-css.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/font-awesome-4.5.0/css/font-awesome.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/pure/0.6.0/pure.css') }}" rel="stylesheet">
+     <link href="{{ asset('css/wc2-css.css') }}" rel="stylesheet">
+   <!--  <link href="{{ asset('css/font-awesome-4.5.0/css/font-awesome.css') }}" rel="stylesheet"> -->
+    <!-- <link href="{{ asset('css/pure/0.6.0/pure.css') }}" rel="stylesheet"> -->
 
 </head>
 <body>
     <div id="banner" align="center" style="padding-top:5px;"></div>
     <div id="app">
         <nav id="nav_bar">
-            <ul>
-                <li>
+            <ul class="hidden-overflow" style="background-color: #1B3872;">
+                <li class="hidden-overflow" >
                     <a href="wc2-index.php">
                         <i class="fa fa-home"></i>&nbsp;Home</a>
                 </li>
@@ -54,7 +54,32 @@
                     <a href="wc2-help.php"><i class="fa fa-info-circle"></i>&nbsp;Help</a>
                 </li>
 
-                <li style="float:right"><a href="{{ route('login') }}"><i class="fa fa-power-off"></i>&nbsp;Login</a></li>
+                  <!-- Authentication Links -->
+                @guest
+                    <li style="float:right"><a href="{{ route('login') }}"><i class="fa fa-power-off"></i>&nbsp;Login</a></li>
+                @else
+                    <li  class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">
+                            {{ Auth::user()->name }} <span class="caret"></span>
+                        </a>
+
+                        <ul class="dropdown-menu" style="overflow: visible !important;">
+                            <li>
+                                <a href="{{ route('logout') }}"
+                                            onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                            Logout
+                                </a>
+
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                            {{ csrf_field() }}
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                @endguest
+
+               
 
             </ul>
         </nav>
@@ -62,6 +87,7 @@
         @yield('content')
     </div>
 
+    <div id="footer">&copy; Copyright 2016 Nassau County</div>
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
 </body>
