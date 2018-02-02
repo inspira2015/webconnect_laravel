@@ -42,9 +42,6 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $user = 'dgomez@nassaucountyny.gov';
-        $pass = 'P3Admin8##';
-
 
         if (Auth::attempt($request->only(['username', 'password']))) {
         
