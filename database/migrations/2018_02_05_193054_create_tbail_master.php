@@ -14,31 +14,31 @@ class CreateTbailMaster extends Migration
     public function up()
     {
         //
-         Schema::create('tbail_master', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('court_no');
-            $table->string('index_no', 10);
-            $table->string('index_year', 2);
-            $table->date('posted_date')->nullable(); 
-            $table->string('def_last_name', 20)->nullable();
-            $table->string('def_first_name', 20)->nullable();
-            $table->string('surety_last_name', 20)->nullable();
-            $table->string('surety_first_name', 20)->nullable();
-            $table->decimal('total_forfeit_amt', 18, 2)->nullable();
-            $table->decimal('total_payment_amt', 18, 2)->nullable();
-            $table->decimal('total_cty_fee_amt', 18, 2)->nullable();
-            $table->decimal('total_receipt_amt', 18, 2)->nullable();
-            $table->string('comments_ind', 1)->nullable();
-            $table->string('bail_status', 1)->nullable();
-            $table->string('surety_address', 40)->nullable(); 
-            $table->string('surety_city', 20)->nullable(); 
-            $table->string('surety_state', 2)->nullable(); 
-            $table->string('surety_zip', 10)->nullable(); 
-            $table->integer('flag_forfeit')->nullable(); 
-            $table->date('flag_date')->nullable(); 
-            $table->date('date_of_record')->nullable(); 
-            $table->string('NUMIS_doc_id', 12)->nullable(); 
-            $table->longText('comments');
+         Schema::create('bail_master', function (Blueprint $table) {
+            $table->increments('m_id');
+            $table->integer('m_court_number');
+            $table->string('m_index_number', 10);
+            $table->string('m_index_year', 2);
+            $table->date('m_posted_date')->nullable(); 
+            $table->string('m_def_last_name', 20)->nullable();
+            $table->string('m_def_first_name', 20)->nullable();
+            $table->string('m_surety_last_name', 20)->nullable();
+            $table->string('m_surety_first_name', 20)->nullable();
+            $table->decimal('m_total_forfeit_amount', 18, 2)->nullable();
+            $table->decimal('m_total_payment_amount', 18, 2)->nullable();
+            $table->decimal('m_total_city_fee_amount', 18, 2)->nullable();
+            $table->decimal('m_total_receipt_amount', 18, 2)->nullable();
+            $table->string('m_comments_ind', 1)->nullable();   // whats the difference between this 2 comments
+            $table->string('m_bail_status', 1)->nullable();
+            $table->string('m_surety_address', 40)->nullable(); 
+            $table->string('m_surety_city', 20)->nullable(); 
+            $table->string('m_surety_state', 2)->nullable(); 
+            $table->string('m_surety_zip', 10)->nullable(); 
+            $table->integer('m_flag_forfeit')->nullable(); 
+            $table->date('m_flag_date')->nullable(); 
+            $table->date('m_date_of_record')->nullable(); 
+            $table->string('m_numis_doc_id', 12)->nullable(); 
+            $table->longText('m_comments');                   // Another comment
         });
     }
 
