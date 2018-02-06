@@ -44,5 +44,6 @@ class CreateTbailTransactions extends Migration
     public function down()
     {
         //
+        Schema::dropIfExists('bail_transactions');
     }
 }

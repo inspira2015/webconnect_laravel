@@ -50,6 +50,6 @@ class CreateTbailMaster extends Migration
     public function down()
     {
         //
-        Schema::dropIfExists('tbail_master');
+        Schema::dropIfExists('bail_master');
     }
 }

@@ -39,5 +39,6 @@ class CreateBailTransactionsPayee extends Migration
     public function down()
     {
         //
+        Schema::dropIfExists('bail_transactions_payee');
     }
 }
