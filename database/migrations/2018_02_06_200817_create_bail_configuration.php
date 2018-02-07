@@ -16,8 +16,10 @@ class CreateBailConfiguration extends Migration
         //
         Schema::create('bail_configuration', function (Blueprint $table) {
             $table->increments('bc_id');
-            $table->string('bc_category', 10);
-            $table->string('bc_type', 20);
+            $table->dateTime('bc_create_at');
+            $table->tinyInteger('bc_active');
+            $table->string('bc_category', 20);
+            $table->string('bc_type', 25);
             $table->string('bc_value', 50)->nullable();
        });
     }

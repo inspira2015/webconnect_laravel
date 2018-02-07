@@ -3,7 +3,6 @@ a {
 }
 a:hover {
 	color: #F76213;
-	overflow: hidden!important;
 }
 body {
 	margin:0;
