@@ -24,12 +24,12 @@ class CreateTbailMaster extends Migration
             $table->string('m_def_first_name', 20)->nullable();
             $table->string('m_surety_last_name', 20)->nullable();
             $table->string('m_surety_first_name', 20)->nullable();
-            $table->decimal('m_total_forfeit_amount', 18, 2)->nullable();
-            $table->decimal('m_total_payment_amount', 18, 2)->nullable();
-            $table->decimal('m_total_city_fee_amount', 18, 2)->nullable();
-            $table->decimal('m_total_receipt_amount', 18, 2)->nullable();
+            $table->decimal('m_forfeit_amount', 18, 2)->nullable();
+            $table->decimal('m_payment_amount', 18, 2)->nullable();
+            $table->decimal('m_city_fee_amount', 18, 2)->nullable();
+            $table->decimal('m_receipt_amount', 18, 2)->nullable();
             $table->string('m_comments_ind', 1)->nullable();   // whats the difference between this 2 comments
-            $table->string('m_bail_status', 1)->nullable();
+            $table->string('m_status', 1)->nullable();
             $table->string('m_surety_address', 40)->nullable(); 
             $table->string('m_surety_city', 20)->nullable(); 
             $table->string('m_surety_state', 2)->nullable(); 

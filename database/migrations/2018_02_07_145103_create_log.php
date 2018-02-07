@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBailTransactionsTypes extends Migration
+class CreateLog extends Migration
 {
     /**
      * Run the migrations.
@@ -14,11 +14,12 @@ class CreateBailTransactionsTypes extends Migration
     public function up()
     {
         //
-        Schema::create('bail_transactions_types', function (Blueprint $table) {
-            $table->increments('tt_id');
-            $table->string('tt_code', 2);
-            $table->string('tt_description', 50);
-        });
+        Schema::create('log', function (Blueprint $table) {
+            $table->increments('l_id');
+            $table->integer('ext_id');
+            $table->string('ext_id_table', 20);
+            $table->binary('function', 20);
+       });
     }
 
     /**
@@ -29,5 +30,6 @@ class CreateBailTransactionsTypes extends Migration
     public function down()
     {
         //
+        Schema::dropIfExists('log');
     }
 }

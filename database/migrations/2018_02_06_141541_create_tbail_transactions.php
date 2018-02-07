@@ -19,7 +19,7 @@ class CreateTbailTransactions extends Migration
             $table->integer('m_id');
             $table->string('t_numis_doc_id', 12)->nullable(); 
             $table->dateTime('t_created_at')->nullable(); 
-            $table->string('t_debit_credit_ind', 2)->nullable();
+            $table->string('t_debit_credit_index', 2)->nullable();
             $table->string('t_type', 5)->nullable();
             $table->decimal('t_amount', 18, 2)->nullable();
             $table->decimal('t_fee_percentage', 10, 2)->nullable();
