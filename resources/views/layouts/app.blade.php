@@ -8,86 +8,97 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>Nassau County - Webconnect</title>
 
     <!-- Styles -->
+    <link href="http://webconnect/NC_Stylesheets/clean.css" rel="stylesheet" type="text/css" />
+    <link href="http://webconnect/NC_Stylesheets/intranet.css" rel="stylesheet" type="text/css">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-     <link href="{{ asset('css/wc2-css.css') }}" rel="stylesheet">
    <!--  <link href="{{ asset('css/font-awesome-4.5.0/css/font-awesome.css') }}" rel="stylesheet"> -->
     <!-- <link href="{{ asset('css/pure/0.6.0/pure.css') }}" rel="stylesheet"> -->
-
+    <?php 
+        $B1 = '#1a3972';
+        $B2 = '#0973c5';
+        $B3 = '#97c4e1';
+        $B4 = '#cadae7';
+        $OW = '#eff3f7';
+        $OR = '#fb6510';
+        $Y  = '#faeb31';
+        $W  = '#ffffff';
+    ?>
 </head>
 <body>
-    <div id="banner" align="center" style="padding-top:5px;"></div>
-    <div id="app">
-        <nav id="nav_bar">
-            <ul class="hidden-overflow" style="background-color: #1B3872;">
-                <li class="hidden-overflow" >
-                    <a href="wc2-index.php">
-                        <i class="fa fa-home"></i>&nbsp;Home</a>
-                </li>
-                <li>
-                    <a href="wc2-applications.php">
-                        <i class="fa fa-laptop"></i>&nbsp;Applications</a>
-                </li>
-                <li>
-                    <a href="wc2-departments.php">
-                        <i class="fa fa-group"></i>&nbsp;Departments</a>
-                </li>
-                <li>
-                    <a href="wc2-preferences.php">
-                        <i class="fa fa-cogs"></i>&nbsp;Preferences</a>
-                </li>
-                <li>
-                    <a href="https://webmail.nassaucountyny.gov/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fwebmail.nassaucountyny.gov%2fowa%2f" target="_blank">
-                        <i class="fa fa-envelope"></i>&nbsp;Email</a>
-                </li>
-                <li>
-                    <a href="wc2-documents.php">
-                        <i class="fa fa-file"></i>&nbsp;Documents</a>
-                </li>
-                <li>
-                    <a href="wc2-links.php">
-                        <i class="fa fa-list"></i>&nbsp;Links</a>
-                </li>
-                <li>
-                    <a href="wc2-help.php"><i class="fa fa-info-circle"></i>&nbsp;Help</a>
-                </li>
+<div id="container">
+    <table width="100%" height="121" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+            <td> 
+                <div id="header">
+                    <div class="wclogo"></div>
+                    <div class="weather" align="left"> <?php /* 
+                        ini_set("default_socket_timeout", "05");
+                        set_time_limit(5);
+                        $f=fopen("http://www.weather.com/weather/local/USNY0926","r");
+                        $r=fread($f,1000);
+                        fclose($f);
+                        if(strlen($r)>1){       
+                        include ('http://webconnect/weather2/zfeed/zfeeder.php'); 
+                        }      */ ?>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <div id="navbar">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td align="left" valign="top" class="navleft">
+                    <table height="30" border="0" align="center" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td width="48"><div align="center"><a href="/index.php"class="navlink">Home</a></div></td>
+                            <td width="48"><div align="center"><a href="/myapps.php"class="navlink">Apps</a></div></td>
+                            <!-- <td width="48"><div align="center"><a href="http://webconnect/News/index.php"class="navlink">News</a></div></td> -->
+                            <td width="90"><div align="center"><a href="/agencies/index.php"class="navlink">Departments</a></div></td>
+                            <td width="90"><div align="center"><a href="/prefs/index.php"class="navlink">Preferences</a></div></td>
+                            <td width="48"><div align="center"><a href="https://outlook.office365.com/owa/nassaucountyny.gov/" target="_blank"class="navlink">Email</a></div></td>
+                            <td width="80"><div align="center"><a href="/Docs/index.php"class="navlink">Documents</a></div></td>
+                            <!-- <td width="60"><div align="center"><a href="http://webconnect/directory.php"class="navlink">Directory</a></div></td> -->
+                            <td width="48"><div align="center"><a href="/links.php"class="navlink">Links</a></div></td>
+                            <td width="48"><div align="center"><a href="/help.php"class="navlink">Help</a></div></td>
+                        </tr>
+                    </table>
+                </td>
+                <td align="center" valign="top" class="navright">
+                    <table height="30" border="0" align="center" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td width="48">
+                                <div align="center">
+                                <?php   
 
-                  <!-- Authentication Links -->
-                @guest
-                    <li style="float:right"><a href="{{ route('login') }}"><i class="fa fa-power-off"></i>&nbsp;Login</a></li>
-                @else
-                    <li  class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">
-                            {{ Auth::user()->name }} <span class="caret"></span>
-                        </a>
-
-                        <ul class="dropdown-menu" style="overflow: visible !important;">
-                            <li>
-                                <a href="{{ route('logout') }}"
-                                            onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                            Logout
-                                </a>
-
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                            {{ csrf_field() }}
-                                </form>
-                            </li>
-                        </ul>
-                    </li>
-                @endguest
-
-               
-
-            </ul>
-        </nav>
+                                    if (isset($_SESSION['insession'])){
+                                        if ($_SESSION['code']>0) { 
+                                            echo "<a class='navlink' href='/login/logout.php'>Logout</a>";
+                                        }  
+                                    } else { 
+                                        echo "<a class='navlink' href='/login/login.php'>Login</a> ";
+                                        //echo "<span class='Home_Nav'>|</span> <a class='Home_Nav' href='http://webconnect/login/newusrfrm.php'>New User</a>";
+                                    }
+                                ?>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
 
         @yield('content')
     </div>
 
-    <div id="footer">&copy; Copyright 2016 Nassau County</div>
+    <div id="footer">
+        <div align="center" class="content">Copyright 2018 Nassau County </div>
+    </div>
+
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
 </body>
