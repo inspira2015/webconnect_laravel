@@ -25,6 +25,7 @@ class HomeController extends Controller
     {
         $mydir = $this->myDirectory();
         $homeArray = [
+                        'current_url' => env('CURRENT_URL'),
                         'curbox' => 'B2',
                         'bodwidth' => '830px',
                         'LNfilename' => 'webconnect/navs/' . $mydir . '.php',

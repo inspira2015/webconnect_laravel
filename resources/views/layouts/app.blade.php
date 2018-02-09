@@ -54,16 +54,16 @@
                 <td align="left" valign="top" class="navleft">
                     <table height="30" border="0" align="center" cellpadding="0" cellspacing="0">
                         <tr>
-                            <td width="48"><div align="center"><a href="/index.php"class="navlink">Home</a></div></td>
-                            <td width="48"><div align="center"><a href="/myapps.php"class="navlink">Apps</a></div></td>
+                            <td width="48"><div align="center"><a href="<?php echo $current_url; ?>index.php"class="navlink">Home</a></div></td>
+                            <td width="48"><div align="center"><a href="<?php echo $current_url; ?>myapps.php"class="navlink">Apps</a></div></td>
                             <!-- <td width="48"><div align="center"><a href="http://webconnect/News/index.php"class="navlink">News</a></div></td> -->
-                            <td width="90"><div align="center"><a href="/agencies/index.php"class="navlink">Departments</a></div></td>
-                            <td width="90"><div align="center"><a href="/prefs/index.php"class="navlink">Preferences</a></div></td>
+                            <td width="90"><div align="center"><a href="<?php echo $current_url; ?>agencies/index.php"class="navlink">Departments</a></div></td>
+                            <td width="90"><div align="center"><a href="<?php echo $current_url; ?>prefs/index.php"class="navlink">Preferences</a></div></td>
                             <td width="48"><div align="center"><a href="https://outlook.office365.com/owa/nassaucountyny.gov/" target="_blank"class="navlink">Email</a></div></td>
-                            <td width="80"><div align="center"><a href="/Docs/index.php"class="navlink">Documents</a></div></td>
+                            <td width="80"><div align="center"><a href="<?php echo $current_url; ?>Docs/index.php"class="navlink">Documents</a></div></td>
                             <!-- <td width="60"><div align="center"><a href="http://webconnect/directory.php"class="navlink">Directory</a></div></td> -->
-                            <td width="48"><div align="center"><a href="/links.php"class="navlink">Links</a></div></td>
-                            <td width="48"><div align="center"><a href="/help.php"class="navlink">Help</a></div></td>
+                            <td width="48"><div align="center"><a href="<?php echo $current_url; ?>links.php"class="navlink">Links</a></div></td>
+                            <td width="48"><div align="center"><a href="<?php echo $current_url; ?>help.php"class="navlink">Help</a></div></td>
                         </tr>
                     </table>
                 </td>
