@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Adldap\Laravel\Facades\Adldap;
 use Illuminate\Http\Request;
+use App\Models\UserAllow;
 use Auth;
+use Session;
 
 class LoginController extends Controller
 {
@@ -47,16 +49,38 @@ class LoginController extends Controller
         $credentials = $this->prepareCredentialArry($request->only(['username', 'password']));
 
         if (Auth::attempt($credentials)) {
-        
-            // Returns \App\User model configured in `config/auth.php`.
             $user = Auth::user();
-        
+            $ldap = Adldap::search()->users()->whereMail($user->username)->first();
+            $userUid = $ldap->employeeid[0];
+
+            if ($userUid == 'CONTRACTOR') {
+                $userUid = 777;
+            }
+
+            $userAllow = new UserAllow();
+            $userClearance = $userAllow->GetUserClearance($userUid);
+
+            if (empty($userClearance[0])) {
+                Session::flush();
+                Auth::logout();
+                $this->redirectLogin();
+            }
+
+            $user = Auth::user();
+
             return redirect()->to('home')
                 ->withMessage('Logged in!');
         }
-    
+
         return redirect()->to('login')
             ->withMessage('Hmm... Your username or password is incorrect');
+    }
+
+    private function redirectLogin()
+    {
+        return redirect()->to('login')
+            ->withMessage('Hmm... Your username or password is incorrect');
+
     }
 
     private function prepareCredentialArry(array $credentials)
