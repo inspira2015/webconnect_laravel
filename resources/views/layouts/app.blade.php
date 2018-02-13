@@ -73,15 +73,15 @@
                             <td width="48">
                                 <div align="center">
                                 <?php   
+                                     if (Auth::user()) { ?>
+                                        <a href="{{ route('logout') }}" onclick='event.preventDefault(); document.getElementById("logout-form").submit();''>Logout</a>
 
-                                    if (isset($_SESSION['insession'])){
-                                        if ($_SESSION['code']>0) { 
-                                            echo "<a class='navlink' href='/login/logout.php'>Logout</a>";
-                                        }  
-                                    } else { 
-                                        echo "<a class='navlink' href='/login/login.php'>Login</a> ";
-                                        //echo "<span class='Home_Nav'>|</span> <a class='Home_Nav' href='http://webconnect/login/newusrfrm.php'>New User</a>";
-                                    }
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;"">{{ csrf_field() }}</form>
+
+                                   <?php  } else { ?>
+                                        <a href="{{ route('login') }}" >Login</a>
+
+                                <?php }
                                 ?>
                                 </div>
                             </td>
