@@ -66,6 +66,7 @@ class LoginController extends Controller
                 $this->redirectLogin();
             }
 
+            Session::put('userClearance', $userClearance[0]);
             $user = Auth::user();
 
             return redirect()->to('home')
@@ -73,13 +74,13 @@ class LoginController extends Controller
         }
 
         return redirect()->to('login')
-            ->withMessage('Hmm... Your username or password is incorrect');
+            ->withErrors('Hmm... Your username or password is incorrect');
     }
 
     private function redirectLogin()
     {
         return redirect()->to('login')
-            ->withMessage('Hmm... Your username or password is incorrect');
+            ->withErrors('Hmm... Your username or password is incorrect');
 
     }
 
