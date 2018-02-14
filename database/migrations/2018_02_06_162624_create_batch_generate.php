@@ -16,8 +16,8 @@ class CreateBatchGenerate extends Migration
         //
         Schema::create('batch_generate', function (Blueprint $table) {
             $table->increments('bg_id');
-            $table->integer('bg_number');
-            $table->dateTime('bg_create_at');
+            $table->integer('bg_number')->nullable();
+            $table->date('bg_create_at');
         });
     }
 
