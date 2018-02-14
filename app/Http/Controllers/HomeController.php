@@ -3,6 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\UserAllow;
+use App\Models\BatchGenerate;
+use App\Models\BatchApprovals;
+use View;
+use Auth;
+use Session;
+use DB;
 
 class HomeController extends Controller
 {
@@ -23,9 +30,34 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $user = Session::get('userClearance');
+
+        $currentDate = date('Y-m-d');
+        $batchGenerate = new BatchGenerate();
+        $batchJobs = $batchGenerate->GetBatchJobByDate($currentDate);
+        $batchJobsNumber = $batchJobs->count();
+
+
+        if ($batchJobsNumber > 0) {
+            //get todays batch number
+            $batno = $batchJobs[0]->bg_id;
+        } else {
+            $batchGenerate = new BatchGenerate();
+            $batchGenerate->bg_create_at = date('Y-m-d G:i:s');
+            $batchGenerate->save();
+            $batno = DB::getPdo()->lastInsertId();
+        }
+
+        $batchApprovals = new BatchApprovals();
+        $batchRow = $batchApprovals->GetApprovalsByBatchId($batno);
+        $totalRows_approvals = $batchRow->count();
+
+
         $mydir = $this->myDirectory();
         $homeArray = [
-                        'current_url' => env('CURRENT_URL'),
+                        'totalRows_approvals' => (int) $totalRows_approvals,
+                        'batno' => (int) $batno,
+                        'user_lev' => (int) $user->ua_level,
                         'curbox' => 'B2',
                         'bodwidth' => '830px',
                         'LNfilename' => 'webconnect/navs/' . $mydir . '.php',
