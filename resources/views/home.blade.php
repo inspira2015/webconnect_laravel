@@ -77,7 +77,7 @@
               <td height="21" style="background-image:url({{ asset('images/cashbail/cashbailbuttons_18.jpg') }}); background-position: left top; background-repeat:no-repeat"><span style="font-weight: bold; padding-left:30px;"><a href="lookBail1.php" class="content">Bail Lookup </a>-</span> <span class="content">Search bails by defendant, index # or surety </span></td>
             </tr>
           </table>
-          <p class="content"><a href="cashbailmanual.pdf">CLICK HERE FOR THE CASH BAIL MANUAL (.pdf) </a></p>
+          <p class="content"><a href="<?php echo url('/home/cashBailManual'); ?>">CLICK HERE FOR THE CASH BAIL MANUAL (.pdf) </a></p>
     </div>
 
     

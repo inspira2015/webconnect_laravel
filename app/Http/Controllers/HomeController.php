@@ -37,7 +37,6 @@ class HomeController extends Controller
         $batchJobs = $batchGenerate->GetBatchJobByDate($currentDate);
         $batchJobsNumber = $batchJobs->count();
 
-
         if ($batchJobsNumber > 0) {
             //get todays batch number
             $batno = $batchJobs[0]->bg_id;
@@ -52,7 +51,6 @@ class HomeController extends Controller
         $batchRow = $batchApprovals->GetApprovalsByBatchId($batno);
         $totalRows_approvals = $batchRow->count();
 
-
         $mydir = $this->myDirectory();
         $homeArray = [
                         'totalRows_approvals' => (int) $totalRows_approvals,
@@ -66,14 +64,21 @@ class HomeController extends Controller
         return view('home')->with($homeArray);
     }
 
-
+    /**
+     * [myDirectory Return a directory path]
+     * @return [type] [description]
+     */
     private function myDirectory()
     {
         $result = explode('/', dirname($_SERVER['PHP_SELF']));
         return end($result);
     }
 
-
+    /**
+     * [getThisBox Returns some styles]
+     * @param  [type] $curbox [description]
+     * @return [type]         [description]
+     */
     private function getThisBox($curbox)
     {
         return ".topleft".$curbox."{
@@ -108,5 +113,15 @@ class HomeController extends Controller
             background-image:url(/public/images/v2/". $curbox . "S/". $curbox . "BR.jpg);
             background-position:top left;
             background-repeat:no-repeat;};";
+    }
+
+    /**
+     * [downloadCashBailManual Method to download CashBail Manual]
+     * @return [pdf file] [returns a pdf file]
+     */
+    public function downloadCashBailManual()
+    {
+        $pathPublic = public_path('pdf/cashbailmanual.pdf');
+        return response()->download($pathPublic);
     }
 }
