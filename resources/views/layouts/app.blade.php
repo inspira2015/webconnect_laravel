@@ -13,9 +13,16 @@
     <!-- Styles -->
     <link href="http://webconnect/NC_Stylesheets/clean.css" rel="stylesheet" type="text/css" />
     <link href="http://webconnect/NC_Stylesheets/intranet.css" rel="stylesheet" type="text/css">
+    <link href="http://demo.expertphp.in/css/jquery.ui.autocomplete.css" rel="stylesheet">
     <!-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> -->
    <!--  <link href="{{ asset('css/font-awesome-4.5.0/css/font-awesome.css') }}" rel="stylesheet"> -->
     <!-- <link href="{{ asset('css/pure/0.6.0/pure.css') }}" rel="stylesheet"> -->
+        <script src="{{ asset('js/app.js') }}"></script>
+    <script src="http://demo.expertphp.in/js/jquery.js"></script>
+    <script src="http://demo.expertphp.in/js/jquery-ui.min.js"></script>
+
+
+
     <?php 
         $B1 = '#1a3972';
         $B2 = '#0973c5';
@@ -98,6 +105,6 @@
     </div>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
+
 </body>
 </html>

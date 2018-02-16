@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserAllow extends Model
 {
-	/**
-	 * [$table Db table name]
-	 * @var string
-	 */
+    /**
+     * [$table Db table name]
+     * @var string
+     */
     protected $table = 'users_allow';
 
     /**
