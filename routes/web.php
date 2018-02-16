@@ -18,5 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-
 Route::get('/home/cashBailManual', 'HomeController@downloadCashBailManual');
+
+
+Route::get('/enterbail', 'EnterBailController@index')->name('enterbail');
