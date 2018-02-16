@@ -64,17 +64,15 @@ class EnterBailController extends Controller
     public function searchcheckajax(Request $request)
     {
         $query = $request->get('term','');
-
-        print_r($query);
-
-        exit;
-
+        $jailImport = new JailImport();
         
-        $products=Product::where('name','LIKE','%'.$query.'%')->get();
-        
-        $data=array();
-        foreach ($products as $product) {
-                $data[]=array('value'=>$product->name,'id'=>$product->id);
+        $jailRecords = $jailImport->GetJailRecordsByCheckNumber($query);
+
+
+        $data = array();
+
+        foreach ($jailRecords as $currentRecord) {
+                $data[] = ['value'=> $currentRecord->j_check_number, 'id'=> $currentRecord->j_id];
         }
         
         if (count($data)) {

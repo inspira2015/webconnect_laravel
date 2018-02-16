@@ -21,6 +21,6 @@ class JailImport extends Model
     public function scopeGetJailRecordsByCheckNumber($query, $checkNumber)
     {
         $checkNumber = (int) $checkNumber;
-        return $query->where('j_check_number', 'like',  '%' . $currentUserId)->get();
+        return $query->where('j_check_number', 'like',   $checkNumber . '%')->get();
     }
 }
