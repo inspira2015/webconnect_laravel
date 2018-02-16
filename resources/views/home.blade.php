@@ -18,7 +18,7 @@
                 if ($totalRows_approvals <= 0) : ?>
             <tr>
                 <td height="21" style="background-image:url({{ asset('images/cashbail/cashbailbuttons_03.jpg') }}); background-position: left top; background-repeat:no-repeat">
-                    <span style="font-weight: bold; padding-left:30px;"><a href="entBail1.php" class="content">Enter Bail</a> -</span> <span class="content">process checks from jail or manually enter bails</span>
+                    <span style="font-weight: bold; padding-left:30px;"><a href="{{ route('enterbail') }}" class="content">Enter Bail</a> -</span> <span class="content">process checks from jail or manually enter bails</span>
                 </td>
             </tr>
             <tr>
