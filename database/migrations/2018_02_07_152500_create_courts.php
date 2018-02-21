@@ -17,10 +17,10 @@ class CreateCourts extends Migration
         Schema::create('courts', function (Blueprint $table) {
             $table->increments('c_id');
             $table->string('c_name', 20);
-            $table->string('c_address', 80);
-            $table->string('c_city', 80);
-            $table->string('c_state', 3);
-            $table->string('c_zip', 5);
+            $table->string('c_address', 80)->nullable();
+            $table->string('c_city', 80)->nullable();
+            $table->string('c_state', 3)->nullable();
+            $table->string('c_zip', 5)->nullable();
         });
     }
 
