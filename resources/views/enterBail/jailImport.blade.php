@@ -142,19 +142,20 @@
 </script>
 <script>
     $(document).ready(function(){
-      var date_input=$('input[name="date_of_record"]'); //our date input has the name "date"
-      var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-      var options={
-        format: 'mm/dd/yyyy',
-        container: container,
-        todayHighlight: true,
-        autoclose: true,
-      };
-      date_input.datepicker(options).datepicker("setDate",'now');
+        var date_input=$('input[name="date_of_record"]'); //our date input has the name "date"
+        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+        var options={
+            format: 'mm/dd/yyyy',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+        };
+        date_input.datepicker(options).datepicker("setDate",'now');
 
         $('.phone').text(function(i, text) {
             return text.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '$1-$2-$3');
         });
+        $(".dollar-amount").currency();
     })
 </script>
 @endsection

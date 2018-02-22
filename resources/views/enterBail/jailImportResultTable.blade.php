@@ -1,4 +1,5 @@
-<p><strong>Records for Check Number: {{ $checkNumber }} </strong></p>
+<p><strong>Check Number: {{ $checkNumber }} </strong></p>
+<p><strong>Total Check Amount: <span class="dollar-amount">{{ $totalCheckAmount }}</span> </strong></p>
 
 <table width="100%"  border="0" cellpadding="2" cellspacing="0" class="reduce-input reduce-width jailRecords">
     <tr style="font-weight: bold"> 
@@ -38,7 +39,7 @@
             <td height="20" width="120">
                 {!! Form::select('court_no[]', $courtList, $value->j_court_number, array('class' => 'form-control form-control-sm')) !!}
             </td>
-            <td height="20">  {{ $value->j_bail_amount/100 }} </td>
+            <td height="20" class="dollar-amount">  {{ $value->bail_amount }} </td>
             <td height="20">  {{ $value->j_surety_last_name }} </td>
             <td height="20">  {{ $value->j_surety_first_name }} </td>
             <td height="20">  {{ $value->j_surety_address }} </td>

@@ -47,6 +47,7 @@ class EnterBailController extends Controller
 
         $indexArray = [
                         'jailRecords' => array(),
+                        'totalCheckAmount' => '',
                         'color1' => "#EEEEEE",
                         'color2' => "#CCCCCC",
                         'row_count' => 0,
@@ -66,11 +67,14 @@ class EnterBailController extends Controller
         $checkNumber = $request->input('check_no');
         $jailImport = new JailImport();
         $jailRecords = $jailImport->GetJailRecordsByCheckNumber($checkNumber);
+        $totalJailRecords = $jailImport->GetJailRecordsTotalByCheckNumber();
 
+       // $jailTotal   = $jailImport->GetJailRecordsTotalByCheckNumber($checkNumber);
         $courtList = Courts::pluck('c_name', 'c_id')->toArray();
 
         $indexArray = [
                         'checkNumber' => $checkNumber,
+                        'totalCheckAmount' => $totalJailRecords,
                         'jailRecords' => $jailRecords,
                         'color1' => "#EEEEEE",
                         'color2' => "#CCCCCC",
