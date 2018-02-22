@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\JailImport;
+use App\Models\Courts;
+use Form;
 use View;
 use DB;
 
@@ -41,12 +43,16 @@ class EnterBailController extends Controller
      */
     public function jailImport()
     {
+        $courtList = Courts::pluck('c_name', 'c_id')->toArray();
+
         $indexArray = [
+                        'jailRecords' => array(),
                         'color1' => "#EEEEEE",
                         'color2' => "#CCCCCC",
                         'row_count' => 0,
                         'check_total' => 0,
                         'keyno' => 0,
+                        'courtList' => $courtList,
                       ];
         return view('enterBail.jailImport')->with($indexArray);
     }
@@ -55,9 +61,25 @@ class EnterBailController extends Controller
      * [searchchecknumber description]
      * @return [type] [description]
      */
-    public function searchchecknumber()
+    public function searchchecknumber(Request $request)
     {
+        $checkNumber = $request->input('check_no');
+        $jailImport = new JailImport();
+        $jailRecords = $jailImport->GetJailRecordsByCheckNumber($checkNumber);
 
+        $courtList = Courts::pluck('c_name', 'c_id')->toArray();
+
+        $indexArray = [
+                        'checkNumber' => $checkNumber,
+                        'jailRecords' => $jailRecords,
+                        'color1' => "#EEEEEE",
+                        'color2' => "#CCCCCC",
+                        'row_count' => 0,
+                        'check_total' => 0,
+                        'keyno' => 0,
+                        'courtList' => $courtList,
+                      ];
+        return view('enterBail.jailImport')->with($indexArray);
     }
 
 
@@ -65,9 +87,7 @@ class EnterBailController extends Controller
     {
         $query = $request->get('term','');
         $jailImport = new JailImport();
-        
-        $jailRecords = $jailImport->GetJailRecordsByCheckNumber($query);
-
+        $jailRecords = $jailImport->GetJailRecordsLikeCheckNumber($query);
 
         $data = array();
 
@@ -87,7 +107,6 @@ class EnterBailController extends Controller
     public function checkolddatabase()
     {
         $jailimport = DB::connection('mysql2')->table('jailimport')->get();
-
 
         foreach ($jailimport as $currentRecord) {
             $currentJailImport = new JailImport();
