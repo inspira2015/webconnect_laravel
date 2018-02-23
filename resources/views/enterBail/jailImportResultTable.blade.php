@@ -29,7 +29,7 @@
     @foreach($jailRecords as $key => $value)
         <tr class="<?php echo $value->duplicate; ?>">
             <td height="20"> <?php echo date("M/d/Y", strtotime($value->j_date_1)); ?> </td>
-            <td height="20" width="90">
+            <td height="20" width="110">
                 <input type="text" name="daterec[<?php echo $value->j_id; ?>]" size="25" class="form-control form-control-sm"  value="<?php echo date('m/d/Y', strtotime($value->j_date_2)); ?>">
             </td>
             <td height="20" width="10">  {{ $value->j_def_last_name }} </td>

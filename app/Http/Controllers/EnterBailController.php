@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\JailImport;
 use App\Models\Courts;
-use App\Models\
+use App\Models\BailMaster;
 use Form;
 use Session;
 use View;
@@ -99,14 +99,46 @@ class EnterBailController extends Controller
         $userInputData = $request->all();
         
 
-        foreach ($jailIdArray AS $key => $value ) {
+        foreach ($jailIdArray AS $key => $value) {
+            $jailImportRecord = JailImport::where('j_id', '=', $value)->first();
+            
+            $comment = 'N';
 
+            if ($jailImportRecord->j_def_suffix == "*") {
+                $comment = 'Y';
+            }
+
+            $bailMaster = BailMaster::firstOrNew(array('j_id' => $value));
+            //echo "<pre>";
+
+            //print_r($bailMaster);
+
+            //exit;
+
+
+            //$bailMaster->j_id = $value;
+            $bailMaster->m_court_number = $userInputData['court_no'][$value];
+            $bailMaster->m_index_number = $userInputData['index_no'][$value];
+            $bailMaster->m_index_year = $userInputData['index_year'][$value];
+            $bailMaster->m_posted_date = date("Y-m-d", strtotime($userInputData['daterec'][$value]));
+            $bailMaster->m_def_last_name = $jailImportRecord->j_def_last_name;
+            $bailMaster->m_def_first_name = $jailImportRecord->j_def_first_name;
+            $bailMaster->m_surety_last_name = $jailImportRecord->j_surety_last_name;
+            $bailMaster->m_surety_first_name = $jailImportRecord->j_surety_first_name;
+            $bailMaster->m_forfeit_amount = 0;
+            $bailMaster->m_payment_amount = 0;
+            $bailMaster->m_city_fee_amount = 0;
+            $bailMaster->m_receipt_amount = $jailImportRecord->j_bail_amount /100;
+            $bailMaster->m_comments_ind =  $comment;
+            $bailMaster->m_status = 'O';
+            $bailMaster->m_surety_address = $jailImportRecord->j_surety_address;
+            $bailMaster->m_surety_city = $jailImportRecord->j_surety_city;
+            $bailMaster->m_surety_state = $jailImportRecord->j_surety_state;
+            $bailMaster->m_surety_zip = $jailImportRecord->j_surety_zip;
+            $bailMaster->save();
         }
 
-        echo "<pre>";
-
-        print_r($userInputData);
-        exit;
+       
     }
 
 
