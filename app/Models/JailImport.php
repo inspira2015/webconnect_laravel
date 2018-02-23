@@ -15,6 +15,8 @@ class JailImport extends Model
 
     private $totalJailAmount;
 
+    private $resultJailRecord;
+
     /**
      * [$timestamps description]
      * @var boolean
@@ -49,6 +51,7 @@ class JailImport extends Model
                             GROUP BY ji.j_id WITH ROLLUP ", [$checkNumber]
                         );
         $totalRow = array_pop($jailRecords);
+        $this->resultJailRecord = $jailRecords;
         $this->totalJailAmount = $totalRow->total;
         return $jailRecords;
     }
@@ -56,6 +59,16 @@ class JailImport extends Model
     public function scopeGetJailRecordsTotalByCheckNumber($query)
     {
         return round($this->totalJailAmount, 2);
+    }
+
+
+    public function scopeGetAllJailIds($query)
+    {
+      $resultIdArray = [];
+      foreach ($this->resultJailRecord AS $key => $value) {
+        $resultIdArray[] = $value->j_id;
+      }
+      return $resultIdArray;
     }
 
 }

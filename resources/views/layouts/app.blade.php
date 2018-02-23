@@ -29,6 +29,8 @@
     <script src="http://demo.expertphp.in/js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
     <script src="{{ asset('js/jquery.currency.js')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.min.js"></script>
+
 
     <?php 
         $B1 = '#1a3972';

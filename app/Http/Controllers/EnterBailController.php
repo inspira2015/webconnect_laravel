@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\JailImport;
 use App\Models\Courts;
+use App\Models\
 use Form;
+use Session;
 use View;
 use DB;
 
@@ -68,8 +70,9 @@ class EnterBailController extends Controller
         $jailImport = new JailImport();
         $jailRecords = $jailImport->GetJailRecordsByCheckNumber($checkNumber);
         $totalJailRecords = $jailImport->GetJailRecordsTotalByCheckNumber();
+        $jailIdArray = $jailImport->GetAllJailIds();
         $courtList = Courts::pluck('c_name', 'c_id')->toArray();
-
+        Session::put('JailIdArray', $jailIdArray);
         $indexArray = [
                         'checkNumber' => $checkNumber,
                         'totalCheckAmount' => $totalJailRecords,
@@ -82,6 +85,28 @@ class EnterBailController extends Controller
                         'courtList' => $courtList,
                       ];
         return view('enterBail.jailImport')->with($indexArray);
+    }
+
+
+    /**
+     * [processbails Process Bails]
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function processbails(Request $request)
+    {
+        $jailIdArray = Session::get('JailIdArray');
+        $userInputData = $request->all();
+        
+
+        foreach ($jailIdArray AS $key => $value ) {
+
+        }
+
+        echo "<pre>";
+
+        print_r($userInputData);
+        exit;
     }
 
 

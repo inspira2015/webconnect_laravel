@@ -48,6 +48,24 @@
     color: #FFF!important;
 }
 
+.error {
+    width: 200px !important;
+    color:#FF0000!important;
+}
+
+.font18 {
+    font-size: 18px;
+}
+
+.blue-font {
+    color: #2a4e6c;
+}
+
+.green-font {
+    color: #003300;
+}
+
+
 </style>
 
 <div style="background-image:url({{ asset('images/cashbail/back_red_21.jpg') }}); background-position:top left; background-repeat:no-repeat;  padding:10px;">
@@ -86,7 +104,7 @@
         </form>
         <hr>
  </div>
-        <form name="bails" method="post" action="{{ route('searchchecknumber') }}" class="reduce-input form-inline content">
+        <form name="bails" id="form-bails" method="post" action="{{ route('processbails') }}" class="reduce-input form-inline content">
             {{ csrf_field() }}
         <div style="margin-top: .5em; margin-left: 5em; width: 100%;">
 
@@ -94,7 +112,7 @@
                 <div class="form-group">
                     <label for="docno"><strong>Document Number: </strong></label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control form-control-sm" id="docno" placeholder="Document Number">
+                        <input type="text" name="docno" required class="form-control form-control-sm" id="docno" placeholder="Document Number">
                     </div>
                 </div>
                 <br>
@@ -172,6 +190,10 @@
             return text.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '$1-$2-$3');
         });
         $(".dollar-amount").currency();
-    })
+    });
+
+    $("#form-bails").validate({
+     
+    });
 </script>
 @endsection

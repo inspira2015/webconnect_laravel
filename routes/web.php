@@ -24,6 +24,8 @@ Route::get('/home/cashBailManual', 'HomeController@downloadCashBailManual');
 Route::get('/enterbail', 'EnterBailController@index')->name('enterbail');
 Route::get('/enterbail/jailcheck', 'EnterBailController@jailImport')->name('jailcheck');
 Route::post('/enterbail/searchchecknumber', 'EnterBailController@searchchecknumber')->name('searchchecknumber');
+Route::post('/enterbail/processbails', 'EnterBailController@processbails')->name('processbails');
+
 
 Route::get('/enterbail/searchcheckajax', 'EnterBailController@searchcheckajax')->name('searchcheckajax');
 
