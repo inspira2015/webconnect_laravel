@@ -1,4 +1,8 @@
-<p><strong>Check Number: {{ $checkNumber }} </strong></p>
+<div style="width: 100%;">
+    <p><strong>Check Number: {{ $checkNumber }} </strong></p>
+
+</div>
+<br><br>
 <p><strong>Total Check Amount: <span class="dollar-amount">{{ $totalCheckAmount }}</span> </strong></p>
 
 <table width="100%"  border="0" cellpadding="2" cellspacing="0" class="reduce-input reduce-width jailRecords">
@@ -21,8 +25,9 @@
         <td>Phone</td>
         <td><br /></td>
     </tr>
-    @foreach($jailRecords as $key=>$value)
-        <tr>
+
+    @foreach($jailRecords as $key => $value)
+        <tr class="<?php echo $value->duplicate; ?>">
             <td height="20"> <?php echo date("M/d/Y", strtotime($value->j_date_1)); ?> </td>
             <td height="20" width="90">
                 <input type="text" name="daterec[]" size="25" class="form-control form-control-sm"  value="<?php echo date('m/d/Y', strtotime($value->j_date_2)); ?>">

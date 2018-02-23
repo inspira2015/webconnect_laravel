@@ -35,6 +35,10 @@ class JailImport extends Model
                                       SUM(ji.j_bail_amount/100) as total,
                                       SUBSTRING_INDEX(ji.j_index_number, '/', 1)  AS index_number,
                                       SUBSTRING_INDEX(ji.j_index_number, '/', -1) AS index_year,
+                                      CASE
+                                            WHEN bm.j_id IS NOT NULL THEN 'duplicate-row'
+                                            ELSE   ''
+                                      END as duplicate,
                                       bm.j_id                                  AS bm_j_id,
                                       TRUNCATE(ji.j_bail_amount/100, 2)        AS bail_amount,
                                       ji.*

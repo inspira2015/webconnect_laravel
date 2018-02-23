@@ -68,8 +68,6 @@ class EnterBailController extends Controller
         $jailImport = new JailImport();
         $jailRecords = $jailImport->GetJailRecordsByCheckNumber($checkNumber);
         $totalJailRecords = $jailImport->GetJailRecordsTotalByCheckNumber();
-
-       // $jailTotal   = $jailImport->GetJailRecordsTotalByCheckNumber($checkNumber);
         $courtList = Courts::pluck('c_name', 'c_id')->toArray();
 
         $indexArray = [

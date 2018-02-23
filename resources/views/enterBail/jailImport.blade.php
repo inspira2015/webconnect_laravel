@@ -41,6 +41,13 @@
 }
 
 .jailRecords tr:nth-child(even){background-color: #ccc}
+
+
+.duplicate-row {
+    background-color: #8B0000!important;
+    color: #FFF!important;
+}
+
 </style>
 
 <div style="background-image:url({{ asset('images/cashbail/back_red_21.jpg') }}); background-position:top left; background-repeat:no-repeat;  padding:10px;">
@@ -78,9 +85,10 @@
                 <button type="submit" class="btn btn-primary btn-sm">Submit</button>
         </form>
         <hr>
-
-        <form name="bails" method="post" action="" class="reduce-input form-inline content">
+ </div>
+        <form name="bails" method="post" action="{{ route('searchchecknumber') }}" class="reduce-input form-inline content">
             {{ csrf_field() }}
+        <div style="margin-top: .5em; margin-left: 5em; width: 100%;">
 
             <div class="form-group">
                 <div class="form-group">
@@ -105,17 +113,25 @@
                 </div>
                  <p align="right">&nbsp;</p>
             </div>
-        </form> 
-    </div>
-    <hr>
+        </div>
+   <br><br>
+    <hr style="width: 100%;">
 
 
     @if( ! empty($jailRecords))
+        <div style="width: 100%; padding: 8px; text-align: right;">
+            <button type="submit" class="btn btn-warning ">Process Bail</button>
+        </div>
+
         @include('enterbail.jailImportResultTable')
+        <div style="width: 100%; padding: 8px; text-align: right; margin-top: 20px;">
+            <button type="submit" class="btn btn-warning ">Process Bail</button>
+        </div>
     @endif
 
     <br><br>
 
+        </form> 
 </div>
 
 <script>
