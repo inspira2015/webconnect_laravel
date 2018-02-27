@@ -7,6 +7,10 @@ use App\Http\Controllers\Controller;
 use App\Models\JailImport;
 use App\Models\Courts;
 use App\Models\BailMaster;
+use App\Models\BailTransactions;
+
+use Auth;
+use Input;
 use Form;
 use Session;
 use View;
@@ -73,6 +77,7 @@ class EnterBailController extends Controller
         $jailIdArray = $jailImport->GetAllJailIds();
         $courtList = Courts::pluck('c_name', 'c_id')->toArray();
         Session::put('JailIdArray', $jailIdArray);
+        Session::put('checkNumber', $checkNumber);
         $indexArray = [
                         'checkNumber' => $checkNumber,
                         'totalCheckAmount' => $totalJailRecords,
@@ -95,50 +100,83 @@ class EnterBailController extends Controller
      */
     public function processbails(Request $request)
     {
-        $jailIdArray = Session::get('JailIdArray');
-        $userInputData = $request->all();
-        
 
-        foreach ($jailIdArray AS $key => $value) {
-            $jailImportRecord = JailImport::where('j_id', '=', $value)->first();
+        if ($request->isMethod('post')) {
+            $jailIdArray = Session::get('JailIdArray');
+            $userInputData = $request->all();
+            $processDate = date('Y-m-d G:i:s');
+
             
-            $comment = 'N';
+            foreach ($jailIdArray AS $key => $value) {
+                $jailImportRecord = JailImport::where('j_id', '=', $value)->first();
+                $bailAmount = $jailImportRecord->j_bail_amount /100;
+                $comment = 'N';
 
-            if ($jailImportRecord->j_def_suffix == "*") {
-                $comment = 'Y';
+                if ($jailImportRecord->j_def_suffix == "*") {
+                    $comment = 'Y';
+                }
+                $bailMaster = BailMaster::firstOrNew(array('j_id' => $value));
+
+                $bailMaster->m_court_number = $userInputData['court_no'][$value];
+                $bailMaster->m_index_number = $userInputData['index_no'][$value];
+                $bailMaster->m_index_year = $userInputData['index_year'][$value];
+                $bailMaster->m_posted_date = date("Y-m-d", strtotime($userInputData['daterec'][$value]));
+                $bailMaster->m_def_last_name = $jailImportRecord->j_def_last_name;
+                $bailMaster->m_def_first_name = $jailImportRecord->j_def_first_name;
+                $bailMaster->m_surety_last_name = $jailImportRecord->j_surety_last_name;
+                $bailMaster->m_surety_first_name = $jailImportRecord->j_surety_first_name;
+                $bailMaster->m_forfeit_amount = 0;
+                $bailMaster->m_payment_amount = 0;
+                $bailMaster->m_city_fee_amount = 0;
+                $bailMaster->m_receipt_amount = $bailAmount;
+                $bailMaster->m_comments_ind =  $comment;
+                $bailMaster->m_status = 'O';
+                $bailMaster->m_surety_address = $jailImportRecord->j_surety_address;
+                $bailMaster->m_surety_city = $jailImportRecord->j_surety_city;
+                $bailMaster->m_surety_state = $jailImportRecord->j_surety_state;
+                $bailMaster->m_surety_zip = $jailImportRecord->j_surety_zip;
+                $bailMaster->save();
+            
+
+                $bailTransaction = BailTransactions::firstOrNew([
+                                                                  "m_id" => $bailMaster->m_id,
+                                                                  "t_type" => 'R'
+                                                                ]);
+
+                $bailTransaction->m_id = $bailMaster->m_id;
+                $bailTransaction->t_numis_doc_id = $userInputData['docno'];
+                $bailTransaction->t_created_at = $processDate;
+                $bailTransaction->t_debit_credit_index = 'I';
+                $bailTransaction->t_type = 'R';
+                $bailTransaction->t_amount = $bailAmount;
+                $bailTransaction->t_fee_percentage = 0;
+                $bailTransaction->t_total_refund = 0;
+                $bailTransaction->t_reversal_index = '';
+                $bailTransaction->save();
+                
             }
 
-            $bailMaster = BailMaster::firstOrNew(array('j_id' => $value));
-            //echo "<pre>";
-
-            //print_r($bailMaster);
-
-            //exit;
-
-
-            //$bailMaster->j_id = $value;
-            $bailMaster->m_court_number = $userInputData['court_no'][$value];
-            $bailMaster->m_index_number = $userInputData['index_no'][$value];
-            $bailMaster->m_index_year = $userInputData['index_year'][$value];
-            $bailMaster->m_posted_date = date("Y-m-d", strtotime($userInputData['daterec'][$value]));
-            $bailMaster->m_def_last_name = $jailImportRecord->j_def_last_name;
-            $bailMaster->m_def_first_name = $jailImportRecord->j_def_first_name;
-            $bailMaster->m_surety_last_name = $jailImportRecord->j_surety_last_name;
-            $bailMaster->m_surety_first_name = $jailImportRecord->j_surety_first_name;
-            $bailMaster->m_forfeit_amount = 0;
-            $bailMaster->m_payment_amount = 0;
-            $bailMaster->m_city_fee_amount = 0;
-            $bailMaster->m_receipt_amount = $jailImportRecord->j_bail_amount /100;
-            $bailMaster->m_comments_ind =  $comment;
-            $bailMaster->m_status = 'O';
-            $bailMaster->m_surety_address = $jailImportRecord->j_surety_address;
-            $bailMaster->m_surety_city = $jailImportRecord->j_surety_city;
-            $bailMaster->m_surety_state = $jailImportRecord->j_surety_state;
-            $bailMaster->m_surety_zip = $jailImportRecord->j_surety_zip;
-            $bailMaster->save();
+            $checkNumber = Session::get('checkNumber');
+            $jailImport = new JailImport();
+            $jailRecords = $jailImport->GetJailRecordsByCheckNumber($checkNumber);
+            $totalJailRecords = $jailImport->GetJailRecordsTotalByCheckNumber();
+            $jailIdArray = $jailImport->GetAllJailIds();
+            $courtList = Courts::pluck('c_name', 'c_id')->toArray();
+            Session::put('JailIdArray', $jailIdArray);
+            Session::put('checkNumber', $checkNumber);
+            $indexArray = [
+                            'checkNumber' => $checkNumber,
+                            'totalCheckAmount' => $totalJailRecords,
+                            'jailRecords' => $jailRecords,
+                            'color1' => "#EEEEEE",
+                            'color2' => "#CCCCCC",
+                            'row_count' => 0,
+                            'check_total' => 0,
+                            'keyno' => 0,
+                            'courtList' => $courtList,
+                        ];
+        return view('enterBail.jailImport')->with($indexArray);
         }
-
-       
     }
 
 
@@ -146,7 +184,7 @@ class EnterBailController extends Controller
     {
         $query = $request->get('term','');
         $jailImport = new JailImport();
-        $jailRecords = $jailImport->GetJailRecordsLikeCheckNumber($query);
+        $jailRecords = $jailImport->GetCheckNumbersLikeInput($query);
 
         $data = array();
 

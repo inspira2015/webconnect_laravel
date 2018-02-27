@@ -23,10 +23,16 @@ class JailImport extends Model
      */
     public $timestamps = false;
 
-    public function scopeGetJailRecordsLikeCheckNumber($query, $checkNumber)
+    /**
+     * [scopeGetJailRecordsLikeCheckNumber description]
+     * @param  [type] $query       [description]
+     * @param  [type] $checkNumber [description]
+     * @return [type]              [description]
+     */
+    public function scopeGetCheckNumbersLikeInput($query, $checkNumber)
     {
         $checkNumber = (int) $checkNumber;
-        return $query->where('j_check_number', 'like', $checkNumber . '%')->get();
+        return $query->distinct()->select('j_check_number')->where('j_check_number', 'like', $checkNumber . '%')->get();
     }
 
     public function scopeGetJailRecordsByCheckNumber($query, $checkNumber)
@@ -50,9 +56,11 @@ class JailImport extends Model
                             AND ji.j_check_number = ?
                             GROUP BY ji.j_id WITH ROLLUP ", [$checkNumber]
                         );
-        $totalRow = array_pop($jailRecords);
-        $this->resultJailRecord = $jailRecords;
-        $this->totalJailAmount = $totalRow->total;
+        if (!empty($jailRecords)) {
+          $totalRow = array_pop($jailRecords);
+          $this->resultJailRecord = $jailRecords;
+          $this->totalJailAmount = $totalRow->total;
+        }
         return $jailRecords;
     }
 
