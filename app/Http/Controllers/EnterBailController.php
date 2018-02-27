@@ -179,7 +179,7 @@ class EnterBailController extends Controller
                             'keyno' => 0,
                             'courtList' => $courtList,
                             'processBail' => false,
-                        ];
+                          ];
         return view('enterBail.jailImport')->with($indexArray);
         }
     }

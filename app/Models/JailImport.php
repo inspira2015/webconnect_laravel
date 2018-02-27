@@ -71,14 +71,14 @@ class JailImport extends Model
         $id = (int) $id;
         $jailRecords = DB::select("
                                     SELECT    
-                                          SUBSTRING_INDEX(ji.j_index_number, '/', 1)  AS index_number,
-                                          SUBSTRING_INDEX(ji.j_index_number, '/', -1) AS index_year,
-                                          TRUNCATE(ji.j_bail_amount/100, 2)        AS bail_amount,
-                                          ji.*
-                                    FROM  jail_import AS ji
-                            WHERE 1
-                            AND ji.j_id = ?", [$id]
-                        );
+                                           SUBSTRING_INDEX(ji.j_index_number, '/', 1)  AS index_number,
+                                           SUBSTRING_INDEX(ji.j_index_number, '/', -1) AS index_year,
+                                           TRUNCATE(ji.j_bail_amount/100, 2)        AS bail_amount,
+                                           ji.*
+                                    FROM   jail_import AS ji
+                                    WHERE  1
+                                    AND    ji.j_id      =  ?", [$id]
+                                 );
         if (!empty($jailRecords)) {
           return $jailRecords[0];
         }
