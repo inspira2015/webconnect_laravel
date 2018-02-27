@@ -131,7 +131,7 @@ return [
         |
         */
 
-        'ldap' => 'userprincipalname',
+        'ldap' => 'samaccountname',
 
         /*
         |--------------------------------------------------------------------------
@@ -239,7 +239,7 @@ return [
 
     'sync_attributes' => [
 
-        'username' => 'userprincipalname',
+        'username' => 'samaccountname',
         'name' => 'cn',
 
     ],

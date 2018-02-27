@@ -16,7 +16,7 @@ class CreateTbailMaster extends Migration
         //
          Schema::create('bail_master', function (Blueprint $table) {
             $table->increments('m_id');
-            $table->integer('j_id')->nullable();
+            $table->integer('j_check_number')->nullable();
             $table->integer('m_court_number');
             $table->string('m_index_number', 10);
             $table->string('m_index_year', 2);

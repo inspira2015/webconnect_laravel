@@ -44,14 +44,16 @@ class JailImport extends Model
                                       SUBSTRING_INDEX(ji.j_index_number, '/', 1)  AS index_number,
                                       SUBSTRING_INDEX(ji.j_index_number, '/', -1) AS index_year,
                                       CASE
-                                            WHEN bm.j_id IS NOT NULL THEN 'duplicate-row'
+                                            WHEN bm.j_check_number IS NOT NULL THEN 'duplicate-row'
                                             ELSE   ''
                                       END as duplicate,
-                                      bm.j_id                                  AS bm_j_id,
+                                     
                                       TRUNCATE(ji.j_bail_amount/100, 2)        AS bail_amount,
                                       ji.*
                             FROM      jail_import AS ji
-                            LEFT JOIN bail_master AS bm ON bm.j_id = ji.j_id
+                            LEFT JOIN bail_master AS bm ON bm.j_check_number       = ji.j_check_number
+                                  AND SUBSTRING_INDEX(ji.j_index_number, '/', 1)   = bm.m_index_number
+                                  AND  SUBSTRING_INDEX(ji.j_index_number, '/', -1) = bm.m_index_year  
                             WHERE 1
                             AND ji.j_check_number = ?
                             GROUP BY ji.j_id WITH ROLLUP ", [$checkNumber]
@@ -60,6 +62,25 @@ class JailImport extends Model
           $totalRow = array_pop($jailRecords);
           $this->resultJailRecord = $jailRecords;
           $this->totalJailAmount = $totalRow->total;
+        }
+        return $jailRecords;
+    }
+
+    public function scopeGetJailRecordSplitById($query, $id)
+    {
+        $id = (int) $id;
+        $jailRecords = DB::select("
+                                    SELECT    
+                                          SUBSTRING_INDEX(ji.j_index_number, '/', 1)  AS index_number,
+                                          SUBSTRING_INDEX(ji.j_index_number, '/', -1) AS index_year,
+                                          TRUNCATE(ji.j_bail_amount/100, 2)        AS bail_amount,
+                                          ji.*
+                                    FROM  jail_import AS ji
+                            WHERE 1
+                            AND ji.j_id = ?", [$id]
+                        );
+        if (!empty($jailRecords)) {
+          return $jailRecords[0];
         }
         return $jailRecords;
     }

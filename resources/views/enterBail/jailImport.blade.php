@@ -73,7 +73,7 @@
     <table width="100%" border="0" cellspacing="0" cellpadding="2">
         <tr>
             <td valign="top"><h1>Enter Bail By Jail Check Number</h1></td>
-            <td valign="top"><div align="right"><span class="content"><a href="index.php" >Main Menu </a></span></div></td>
+            <td valign="top"><div align="right"><span class="content"><a href="{{ route('home') }}" >Main Menu </a></span></div></td>
         </tr>
     </table>
 
@@ -106,8 +106,8 @@
  </div>
         <form name="bails" id="form-bails" method="post" action="{{ route('processbails') }}" class="reduce-input form-inline content">
             {{ csrf_field() }}
+    @if($processBail)
         <div style="margin-top: .5em; margin-left: 5em; width: 100%;">
-
             <div class="form-group">
                 <div class="form-group">
                     <label for="docno"><strong>Document Number: </strong></label>
@@ -134,17 +134,22 @@
         </div>
    <br><br>
     <hr style="width: 100%;">
+    @endif
 
-
-    @if( ! empty($jailRecords))
-        <div style="width: 100%; padding: 8px; text-align: right;">
-            <button type="submit" class="btn btn-warning ">Process Bail</button>
-        </div>
+    @if(!empty($jailRecords))
+        @if($processBail)
+            <div style="width: 100%; padding: 8px; text-align: right;">
+                <button type="submit" class="btn btn-warning ">Process Bail</button>
+            </div>
+        @endif
 
         @include('enterbail.jailImportResultTable')
-        <div style="width: 100%; padding: 8px; text-align: right; margin-top: 20px;">
-            <button type="submit" class="btn btn-warning ">Process Bail</button>
-        </div>
+
+        @if($processBail)
+            <div style="width: 100%; padding: 8px; text-align: right; margin-top: 20px;">
+                <button type="submit" class="btn btn-warning ">Process Bail</button>
+            </div>
+        @endif
     @endif
 
     <br><br>

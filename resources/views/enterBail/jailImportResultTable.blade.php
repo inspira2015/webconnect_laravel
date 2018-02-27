@@ -23,7 +23,8 @@
         <td>State</td>
         <td>Zip</td>
         <td>Phone</td>
-        <td><br /></td>
+        <td><br/></td>
+    
     </tr>
 
     @foreach($jailRecords as $key => $value)

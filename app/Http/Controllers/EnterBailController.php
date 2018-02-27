@@ -88,6 +88,7 @@ class EnterBailController extends Controller
                         'check_total' => 0,
                         'keyno' => 0,
                         'courtList' => $courtList,
+                        'processBail' => true,
                       ];
         return view('enterBail.jailImport')->with($indexArray);
     }
@@ -105,18 +106,23 @@ class EnterBailController extends Controller
             $jailIdArray = Session::get('JailIdArray');
             $userInputData = $request->all();
             $processDate = date('Y-m-d G:i:s');
+            $checkNumber = Session::get('checkNumber');
 
             
             foreach ($jailIdArray AS $key => $value) {
-                $jailImportRecord = JailImport::where('j_id', '=', $value)->first();
+                $jailImportRecord = JailImport::GetJailRecordSplitById($value);
                 $bailAmount = $jailImportRecord->j_bail_amount /100;
                 $comment = 'N';
 
                 if ($jailImportRecord->j_def_suffix == "*") {
                     $comment = 'Y';
                 }
-                $bailMaster = BailMaster::firstOrNew(array('j_id' => $value));
 
+                $bailMaster = BailMaster::firstOrNew([
+                                                       "j_check_number" => $jailImportRecord->j_check_number,
+                                                       "m_index_number" => $jailImportRecord->index_number,
+                                                       "m_index_year" => $jailImportRecord->index_year,
+                                                     ]);
                 $bailMaster->m_court_number = $userInputData['court_no'][$value];
                 $bailMaster->m_index_number = $userInputData['index_no'][$value];
                 $bailMaster->m_index_year = $userInputData['index_year'][$value];
@@ -136,7 +142,6 @@ class EnterBailController extends Controller
                 $bailMaster->m_surety_state = $jailImportRecord->j_surety_state;
                 $bailMaster->m_surety_zip = $jailImportRecord->j_surety_zip;
                 $bailMaster->save();
-            
 
                 $bailTransaction = BailTransactions::firstOrNew([
                                                                   "m_id" => $bailMaster->m_id,
@@ -153,7 +158,6 @@ class EnterBailController extends Controller
                 $bailTransaction->t_total_refund = 0;
                 $bailTransaction->t_reversal_index = '';
                 $bailTransaction->save();
-                
             }
 
             $checkNumber = Session::get('checkNumber');
@@ -174,6 +178,7 @@ class EnterBailController extends Controller
                             'check_total' => 0,
                             'keyno' => 0,
                             'courtList' => $courtList,
+                            'processBail' => false,
                         ];
         return view('enterBail.jailImport')->with($indexArray);
         }

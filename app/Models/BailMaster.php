@@ -21,7 +21,7 @@ class BailMaster extends Model
     protected $primaryKey = 'm_id';
 
     protected $fillable = [
-                            'j_id',
+                            'j_check_number',
                             'm_court_number'
                           ];
 }
