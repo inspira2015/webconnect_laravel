@@ -12,9 +12,13 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
+    
+    <link href="{{ asset('css/cashbailcss.css')}}" rel="stylesheet" type="text/css"/>
     <link href="http://webconnect/NC_Stylesheets/clean.css" rel="stylesheet" type="text/css" />
     <link href="http://webconnect/NC_Stylesheets/intranet.css" rel="stylesheet" type="text/css">
+    
+
+    
     <link href="http://demo.expertphp.in/css/jquery.ui.autocomplete.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
     

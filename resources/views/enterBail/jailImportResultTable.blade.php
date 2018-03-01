@@ -42,9 +42,10 @@
             <td height="20" width="25">
                 <input name="index_year[<?php echo $value->j_id; ?>]" size="3" class="form-control form-control-sm" value="<?php echo $value->index_year; ?>">
             </td>
+
             <td height="20" width="120">
                 <?php $court_no = "court_no[{$value->j_id}]"; ?>
-                {!! Form::select($court_no, $courtList, $value->j_court_number, array('class' => 'form-control form-control-sm')) !!}
+                {!! Form::select($court_no, $courtList, $value->current_court_number, array('class' => 'form-control form-control-sm')) !!}
             </td>
             <td height="20" class="dollar-amount">  {{ $value->bail_amount }} </td>
             <td height="20">  {{ $value->j_surety_last_name }} </td>

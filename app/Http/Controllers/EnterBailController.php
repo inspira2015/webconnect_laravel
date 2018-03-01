@@ -60,6 +60,7 @@ class EnterBailController extends Controller
                         'check_total' => 0,
                         'keyno' => 0,
                         'courtList' => $courtList,
+                        'processBail' => true,
                       ];
         return view('enterBail.jailImport')->with($indexArray);
     }
@@ -107,7 +108,6 @@ class EnterBailController extends Controller
             $userInputData = $request->all();
             $processDate = date('Y-m-d G:i:s');
             $checkNumber = Session::get('checkNumber');
-
             
             foreach ($jailIdArray AS $key => $value) {
                 $jailImportRecord = JailImport::GetJailRecordSplitById($value);
@@ -123,7 +123,13 @@ class EnterBailController extends Controller
                                                        "m_index_number" => $jailImportRecord->index_number,
                                                        "m_index_year" => $jailImportRecord->index_year,
                                                      ]);
-                $bailMaster->m_court_number = $userInputData['court_no'][$value];
+                $courtNumberValues = [
+                                      'defualtValue' => (int) $jailImportRecord->j_court_number,
+                                      'globalValue' =>  (int) $userInputData['court_number'],
+                                      'rowValue' =>     (int) $userInputData['court_no'][$value],
+                                     ];
+
+                $bailMaster->m_court_number = $this->getCorrectCourtNumber($courtNumberValues);
                 $bailMaster->m_index_number = $userInputData['index_no'][$value];
                 $bailMaster->m_index_year = $userInputData['index_year'][$value];
                 $bailMaster->m_posted_date = date("Y-m-d", strtotime($userInputData['daterec'][$value]));
@@ -163,6 +169,7 @@ class EnterBailController extends Controller
             $checkNumber = Session::get('checkNumber');
             $jailImport = new JailImport();
             $jailRecords = $jailImport->GetJailRecordsByCheckNumber($checkNumber);
+
             $totalJailRecords = $jailImport->GetJailRecordsTotalByCheckNumber();
             $jailIdArray = $jailImport->GetAllJailIds();
             $courtList = Courts::pluck('c_name', 'c_id')->toArray();
@@ -184,7 +191,6 @@ class EnterBailController extends Controller
         }
     }
 
-
     public function searchcheckajax(Request $request)
     {
         $query = $request->get('term','');
@@ -193,7 +199,7 @@ class EnterBailController extends Controller
 
         $data = array();
 
-        foreach ($jailRecords as $currentRecord) {
+        foreach ($jailRecords as $dummykey => $currentRecord) {
                 $data[] = ['value'=> $currentRecord->j_check_number, 'id'=> $currentRecord->j_id];
         }
         
@@ -201,10 +207,17 @@ class EnterBailController extends Controller
              return $data;
         } else{
             return ['value'=>'No Result Found','id'=>''];
-        }
-    
+        }    
     }
 
+    public function manualentry()
+    {
+        $courtList = Courts::pluck('c_name', 'c_id')->toArray();
+        $indexArray = [
+                            'courtList' => $courtList,
+                      ];
+        return view('enterBail.jailImportManualEntry')->with($indexArray);
+    }
 
     public function checkolddatabase()
     {
@@ -242,11 +255,36 @@ class EnterBailController extends Controller
         echo "done";
     }
 
-
     private function convertDate($date)
     {
         return date('Y-m-d', strtotime($date));
     }
 
+    private function getCorrectCourtNumber($courtValues)
+    {   
+        if ($courtValues['defualtValue'] !== $courtValues['globalValue']) {
 
+            if ($courtValues['defualtValue'] == $courtValues['rowValue']) {
+                //echo "1";
+                //echo $courtValues['globalValue'];
+                //exit;
+                return $courtValues['globalValue'];
+            } else {
+                //echo "2";
+                //exit;
+                return $courtValues['rowValue'];
+            }
+        } else {
+            if ($courtValues['defualtValue'] == $courtValues['rowValue']) {
+                //echo "3";
+                //exit;
+                return $courtValues['defualtValue'];
+            } else {
+                //echo "4";
+                //exit;
+                return $courtValues['rowValue'];
+            }
+        }
+
+    }
 }

@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div style="background-image:url({{ asset('images/cashbail/back_red_21.jpg') }}); background-position:top left; background-repeat:no-repeat; padding:10px;">
+<div>
         <table width="100%" border="0" cellspacing="0" cellpadding="2">
             <tr>
                 <td><h1>Bail Entry</h1></td>
@@ -17,7 +17,7 @@
                 <td height="21" style="background-image:url({{ asset('images/cashbail/cashbailbuttons_03.jpg') }}); background-position: left top; background-repeat:no-repeat"><span style="font-weight: bold; padding-left:30px;"><a href="{{ route('jailcheck') }}" class="content">Enter Bail From Jail Check</a></span></td>
             </tr>
             <tr>
-                <td height="21" style="background-image:url({{ asset('images/cashbail/cashbailbuttons_03.jpg') }}); background-position: left top; background-repeat:no-repeat"><span style="font-weight: bold; padding-left:30px;"><a href="enterbail.php" class="content">Enter Bail Manually </a></span><a href="enterbail.php"><span class="content"></span></a></td>
+                <td height="21" style="background-image:url({{ asset('images/cashbail/cashbailbuttons_03.jpg') }}); background-position: left top; background-repeat:no-repeat"><span style="font-weight: bold; padding-left:30px;"><a href="{{ route('manualentry') }}" class="content">Enter Bail Manually </a></span><a href="{{ route('manualentry') }}"><span class="content"></span></a></td>
             </tr>
         </table>
 </div>

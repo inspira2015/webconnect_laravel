@@ -46,9 +46,12 @@ class JailImport extends Model
                                       CASE
                                             WHEN bm.j_check_number IS NOT NULL THEN 'duplicate-row'
                                             ELSE   ''
-                                      END as duplicate,
-                                     
-                                      TRUNCATE(ji.j_bail_amount/100, 2)        AS bail_amount,
+                                      END                                         AS duplicate,
+                                      CASE
+                                            WHEN bm.m_court_number IS NOT NULL THEN bm.m_court_number
+                                            ELSE ji.j_court_number
+                                      END                                         AS current_court_number,
+                                      TRUNCATE(ji.j_bail_amount/100, 2)           AS bail_amount,
                                       ji.*
                             FROM      jail_import AS ji
                             LEFT JOIN bail_master AS bm ON bm.j_check_number       = ji.j_check_number
