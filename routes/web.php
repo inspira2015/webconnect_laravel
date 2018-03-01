@@ -16,18 +16,17 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/home/cashBailManual', 'HomeController@downloadCashBailManual');
-
 
 Route::get('/enterbail', 'EnterBailController@index')->name('enterbail');
 Route::get('/enterbail/jailcheck', 'EnterBailController@jailImport')->name('jailcheck');
 Route::post('/enterbail/searchchecknumber', 'EnterBailController@searchchecknumber')->name('searchchecknumber');
 Route::post('/enterbail/processbails', 'EnterBailController@processbails')->name('processbails');
+Route::get('/enterbail/manualentry', 'EnterBailController@manualentry')->name('manualentry');
+Route::post('/enterbail/processmanualentry', 'EnterBailController@processmanualentry')->name('processmanualentry');
 
 
 Route::get('/enterbail/searchcheckajax', 'EnterBailController@searchcheckajax')->name('searchcheckajax');
-
 Route::get('/enterbail/checkolddatabase', 'EnterBailController@checkolddatabase')->name('checkolddatabase');
 

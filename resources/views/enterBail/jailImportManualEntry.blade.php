@@ -1,13 +1,21 @@
 @extends('layouts.app')
 
 @section('content')
+<style type="text/css">
+    
+.error {
+    color:#FF0000!important;
+}
+
+</style>
+
 
 <div class="body-content">
     <h1>Enter Bail Manually</h1>
     
-    <form name="bails" id="form-bails" method="post" action="{{ route('processbails') }}" >
-        <div class="col-md-10 offset-md-1">
-            <span class="anchor" id="formComplex"></span>
+    <form name="bails" id="form-bails" method="post" action="{{ route('processmanualentry') }}" >
+        {{ csrf_field() }}
+        <div class="col-md-10 offset-md-1" style="margin-bottom: 50px;">
             <hr class="my-5">
 
             <!-- form complex example -->
@@ -15,107 +23,105 @@
 
                 <div class="col-sm-3 pb-3">
                     <label for="exampleAccount">Date Posted:</label>
-                    <input type="text" class="form-control" id="posted_date" name="posted_date" placeholder="MM/DD/YYY">
+                    <input type="text" class="form-control form-control-sm" required id="posted_date" name="posted_date" placeholder="MM/DD/YYY">
                 </div>
 
                 <div class="col-sm-3 pb-3">
                     <label for="exampleCtrl">Date of Record:</label>
-                    <input type="text" class="form-control" id="date_of_record" name="date_of_record" placeholder="MM/DD/YYY">
+                    <input type="text" class="form-control form-control-sm" required id="date_of_record" name="date_of_record" placeholder="MM/DD/YYY">
                 </div>
                 
                 <div class="col-sm-3 pb-3">
                     <label for="exampleAmount">Validation Number:</label>
-                    <input type="text" class="form-control" id="validation_number" name="validation_number" placeholder="">
+                    <input type="text" class="form-control form-control-sm" required id="validation_number" name="validation_number" placeholder="">
                 </div>
 
                 <hr class="my-5">
 
                 <div class="col-sm-6 pb-3">
-                    <label for="exampleFirst">Defendant First Name</label>
-                    <input type="text" class="form-control" id="exampleFirst">
+                    <label for="defendant_first_name">Defendant First Name</label>
+                    <input type="text" class="form-control form-control-sm" id="defendant_first_name" name="defendant_first_name" required>
                 </div>
                 
                 <div class="col-sm-6 pb-3">
-                    <label for="exampleLast">Defendant Last Name</label>
-                    <input type="text" class="form-control" id="exampleLast">
+                    <label for="defendant_last_name">Defendant Last Name</label>
+                    <input type="text" class="form-control form-control-sm" id="defendant_last_name" name="defendant_last_name" required>
                 </div>
                 
 
                 <div class="col-sm-2 pb-3">
-                    <label for="exampleAccount">Index Number: </label>
-                    <input type="text" class="form-control" id="posted_date" name="posted_date" placeholder="MM/DD/YYY">
+                    <label for="index_number">Index Number: </label>
+                    <input type="text" class="form-control form-control-sm" id="index_number" name="index_number" placeholder="" required>
                 </div>
 
                 <div class="col-sm-2 pb-3">
-                    <label for="exampleCtrl">Index Year:</label>
-                    <input type="text" class="form-control" id="date_of_record" name="date_of_record" placeholder="MM/DD/YYY">
+                    <label for="index_year">Index Year:</label>
+                    <input type="text" class="form-control form-control-sm" id="index_year" name="index_year" placeholder="" required>
                 </div>
                 
                <div class="col-sm-3 pb-3">
-                    <label for="exampleAmount">Bail Amount</label>
+                    <label for="bail_amount">Bail Amount</label>
                     <div class="input-group">
                         <div class="input-group-prepend"><span class="input-group-text">$</span></div>
-                        <input type="text" class="form-control" id="exampleAmount" placeholder="Amount">
+                        <input type="text" class="form-control form-control-sm" id="bail_amount" name="bail_amount" placeholder="Amount" required>
                     </div>
                 </div>
 
                 <div class="col-sm-3 pb-3">
                     <label for="court_number"><strong>Court Number: </strong></label>
-                        {!! Form::select('court_number', $courtList, null, array('class' => 'form-control')) !!}
+                        {!! Form::select('court_number', $courtList, null, array('class' => 'form-control form-control-sm')) !!}
                 </div>
 
 
                 <div class="col-sm-4 pb-3">
-                    <label for="exampleFirst">Surety First Name</label>
-                    <input type="text" class="form-control" id="exampleFirst">
+                    <label for="surety_first_name">Surety First Name</label>
+                    <input type="text" class="form-control form-control-sm" id="surety_first_name" name="surety_first_name" required>
                 </div>
                 
                 <div class="col-sm-4 pb-3">
-                    <label for="exampleLast">Surety Last Name</label>
-                    <input type="text" class="form-control" id="exampleLast">
+                    <label for="surety_last_name">Surety Last Name</label>
+                    <input type="text" class="form-control form-control-sm" id="surety_last_name" name="surety_last_name" required>
                 </div>
                 
                 <div class="form-check" style="padding-top: 30px; margin-left: 40px;">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                    <label class="form-check-label" for="exampleCheck1">
+                    <input type="checkbox" class="form-check-input" id="defendant_comments" name="defendant_comments">
+                    <label class="form-check-label" for="defendant_comments">
                         Defendant Comments
                     </label>
                 </div>
 
 
                 <div class="col-sm-6 pb-3">
-                    <label for="exampleCity">Address</label>
-                    <input type="text" class="form-control" id="exampleCity">
+                    <label for="surety_address">Address</label>
+                    <input type="text" class="form-control form-control-sm" id="surety_address" name="surety_address" required>
                 </div>
 
                 <div class="col-sm-3 pb-3">
-                    <label for="exampleCity">City</label>
-                    <input type="text" class="form-control" id="exampleCity">
+                    <label for="surety_city">City</label>
+                    <input type="text" class="form-control form-control-sm" id="surety_city" name="surety_city" required>
                 </div>
                 
                 <div class="col-sm-3 pb-3">
-                    <label for="exampleSt">State</label>
-                    <select class="form-control" id="exampleSt">
-                     <option>Pick a state</option>
-                    </select>
+                    <label for="surety_state">State</label>
+                    {!! Form::select('surety_state', $stateList, null, array('class' => 'form-control form-control-sm')) !!}
+
                 </div>
                 
                 <div class="col-sm-3 pb-3">
-                    <label for="exampleZip">Zip Code</label>
-                    <input type="text" class="form-control" id="exampleZip">
+                    <label for="surety_zip">Zip Code</label>
+                    <input type="text" class="form-control form-control-sm" id="surety_zip" name="surety_zip" required>
                 </div>
  
-                        <div class="col-md-6 pb-3">
-                            <label for="exampleMessage">Message</label>
-                            <textarea class="form-control" id="exampleMessage"></textarea>
-                            <small class="text-info">
-                              Add the packaging note here.
-                            </small>
-                        </div>
-
-                    </div>
-
+                <div class="col-md-6 pb-3">
+                    <label for="custom_comments">Comments</label>
+                    <textarea class="form-control" id="custom_comments" name="custom_comments"></textarea>
+                    <small class="text-info">
+                        Add the packaging note here.
+                    </small>
                 </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Insert Bail Record</button>
+        </div>
 
 
     </form>

@@ -8,6 +8,8 @@ use App\Models\JailImport;
 use App\Models\Courts;
 use App\Models\BailMaster;
 use App\Models\BailTransactions;
+use App\Models\BailConfiguration;
+
 
 use Auth;
 use Input;
@@ -210,14 +212,32 @@ class EnterBailController extends Controller
         }    
     }
 
+    /**
+     * [manualentry Manual Entry form]
+     * @return [type] [description]
+     */
     public function manualentry()
     {
         $courtList = Courts::pluck('c_name', 'c_id')->toArray();
+        $stateList = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
+
         $indexArray = [
-                            'courtList' => $courtList,
+                        'courtList' => $courtList,
+                        'stateList' => $stateList,
                       ];
         return view('enterBail.jailImportManualEntry')->with($indexArray);
     }
+
+    /**
+     * [processmanualentry description]
+     * @return [type] [description]
+     */
+    public function processmanualentry(Request $request)
+    {
+        echo "done";
+        exit;
+    }
+
 
     public function checkolddatabase()
     {
