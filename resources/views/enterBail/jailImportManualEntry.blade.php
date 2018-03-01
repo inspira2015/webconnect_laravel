@@ -13,7 +13,7 @@
 <div class="body-content">
     <h1>Enter Bail Manually</h1>
     
-    <form name="bails" id="form-bails" method="post" action="{{ route('processmanualentry') }}" >
+    <form name="bails" id="manual-bail-entry" method="post" action="{{ route('processmanualentry') }}" >
         {{ csrf_field() }}
         <div class="col-md-10 offset-md-1" style="margin-bottom: 50px;">
             <hr class="my-5">
@@ -48,24 +48,29 @@
                     <input type="text" class="form-control form-control-sm" id="defendant_last_name" name="defendant_last_name" required>
                 </div>
                 
+   
+                    <div class="col-sm-2 pb-3">
+                        <label for="index_number">Index Number: </label>
+                        <input type="text" class="form-control form-control-sm" id="index_number" name="index_number" placeholder="" required>
+                        <div id="indexyear_message" style="padding-top: 5px; overflow: hidden;">
+                        </div>
+                    </div>
 
-                <div class="col-sm-2 pb-3">
-                    <label for="index_number">Index Number: </label>
-                    <input type="text" class="form-control form-control-sm" id="index_number" name="index_number" placeholder="" required>
-                </div>
 
-                <div class="col-sm-2 pb-3">
-                    <label for="index_year">Index Year:</label>
-                    <input type="text" class="form-control form-control-sm" id="index_year" name="index_year" placeholder="" required>
-                </div>
-                
-               <div class="col-sm-3 pb-3">
+                    <div class="col-sm-2 pb-3">
+                        <label for="index_year">Index Year:</label>
+                        <input type="text" class="form-control form-control-sm" maxlength="2" id="index_year" name="index_year" placeholder="" required>
+                    </div>
+
+
+               <div class="col-sm-2 pb-3">
                     <label for="bail_amount">Bail Amount</label>
-                    <div class="input-group">
+                    <div class="input-group input-group-sm mb-3">
                         <div class="input-group-prepend"><span class="input-group-text">$</span></div>
                         <input type="text" class="form-control form-control-sm" id="bail_amount" name="bail_amount" placeholder="Amount" required>
                     </div>
                 </div>
+
 
                 <div class="col-sm-3 pb-3">
                     <label for="court_number"><strong>Court Number: </strong></label>
@@ -147,12 +152,66 @@
             autoclose: true,
         };
         date_input.datepicker(options).datepicker("setDate",'now');
+        
+
+       // src = "{{ route('searchcheckajax') }}";
+       // $.ajax({
+        //            url: src,
+       //             dataType: "json",
+        //            data : { foo : 'bar', bar : 'foo' },
+
+      //              success: function(data) {
+     //                   response(data);
+                       
+     //               }
+      //          });
+
+        src = "{{ route('validateindexyear') }}";
+        $("#index_number").change(function(){
+            var index_number = $(this).val();
+            var index_year = $('#index_year').val();
+                console.log('not');
+
+            if (index_year && index_number) {
+                console.log('validate');
+                $.ajax({
+                    url: src,
+                    dataType: "json",
+                    data : { number : index_number, year : index_year },
+                    success: function(data) {
+                        console.log('response: ' + data);
+                        $('#indexyear_message').html('This is a test');
+                    }
+                });
+            } 
+
+           // alert("numberThe text has been changed." + value);
+        });
+
+        $("#index_year").change(function(){
+           // alert("year The text has been changed.");
+        });
 
     });
 
-    $("#form-bails").validate({
-     
+    $( "#manual-bail-entry" ).validate({
+        rules: {
+            validation_number: {
+                required: true,
+                number: true
+            },
+            bail_amount: {
+                required: true,
+                number: true
+            },
+            index_year: {
+                required: true,
+                number: true
+            },
+        }
     });
+
+
 </script>
 
 @endsection

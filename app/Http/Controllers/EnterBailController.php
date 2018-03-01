@@ -234,10 +234,27 @@ class EnterBailController extends Controller
      */
     public function processmanualentry(Request $request)
     {
-        echo "done";
-        exit;
+        if ($request->isMethod('post')) {
+            $userInputData = $request->all();
+
+            print_r($userInputData);
+            exit;
+
+
+            echo "done";
+            exit;
+        }
     }
 
+
+    public function validateindexyear(Request $request)
+    {
+
+        $userInputData = $request->all();
+        return response()->json(['name' => 'Abigail', 'state' => 'CA']);
+            print_r($userInputData);
+            exit;
+    }
 
     public function checkolddatabase()
     {
