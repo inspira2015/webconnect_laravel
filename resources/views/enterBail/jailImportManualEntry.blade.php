@@ -4,7 +4,11 @@
 <style type="text/css">
     
 .error {
-    color:#FF0000!important;
+    color: #FF0000!important;
+}
+
+.green {
+    color: #008000!important;
 }
 
 </style>
@@ -33,7 +37,7 @@
                 
                 <div class="col-sm-3 pb-3">
                     <label for="exampleAmount">Validation Number:</label>
-                    <input type="text" class="form-control form-control-sm" required id="validation_number" name="validation_number" placeholder="">
+                    <input type="text" class="form-control form-control-sm" id="validation_number" name="validation_number" placeholder="">
                 </div>
 
                 <hr class="my-5">
@@ -52,7 +56,8 @@
                     <div class="col-sm-2 pb-3">
                         <label for="index_number">Index Number: </label>
                         <input type="text" class="form-control form-control-sm" id="index_number" name="index_number" placeholder="" required>
-                        <div id="indexyear_message" style="padding-top: 5px; overflow: hidden;">
+                        <div id="indexyear_message" class="" style="padding-top: 5px; overflow: hidden; font-size: 11px; font-weight: bold;">
+                        <input type="hidden" id="valid_indexyear" name="valid_indexyear" value="">
                         </div>
                     </div>
 
@@ -67,7 +72,7 @@
                     <label for="bail_amount">Bail Amount</label>
                     <div class="input-group input-group-sm mb-3">
                         <div class="input-group-prepend"><span class="input-group-text">$</span></div>
-                        <input type="text" class="form-control form-control-sm" id="bail_amount" name="bail_amount" placeholder="Amount" required>
+                        <input type="text" class="form-control form-control-sm" id="bail_amount" name="bail_amount" placeholder="Amount">
                     </div>
                 </div>
 
@@ -117,13 +122,7 @@
                     <input type="text" class="form-control form-control-sm" id="surety_zip" name="surety_zip" required>
                 </div>
  
-                <div class="col-md-6 pb-3">
-                    <label for="custom_comments">Comments</label>
-                    <textarea class="form-control" id="custom_comments" name="custom_comments"></textarea>
-                    <small class="text-info">
-                        Add the packaging note here.
-                    </small>
-                </div>
+  
             </div>
             <button type="submit" class="btn btn-primary">Insert Bail Record</button>
         </div>
@@ -132,7 +131,41 @@
     </form>
 </div>
 <script>
-    $(document).ready(function(){
+    $(document).ready(function() {
+        var src = "{{ route('validateindexyear') }}";
+ 
+
+
+        $.validator.addMethod(
+            "uniqueNumberYear",
+                function(value, element) {
+                    var index_number = $('#index_number').val();
+                    var index_year = $('#index_year').val();
+                    var result = false;
+
+                    $.ajax({
+                        type: "GET",
+                        url: src,
+                                        async:false,
+
+                        data: { number : index_number, year : index_year },
+                        dataType:"json",
+                        success: function (data) {
+                           if (data.result == 'empty') {
+                                result = true;
+                            } 
+        
+                        }
+                    });
+
+                    return result;
+
+
+        },
+        "Index Number/Year are duplicate"
+    );
+
+
         var date_input=$('input[name="posted_date"]'); //our date input has the name "date"
         var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
         var options={
@@ -153,24 +186,14 @@
         };
         date_input.datepicker(options).datepicker("setDate",'now');
         
+       // var validateIndexYear = $(function(){
+       // });
 
-       // src = "{{ route('searchcheckajax') }}";
-       // $.ajax({
-        //            url: src,
-       //             dataType: "json",
-        //            data : { foo : 'bar', bar : 'foo' },
 
-      //              success: function(data) {
-     //                   response(data);
-                       
-     //               }
-      //          });
 
-        src = "{{ route('validateindexyear') }}";
         $("#index_number").change(function(){
             var index_number = $(this).val();
             var index_year = $('#index_year').val();
-                console.log('not');
 
             if (index_year && index_number) {
                 console.log('validate');
@@ -179,13 +202,22 @@
                     dataType: "json",
                     data : { number : index_number, year : index_year },
                     success: function(data) {
-                        console.log('response: ' + data);
-                        $('#indexyear_message').html('This is a test');
+
+                        if (data.result == 'empty') {
+                            $('#indexyear_message').removeClass("error");
+                            $('#indexyear_message').addClass("green");
+                            $('#indexyear_message').html('Index Number/Year are unique');
+                            $('#valid_indexyear').val(0);                            
+                        } else {
+                            $('#indexyear_message').removeClass("green");
+                            $('#indexyear_message').addClass("error");
+                            $('#indexyear_message').html('Index Number/Year are duplicate');
+                            $('#valid_indexyear').val(1);
+                        }                        
                     }
                 });
             } 
 
-           // alert("numberThe text has been changed." + value);
         });
 
         $("#index_year").change(function(){
@@ -195,6 +227,13 @@
     });
 
     $( "#manual-bail-entry" ).validate({
+        debug: true,
+        success: function(label,element) {
+                label.hide();
+                //var parent = $('.success').parent().get(0); // This would be the <a>'s parent <li>.
+                //$(parent).addClass('has-success');    
+        },
+
         rules: {
             validation_number: {
                 required: true,
@@ -206,8 +245,9 @@
             },
             index_year: {
                 required: true,
-                number: true
+                uniqueNumberYear: true
             },
+
         }
     });
 

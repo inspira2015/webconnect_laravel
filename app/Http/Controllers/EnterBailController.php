@@ -236,8 +236,14 @@ class EnterBailController extends Controller
     {
         if ($request->isMethod('post')) {
             $userInputData = $request->all();
+            $indexNumber = $userInputData['number'];
+            $indexYear = $userInputData['year'];
 
-            print_r($userInputData);
+            $queryResults = BailMaster::ValidateUniqueRecord([
+                                                               'index_number' => $indexNumber,
+                                                               'index_year' => $indexYear
+                                                             ]);
+            print_r($queryResults);
             exit;
 
 
@@ -249,11 +255,40 @@ class EnterBailController extends Controller
 
     public function validateindexyear(Request $request)
     {
-
         $userInputData = $request->all();
-        return response()->json(['name' => 'Abigail', 'state' => 'CA']);
-            print_r($userInputData);
-            exit;
+        $indexNumber = $userInputData['number'];
+        $indexYear = $userInputData['year'];
+
+        $queryResults = BailMaster::ValidateUniqueRecord([
+                                                            'index_number' => $indexNumber,
+                                                            'index_year' => $indexYear,
+                                                         ]);
+        if (empty($queryResults)) {
+            return response()->json(['result' => 'empty'], 200);
+        }
+
+        $bailMasterRow = $queryResults[0];
+        return response()->json(['result' => 'duplicate',
+                                 'record' =>  $bailMasterRow]);
+    }
+
+
+    public function validateindexyear2(Request $request)
+    {
+        $userInputData = $request->all();
+        $indexNumber = $userInputData['number'];
+        $indexYear = $userInputData['year'];
+
+        $queryResults = BailMaster::ValidateUniqueRecord([
+                                                            'index_number' => $indexNumber,
+                                                            'index_year' => $indexYear,
+                                                         ]);
+        if (empty($queryResults)) {
+            return response()->json('true', 200);
+        }
+        
+        $bailMasterRow = $queryResults[0];
+        return response()->json('false');
     }
 
     public function checkolddatabase()
