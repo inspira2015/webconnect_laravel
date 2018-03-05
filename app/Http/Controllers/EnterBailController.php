@@ -243,13 +243,10 @@ class EnterBailController extends Controller
                                                                'index_number' => $indexNumber,
                                                                'index_year' => $indexYear
                                                              ]);
-            print_r($queryResults);
-            exit;
 
-
-            echo "done";
-            exit;
+           
         }
+         return view('enterBail.processmanualentry')->with(array());
     }
 
 

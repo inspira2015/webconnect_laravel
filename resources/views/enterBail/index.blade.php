@@ -14,10 +14,10 @@
                 <td><span class="content" style="font-weight: bold;">Select a bail entry method </span><span class="content"></span></td>
             </tr>
             <tr>
-                <td height="21" style="background-image:url({{ asset('images/cashbail/cashbailbuttons_03.jpg') }}); background-position: left top; background-repeat:no-repeat"><span style="font-weight: bold; padding-left:30px;"><a href="{{ route('jailcheck') }}" class="content">Enter Bail From Jail Check</a></span></td>
+                <td height="21" style="background-image:url({{ asset('img/cashbail/cashbailbuttons_03.jpg') }}); background-position: left top; background-repeat:no-repeat"><span style="font-weight: bold; padding-left:30px;"><a href="{{ route('jailcheck') }}" class="content">Enter Bail From Jail Check</a></span></td>
             </tr>
             <tr>
-                <td height="21" style="background-image:url({{ asset('images/cashbail/cashbailbuttons_03.jpg') }}); background-position: left top; background-repeat:no-repeat"><span style="font-weight: bold; padding-left:30px;"><a href="{{ route('manualentry') }}" class="content">Enter Bail Manually </a></span><a href="{{ route('manualentry') }}"><span class="content"></span></a></td>
+                <td height="21" style="background-image:url({{ asset('img/cashbail/cashbailbuttons_03.jpg') }}); background-position: left top; background-repeat:no-repeat"><span style="font-weight: bold; padding-left:30px;"><a href="{{ route('manualentry') }}" class="content">Enter Bail Manually </a></span><a href="{{ route('manualentry') }}"><span class="content"></span></a></td>
             </tr>
         </table>
 </div>

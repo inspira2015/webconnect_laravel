@@ -68,7 +68,7 @@
 
 </style>
 
-<div style="background-image:url({{ asset('images/cashbail/back_red_21.jpg') }}); background-position:top left; background-repeat:no-repeat;  padding:10px;">
+<div style="background-image:url({{ asset('img/cashbail/back_red_21.jpg') }}); background-position:top left; background-repeat:no-repeat;  padding:10px;">
 
     <table width="100%" border="0" cellspacing="0" cellpadding="2">
         <tr>
