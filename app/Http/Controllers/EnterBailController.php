@@ -10,7 +10,7 @@ use App\Models\BailMaster;
 use App\Models\BailTransactions;
 use App\Models\BailConfiguration;
 
-
+use Redirect;
 use Auth;
 use Input;
 use Form;
@@ -235,14 +235,20 @@ class EnterBailController extends Controller
     public function processmanualentry(Request $request)
     {
         if ($request->isMethod('post')) {
+            echo "<pre>";
             $userInputData = $request->all();
-            $indexNumber = $userInputData['number'];
-            $indexYear = $userInputData['year'];
+            $indexNumber = $userInputData['index_number'];
+            $indexYear = $userInputData['index_year'];
 
+            print_r($userInputData);
+            //exit;
             $queryResults = BailMaster::ValidateUniqueRecord([
                                                                'index_number' => $indexNumber,
                                                                'index_year' => $indexYear
                                                              ]);
+            //if (!empty($queryResults)) {
+                return Redirect::back()->withInput($request->all());
+            //}
 
            
         }
