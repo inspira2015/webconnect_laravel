@@ -14,7 +14,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     
     <link href="{{ asset('css/cashbailcss.css')}}" rel="stylesheet" type="text/css"/>
-    <link href="http://webconnect/NC_Stylesheets/clean.css" rel="stylesheet" type="text/css" />
+    <!-- <link href="http://webconnect/NC_Stylesheets/clean.css" rel="stylesheet" type="text/css" /> -->
+    <link href="{{ asset('css/clean_old.css')}}" rel="stylesheet" type="text/css"/>
     <link href="http://webconnect/NC_Stylesheets/intranet.css" rel="stylesheet" type="text/css">
     
 
@@ -54,15 +55,7 @@
             <td> 
                 <div id="header">
                     <div class="wclogo"></div>
-                    <div class="weather" align="left"> <?php /* 
-                        ini_set("default_socket_timeout", "05");
-                        set_time_limit(5);
-                        $f=fopen("http://www.weather.com/weather/local/USNY0926","r");
-                        $r=fread($f,1000);
-                        fclose($f);
-                        if(strlen($r)>1){       
-                        include ('http://webconnect/weather2/zfeed/zfeeder.php'); 
-                        }      */ ?>
+                    <div class="weather" align="left">
                     </div>
                 </div>
             </td>

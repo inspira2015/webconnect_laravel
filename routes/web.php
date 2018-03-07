@@ -19,16 +19,15 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/home/cashBailManual', 'HomeController@downloadCashBailManual');
 
+Route::get('/import/jail/data', 'ImportDataController@importOldJailTable')->name('importjaildata');
+
 Route::get('/enterbail', 'EnterBailController@index')->name('enterbail');
-Route::get('/enterbail/jailcheck', 'EnterBailController@jailImport')->name('jailcheck');
-Route::post('/enterbail/searchchecknumber', 'EnterBailController@searchchecknumber')->name('searchchecknumber');
-Route::post('/enterbail/processbails', 'EnterBailController@processbails')->name('processbails');
-Route::get('/enterbail/manualentry', 'EnterBailController@manualentry')->name('manualentry');
-Route::post('/enterbail/processmanualentry', 'EnterBailController@processmanualentry')->name('processmanualentry');
+Route::get('/enterbail/ajax/findcheck', 'EnterBailController@searchcheckajax')->name('searchcheckajax');
 
-Route::get('/enterbail/validateindexyear', 'EnterBailController@validateindexyear')->name('validateindexyear');
+Route::get('/enterbail/jailbatch', 'EnterBailBatchController@index')->name('jailcheck');
+Route::post('/enterbail/jailbatch/check/results', 'EnterBailBatchController@searchchecknumber')->name('searchchecknumber');
+Route::post('/enterbail/jailbatch/processed', 'EnterBailBatchController@processbails')->name('processbails');
 
-
-Route::get('/enterbail/searchcheckajax', 'EnterBailController@searchcheckajax')->name('searchcheckajax');
-Route::get('/enterbail/checkolddatabase', 'EnterBailController@checkolddatabase')->name('checkolddatabase');
-
+Route::get('/enterbail/manualentry', 'EnterBailManualController@index')->name('manualentry');
+Route::post('/enterbail/manualentry/processed', 'EnterBailManualController@processmanualentry')->name('processmanualentry');
+Route::get('/enterbail/validateindexyear', 'EnterBailManualController@validateindexyear')->name('validateindexyear');

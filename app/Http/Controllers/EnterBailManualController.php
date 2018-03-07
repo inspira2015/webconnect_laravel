@@ -46,7 +46,7 @@ class EnterBailManualController extends EnterBailController
      */
     public function processmanualentry(Request $request)
     {
-        if ($request->isMethod('post')) {
+       /* if ($request->isMethod('post')) {
             $bailComments = 'N';
             $userInputData = $request->all();
             $indexNumber = $userInputData['index_number'];
@@ -97,7 +97,7 @@ class EnterBailManualController extends EnterBailController
                                     "t_reversal_index"     => '',
                                    ];
             $this->addTransactionRecord($bailTransactionData, $bailMasterId);
-        }
+        } */
          return view('enterBail.processmanualentry')->with(array());
     }
 
