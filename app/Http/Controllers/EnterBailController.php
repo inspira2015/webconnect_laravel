@@ -56,6 +56,11 @@ class EnterBailController extends Controller
         $indexArray = [
                         'jailRecords' => array(),
                         'totalCheckAmount' => '',
+                        'color1' => "#EEEEEE",
+                        'color2' => "#CCCCCC",
+                        'row_count' => 0,
+                        'check_total' => 0,
+                        'keyno' => 0,
                         'courtList' => $courtList,
                         'processBail' => true,
                       ];
@@ -80,6 +85,11 @@ class EnterBailController extends Controller
                         'checkNumber' => $checkNumber,
                         'totalCheckAmount' => $totalJailRecords,
                         'jailRecords' => $jailRecords,
+                        'color1' => "#EEEEEE",
+                        'color2' => "#CCCCCC",
+                        'row_count' => 0,
+                        'check_total' => 0,
+                        'keyno' => 0,
                         'courtList' => $courtList,
                         'processBail' => true,
                       ];
@@ -165,6 +175,11 @@ class EnterBailController extends Controller
                             'checkNumber' => $checkNumber,
                             'totalCheckAmount' => $totalJailRecords,
                             'jailRecords' => $jailRecords,
+                            'color1' => "#EEEEEE",
+                            'color2' => "#CCCCCC",
+                            'row_count' => 0,
+                            'check_total' => 0,
+                            'keyno' => 0,
                             'courtList' => $courtList,
                             'processBail' => false,
                           ];
