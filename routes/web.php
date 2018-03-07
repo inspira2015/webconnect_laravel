@@ -27,7 +27,6 @@ Route::get('/enterbail/manualentry', 'EnterBailController@manualentry')->name('m
 Route::post('/enterbail/processmanualentry', 'EnterBailController@processmanualentry')->name('processmanualentry');
 
 Route::get('/enterbail/validateindexyear', 'EnterBailController@validateindexyear')->name('validateindexyear');
-Route::get('/enterbail/validateindexyear2', 'EnterBailController@validateindexyear2')->name('validateindexyear2');
 
 
 Route::get('/enterbail/searchcheckajax', 'EnterBailController@searchcheckajax')->name('searchcheckajax');
