@@ -78,8 +78,7 @@
                 </div>
                 
                 <div class="form-check" style="padding-top: 30px; margin-left: 40px;">
-                    <input type="checkbox" class="form-check-input" id="defendant_comments"
-                      @if (old('defendant_comments')) checked @endif name="defendant_comments">
+                    <input type="checkbox" class="form-check-input" id="defendant_comments" name="defendant_comments">
                     <label class="form-check-label" for="defendant_comments">
                         Defendant Comments
                     </label>

@@ -120,46 +120,52 @@ class EnterBailController extends Controller
                     $comment = 'Y';
                 }
 
+                $bailMaster = BailMaster::firstOrNew([
+                                                       "j_check_number" => $jailImportRecord->j_check_number,
+                                                       "m_index_number" => $jailImportRecord->index_number,
+                                                       "m_index_year" => $jailImportRecord->index_year,
+                                                     ]);
                 $courtNumberValues = [
                                       'defualtValue' => (int) $jailImportRecord->j_court_number,
-                                      'globalValue'  => (int) $userInputData['court_number'],
-                                      'rowValue'     => (int) $userInputData['court_no'][$value],
+                                      'globalValue' =>  (int) $userInputData['court_number'],
+                                      'rowValue' =>     (int) $userInputData['court_no'][$value],
                                      ];
-                $bailMasterData = [
-                                    "j_check_number"      => $jailImportRecord->j_check_number,
-                                    "m_index_number"      => $jailImportRecord->index_number,
-                                    "m_index_year"        => $jailImportRecord->index_year,
-                                    "m_court_number"      => $this->getCorrectCourtNumber($courtNumberValues),
-                                    "m_posted_date"       => date("Y-m-d", strtotime($userInputData['daterec'][$value])),
-                                    "m_def_last_name"     => $jailImportRecord->j_def_last_name,
-                                    "m_def_first_name"    => $jailImportRecord->j_def_first_name,
-                                    "m_surety_last_name"  => $jailImportRecord->j_surety_last_name,
-                                    "m_surety_first_name" => $jailImportRecord->j_surety_first_name,
-                                    "m_receipt_amount"    => $bailAmount,
-                                    "m_comments_ind"      => $comment,
-                                    "m_status"            => 'O',
-                                    "m_surety_address"    => $jailImportRecord->j_surety_address,
-                                    "m_surety_city"       => $jailImportRecord->j_surety_city,
-                                    "m_surety_state"      => $jailImportRecord->j_surety_state,
-                                    "m_surety_zip"        => $jailImportRecord->j_surety_zip,
-                                    "m_forfeit_amount"    => 0,
-                                    "m_payment_amount"    => 0,
-                                    "m_city_fee_amount"   => 0,
-                                  ];
-                $bailMasterId = $this->addBailMasterRecord($bailMasterData);
 
-                $bailTransactionData = [
-                                         "t_type"               => 'R',
-                                         "t_numis_doc_id"       => $userInputData['docno'],
-                                         "t_created_at"         => $processDate,
-                                         "t_debit_credit_index" => 'I',
-                                         "t_amount"             => $bailAmount,
-                                         "t_fee_percentage"     => 0,
-                                         "t_total_refund"       => 0,
-                                         "t_reversal_index"     => '',
-                                       ];
+                $bailMaster->m_court_number = $this->getCorrectCourtNumber($courtNumberValues);
+                $bailMaster->m_index_number = $userInputData['index_no'][$value];
+                $bailMaster->m_index_year = $userInputData['index_year'][$value];
+                $bailMaster->m_posted_date = date("Y-m-d", strtotime($userInputData['daterec'][$value]));
+                $bailMaster->m_def_last_name = $jailImportRecord->j_def_last_name;
+                $bailMaster->m_def_first_name = $jailImportRecord->j_def_first_name;
+                $bailMaster->m_surety_last_name = $jailImportRecord->j_surety_last_name;
+                $bailMaster->m_surety_first_name = $jailImportRecord->j_surety_first_name;
+                $bailMaster->m_forfeit_amount = 0;
+                $bailMaster->m_payment_amount = 0;
+                $bailMaster->m_city_fee_amount = 0;
+                $bailMaster->m_receipt_amount = $bailAmount;
+                $bailMaster->m_comments_ind =  $comment;
+                $bailMaster->m_status = 'O';
+                $bailMaster->m_surety_address = $jailImportRecord->j_surety_address;
+                $bailMaster->m_surety_city = $jailImportRecord->j_surety_city;
+                $bailMaster->m_surety_state = $jailImportRecord->j_surety_state;
+                $bailMaster->m_surety_zip = $jailImportRecord->j_surety_zip;
+                $bailMaster->save();
 
-                $this->addTransactionRecord($bailTransactionData, $bailMasterId);
+                $bailTransaction = BailTransactions::firstOrNew([
+                                                                  "m_id" => $bailMaster->m_id,
+                                                                  "t_type" => 'R'
+                                                                ]);
+
+                $bailTransaction->m_id = $bailMaster->m_id;
+                $bailTransaction->t_numis_doc_id = $userInputData['docno'];
+                $bailTransaction->t_created_at = $processDate;
+                $bailTransaction->t_debit_credit_index = 'I';
+                $bailTransaction->t_type = 'R';
+                $bailTransaction->t_amount = $bailAmount;
+                $bailTransaction->t_fee_percentage = 0;
+                $bailTransaction->t_total_refund = 0;
+                $bailTransaction->t_reversal_index = '';
+                $bailTransaction->save();
             }
 
             $checkNumber = Session::get('checkNumber');
@@ -229,56 +235,22 @@ class EnterBailController extends Controller
     public function processmanualentry(Request $request)
     {
         if ($request->isMethod('post')) {
-            $bailComments = 'N';
+            echo "<pre>";
             $userInputData = $request->all();
             $indexNumber = $userInputData['index_number'];
             $indexYear = $userInputData['index_year'];
+
+            print_r($userInputData);
+            //exit;
             $queryResults = BailMaster::ValidateUniqueRecord([
                                                                'index_number' => $indexNumber,
-                                                               'index_year'   => $indexYear
+                                                               'index_year' => $indexYear
                                                              ]);
-            if (!empty($queryResults)) {
+            //if (!empty($queryResults)) {
                 return Redirect::back()->withInput($request->all());
-            }
+            //}
 
-            if ($userInputData['defendant_comments']) {
-                $bailComments = 'Y';
-            }
-            
-            $bailMasterData = [
-                                    "j_check_number"      => '',
-                                    "m_index_number"      => $userInputData['index_number'],
-                                    "m_index_year"        => $userInputData['index_year'],
-                                    "m_court_number"      => $userInputData['court_number'],
-                                    "m_posted_date"       => date("Y-m-d", strtotime($userInputData['posted_date'])),
-                                    "m_def_last_name"     => $userInputData['defendant_last_name'],
-                                    "m_def_first_name"    => $userInputData['defendant_first_name'],
-                                    "m_surety_last_name"  => $userInputData['surety_last_name'],
-                                    "m_surety_first_name" => $userInputData['surety_first_name'],
-                                    "m_receipt_amount"    => $userInputData['bail_amount'],
-                                    "m_comments_ind"      => $bailComments,
-                                    "m_status"            => 'O',
-                                    "m_surety_address"    => $userInputData['surety_address'],
-                                    "m_surety_city"       => $userInputData['surety_city'],
-                                    "m_surety_state"      => $userInputData['surety_state'],
-                                    "m_surety_zip"        => $userInputData['surety_zip'],
-                                    "m_forfeit_amount"    => 0,
-                                    "m_payment_amount"    => 0,
-                                    "m_city_fee_amount"   => 0,
-                                  ];
-            $bailMasterId = $this->addBailMasterRecord($bailMasterData);
-
-            $bailTransactionData = [
-                                    "t_type"               => 'R',
-                                    "t_numis_doc_id"       => $userInputData['validation_number'],
-                                    "t_created_at"         => date("Y-m-d", strtotime($userInputData['posted_date'])),
-                                    "t_debit_credit_index" => 'I',
-                                    "t_amount"             => $userInputData['bail_amount'],
-                                    "t_fee_percentage"     => 0,
-                                    "t_total_refund"       => 0,
-                                    "t_reversal_index"     => '',
-                                   ];
-            $this->addTransactionRecord($bailTransactionData, $bailMasterId);
+           
         }
          return view('enterBail.processmanualentry')->with(array());
     }
@@ -292,7 +264,7 @@ class EnterBailController extends Controller
 
         $queryResults = BailMaster::ValidateUniqueRecord([
                                                             'index_number' => $indexNumber,
-                                                            'index_year'   => $indexYear,
+                                                            'index_year' => $indexYear,
                                                          ]);
         if (empty($queryResults)) {
             return response()->json(['result' => 'empty'], 200);
@@ -358,61 +330,6 @@ class EnterBailController extends Controller
         echo "done";
     }
 
-    private function addBailMasterRecord(array $bailMasterData)
-    {
-        $bailMaster = BailMaster::firstOrNew([
-                                                "j_check_number" => $bailMasterData['j_check_number'],
-                                                "m_index_number" => $bailMasterData['m_index_number'],
-                                                "m_index_year"   => $bailMasterData['m_index_year'],
-                                             ]);
-
-        $bailMaster->m_court_number = $bailMasterData['m_court_number'];
-        $bailMaster->m_index_number = $bailMasterData['m_index_number'];
-        $bailMaster->m_index_year = $bailMasterData['m_index_year'];
-        $bailMaster->m_posted_date = $bailMasterData['m_posted_date'];
-        $bailMaster->m_def_last_name = $bailMasterData['m_def_last_name'];
-        $bailMaster->m_def_first_name = $bailMasterData['m_def_first_name'];
-        $bailMaster->m_surety_last_name = $bailMasterData['m_surety_last_name'];
-        $bailMaster->m_surety_first_name = $bailMasterData['m_surety_first_name'];
-        $bailMaster->m_forfeit_amount = $bailMasterData['m_forfeit_amount'];
-        $bailMaster->m_payment_amount = $bailMasterData['m_payment_amount'];
-        $bailMaster->m_city_fee_amount = $bailMasterData['m_city_fee_amount'];
-        $bailMaster->m_receipt_amount = $bailMasterData['m_receipt_amount'];
-        $bailMaster->m_comments_ind =  $bailMasterData['m_comments_ind'];
-        $bailMaster->m_status = $bailMasterData['m_status'];
-        $bailMaster->m_surety_address = $bailMasterData['m_surety_address'];
-        $bailMaster->m_surety_city = $bailMasterData['m_surety_city'];
-        $bailMaster->m_surety_state = $bailMasterData['m_surety_state'];
-        $bailMaster->m_surety_zip = $bailMasterData['m_surety_zip'];
-        $bailMaster->save();
-        return $bailMaster->id;
-    }
-
-    private function addTransactionRecord(array $bailTransactionData, $bailMasterId = false)
-    {
-        if (!$bailMasterId) {
-            return false;
-        }
-
-        $bailTransaction = BailTransactions::firstOrNew([
-                                                          "m_id"   => $bailMasterId,
-                                                          "t_type" => $bailTransactionData['t_type'],
-                                                        ]);
-
-        $bailTransaction->m_id = $bailMasterId;
-        $bailTransaction->t_numis_doc_id = $bailTransactionData['t_numis_doc_id'];
-        $bailTransaction->t_created_at = $bailTransactionData['t_created_at'];
-        $bailTransaction->t_debit_credit_index = $bailTransactionData['t_debit_credit_index'];
-        $bailTransaction->t_type = $bailTransactionData['t_type'];
-        $bailTransaction->t_amount = $bailTransactionData['t_amount'];
-        $bailTransaction->t_fee_percentage = $bailTransactionData['t_fee_percentage'];
-        $bailTransaction->t_total_refund =  $bailTransactionData['t_total_refund'];
-        $bailTransaction->t_reversal_index =  $bailTransactionData['t_reversal_index'];'';
-        $bailTransaction->save();
-        return $bailTransaction->t_id;
-    }
-
-
     private function convertDate($date)
     {
         return date('Y-m-d', strtotime($date));
@@ -423,15 +340,23 @@ class EnterBailController extends Controller
         if ($courtValues['defualtValue'] !== $courtValues['globalValue']) {
 
             if ($courtValues['defualtValue'] == $courtValues['rowValue']) {
+                //echo "1";
+                //echo $courtValues['globalValue'];
+                //exit;
                 return $courtValues['globalValue'];
             } else {
+                //echo "2";
+                //exit;
                 return $courtValues['rowValue'];
             }
         } else {
             if ($courtValues['defualtValue'] == $courtValues['rowValue']) {
-
+                //echo "3";
+                //exit;
                 return $courtValues['defualtValue'];
             } else {
+                //echo "4";
+                //exit;
                 return $courtValues['rowValue'];
             }
         }
