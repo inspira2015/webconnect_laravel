@@ -71,7 +71,7 @@
 	<div class="center-screen text-center container-800">
     	<form name="edit_bails" id="manual-bail-edit" method="post" action="{{ route('editmanualentry') }}" >
 	        {{ csrf_field() }}
-    		<input type="hidden" name="master_id" value="50">
+    		<input type="hidden" name="master_id" value="{{ $bailMaster->m_id }}">
                 <button type="submit" class="btn btn-warning ">Edit Record</button>
                 
                 <a href="{{ route('home') }}">

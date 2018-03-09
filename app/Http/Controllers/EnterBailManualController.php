@@ -112,10 +112,11 @@ class EnterBailManualController extends EnterBailController
 
     public function editmanualrecord(Request $request)
     {
+
         $courtList = Courts::pluck('c_name', 'c_id')->toArray();
         $stateList = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
         $manualEntry = $request->all();
-        $bailMaster = BailMaster::firstOrNew(array('m_id' => 50));
+        $bailMaster = BailMaster::firstOrNew(array('m_id' => (int) $manualEntry['master_id']));
         $m_posted_date = $this->validatePostedDate($bailMaster->m_posted_date);
 
         if (empty($queryResults)) {
