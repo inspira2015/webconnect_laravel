@@ -144,6 +144,9 @@ div#navbar {
 .center-screen {
 	margin: auto;
 }
+.container400 {
+	width: 400px;
+}
 .container-800 {
 	width: 800px;
 }

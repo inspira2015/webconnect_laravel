@@ -18,6 +18,8 @@
     <link href="{{ asset('css/clean_old.css')}}" rel="stylesheet" type="text/css"/>
     <link href="http://webconnect/NC_Stylesheets/intranet.css" rel="stylesheet" type="text/css">
     
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+
 
     
     <link href="http://demo.expertphp.in/css/jquery.ui.autocomplete.css" rel="stylesheet">

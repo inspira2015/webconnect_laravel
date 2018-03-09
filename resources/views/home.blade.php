@@ -2,11 +2,7 @@
 
 @section('content')
 
-
-
 <div id="content">
-
-
     <h1>Nassau County Cash Bail</h1>
     <div style="width:100%; background-image:url({{ asset('img/cashbail/menu_right_25.jpg') }}); background-position:top right; background-repeat:no-repeat">
         <p class="content"><span style="font-weight: bold">Todays Batch Number Is</span>: <?php echo $batno; ?></p>
