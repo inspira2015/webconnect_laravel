@@ -23,7 +23,7 @@
             </tr>
             <tr>
                 <td height="21" style="background-image:url({{ asset('img/cashbail/cashbailbuttons_06.jpg') }}); background-position: left top; background-repeat:no-repeat">
-                    <span style="font-weight: bold; padding-left:30px;"><a href="procBail1.php" class="content">Process Bail</a>  -</span> <span class="content">process court orders for bail refunds </span>
+                    <span style="font-weight: bold; padding-left:30px;"><a href="{{ route('processbailsearch') }}" class="content">Process Bail</a>  -</span> <span class="content">process court orders for bail refunds </span>
                 </td>
             </tr>
             <tr>

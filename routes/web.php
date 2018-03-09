@@ -32,3 +32,6 @@ Route::get('/enterbail/manualentry', 'EnterBailManualController@index')->name('m
 Route::any('/enterbail/manualentry/processed', 'EnterBailManualController@processmanualentry')->name('processmanualentry');
 Route::get('/enterbail/validateindexyear', 'EnterBailManualController@validateindexyear')->name('validateindexyear');
 Route::post('/enterbail/edit/manualentry', 'EnterBailManualController@editmanualrecord')->name('editmanualentry');
+
+
+Route::get('/processbail', 'ProcessbailController@index')->name('processbailsearch');

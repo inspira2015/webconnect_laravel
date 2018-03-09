@@ -6,7 +6,7 @@
         <table width="100%" border="0" cellspacing="0" cellpadding="2">
             <tr>
                 <td><h1>Bail Entry</h1></td>
-                <td><div align="right"><span class="content"><a href="index.php" >Back Main Menu </a></span></div></td>
+                <td><div align="right"><span class="content"><a href="{{ route('home') }}" >Back Main Menu </a></span></div></td>
             </tr>
         </table>
         <table border="0" align="center" cellpadding="0" cellspacing="5">
