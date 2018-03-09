@@ -29,5 +29,6 @@ Route::post('/enterbail/jailbatch/check/results', 'EnterBailBatchController@sear
 Route::post('/enterbail/jailbatch/processed', 'EnterBailBatchController@processbails')->name('processbails');
 
 Route::get('/enterbail/manualentry', 'EnterBailManualController@index')->name('manualentry');
-Route::post('/enterbail/manualentry/processed', 'EnterBailManualController@processmanualentry')->name('processmanualentry');
+Route::any('/enterbail/manualentry/processed', 'EnterBailManualController@processmanualentry')->name('processmanualentry');
 Route::get('/enterbail/validateindexyear', 'EnterBailManualController@validateindexyear')->name('validateindexyear');
+Route::post('/enterbail/edit/manualentry', 'EnterBailManualController@editmanualrecord')->name('editmanualentry');

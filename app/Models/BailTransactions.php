@@ -18,10 +18,12 @@ class BailTransactions extends Model
      */
     public $timestamps = false;
 
-    protected $primaryKey = 'm_id';
+    protected $primaryKey = 't_id';
 
     protected $fillable = [
-                            'j_id',
+                            't_id',
                             'm_court_number'
                           ];
+
+
 }

@@ -32,4 +32,25 @@ class BailMaster extends Model
         return $query->where('m_index_number', '=', $indexNumber)
                      ->where('m_index_year', '=', $indexYear)->get()->toArray();
     }
+
+    public function scopeGetMasterRecordById($query, $masterId)
+    {
+        return $query->where('m_id', '=', $masterId)->get();
+    }
+
+    public function BailTransactions()
+    {
+        return $this->hasOne('App\Models\BailTransactions', 'm_id');
+    }
+
+    public function Courts()
+    {
+        return $this->hasOne('App\Models\Courts', 'c_id', 'm_court_number');
+    }
+
+    public function BailConfiguration()
+    {
+        return $this->hasOne('App\Models\BailConfiguration', 'bc_id', 'm_surety_state');
+
+    }
 }

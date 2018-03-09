@@ -65,9 +65,7 @@ class EnterBailController extends Controller
     protected function addBailMasterRecord(array $bailMasterData)
     {
         $bailMaster = BailMaster::firstOrNew([
-                                                "j_check_number" => $bailMasterData['j_check_number'],
-                                                "m_index_number" => $bailMasterData['m_index_number'],
-                                                "m_index_year"   => $bailMasterData['m_index_year'],
+                                                "m_id" => $bailMasterData['m_id'],
                                              ]);
 
         $bailMaster->m_court_number = $bailMasterData['m_court_number'];
@@ -89,7 +87,7 @@ class EnterBailController extends Controller
         $bailMaster->m_surety_state = $bailMasterData['m_surety_state'];
         $bailMaster->m_surety_zip = $bailMasterData['m_surety_zip'];
         $bailMaster->save();
-        return $bailMaster->id;
+        return $bailMaster->m_id;
     }
 
     protected function addTransactionRecord(array $bailTransactionData, $bailMasterId = false)

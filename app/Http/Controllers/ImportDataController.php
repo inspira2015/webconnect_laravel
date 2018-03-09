@@ -4,13 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\JailImport;
-
 use DB;
 
 class ImportDataController extends Controller
 {
  
-
     public function importOldJailTable()
     {
         $jailimport = DB::connection('mysql2')->table('jailimport')->get();

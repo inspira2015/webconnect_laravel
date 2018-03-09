@@ -40,8 +40,7 @@ class EnterBailBatchController extends EnterBailController
         return view('enterBail.jailImport')->with($indexArray);
     }
 
-
-       /**
+    /**
      * [processbails Process Bails]
      * @param  Request $request [description]
      * @return [type]           [description]
@@ -125,8 +124,7 @@ class EnterBailBatchController extends EnterBailController
         }
     }
 
-
-        /**
+    /**
      * [searchchecknumber description]
      * @return [type] [description]
      */
@@ -149,5 +147,4 @@ class EnterBailBatchController extends EnterBailController
                       ];
         return view('enterBail.jailImport')->with($indexArray);
     }
-
 }
