@@ -52,19 +52,62 @@ class ProcessbailController extends Controller
         return ['value'=>'No Result Found','id'=>''];    
     }
 
+
+    public function searchresults(Request $request)
+    {
+    	$termToSearch = $request->get('term','');
+        $termType = $request->get('search_term','');
+        $resultArray = $this->getCollectionResults($termToSearch);
+
+        dd($resultArray);
+        exit;
+
+
+    }
+/*  private function getTermFromUserInput($find)
+    {
+    	$splitArray = explode(" ", $find);
+
+    	s
+
+
+
+    	return [
+    			 'index_year'     => $splitArray[0];
+    			 'defendant_name' => $splitArray[]
+    	];
+    }*/
+
+
+    private function getCollectionResults($find)
+    {
+        $bailMaster = new BailMaster();
+
+    	return array_merge(
+							$bailMaster->GetArrayIndexNumberLike($find),
+							$bailMaster->GetArrayDefendantNameLike($find)
+        				  );
+    }
+
+    /**
+     * [getResultsFromUserInput Returns a Result Array depends on the term to find]
+     * @param  [type] $findType [description]
+     * @param  [type] $find     [description]
+     * @return [type]           [description]
+     */
     private function getResultsFromUserInput($findType, $find)
     {
         $bailMaster = new BailMaster();
 
         if ($findType == 'Index_Number') {
-        	return $bailMaster->GetIndexNumberLike($find);
+        	return $bailMaster->GetArrayIndexNumberLike($find);
         } else if ($findType == 'Defendant_name') {
-			return $bailMaster->GetDefendantNameLike($find);
+			return $bailMaster->GetArrayDefendantNameLike($find);
         }
 
         return array_merge(
-							$bailMaster->GetIndexNumberLike($find),
-							$bailMaster->GetDefendantNameLike($find)
+							$bailMaster->GetArrayIndexNumberLike($find),
+							$bailMaster->GetArrayDefendantNameLike($find)
         				  );
     }
 
@@ -74,11 +117,11 @@ class ProcessbailController extends Controller
         foreach ($resultArray as $dummykey => $currentRecord) {
         		$value = $currentRecord['m_index_number'] . '/' . 
         				 $currentRecord['m_index_year'] . " " .
-        				 $currentRecord['m_def_first_name'] . " " . $currentRecord['m_def_last_name'];
+        				 trim($currentRecord['m_def_first_name']) . " " .
+        				 trim($currentRecord['m_def_last_name']);
                 $data[] = ['value'=> $value, 'id'=> $currentRecord['m_id']];
         }
         return $data;
     }
-
 
 }
