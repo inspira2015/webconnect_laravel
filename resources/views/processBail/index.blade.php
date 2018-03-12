@@ -21,13 +21,13 @@
                         <span id="search_concept">Filter by</span> <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" role="menu">
-                      <li><a href="#contains">Index Number</a></li>
-                      <li><a href="#its_equal">Defendant Name</a></li>
+                      <li><a href="#Index_Number">Index Number</a></li>
+                      <li><a href="#Defendant_name">Defendant Name</a></li>
                       <li class="divider"></li>
                     </ul>
                 </div>
                 <input type="hidden" name="search_param" value="all" id="search_param">         
-                <input type="text" class="form-control " name="x" placeholder="Search term...">
+                <input type="text" name="search_term" id="search_term" class="form-control"  placeholder="Search term...">
                 <span class="input-group-btn">
                     <button class="btn btn-lg" type="button"><span class="glyphicon glyphicon-search"></span></button>
                 </span>
@@ -37,14 +37,40 @@
 </div>
 
 <script type="text/javascript">
+
+
+
     $(document).ready(function(e){
     $('.search-panel .dropdown-menu').find('a').click(function(e) {
         e.preventDefault();
         var param = $(this).attr("href").replace("#","");
+        $('#search_param').attr('value', param);
         var concept = $(this).text();
         $('.search-panel span#search_concept').text(concept);
-        $('.input-group #search_param').val(param);
     });
+
+
+ src = "{{ route('ajaxfindbail') }}";
+         $("#search_term").autocomplete({
+            source: function(request, response) {
+                var search_param = $('#search_param').attr('value');
+                $.ajax({
+                    url: src,
+                    dataType: "json",
+                    data: {
+                        term : request.term,
+                        search_term : search_param
+                    },
+                    success: function(data) {
+                        response(data);
+                       
+                    }
+                });
+            },
+            minLength: 3,
+           
+        });
+
 });
 </script>
 @endsection

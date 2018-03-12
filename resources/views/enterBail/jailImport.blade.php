@@ -77,20 +77,6 @@
         </tr>
     </table>
 
-    <?php 
-       /* if($totalRows_dupRecord > 0) {
-            $error1 = "<div align='center'><span class='warning' style='font-weight: bold'>THERE ARE DUPLICATE INDEX NUMBERS DETECTED PLEASE CORRECT THE INDEXT NUMBERS MARKED IN RED BEFORE CONTINUING!</span></div>";
-        } else {
-            $error1 = "";
-        }
-                    
-        if(!$_POST['docno']) {
-            $error2 = "<div align='center'><span class='warning' style='font-weight: bold'>YOU MUST ENTER A DOCUMENT NUMBER BEFORE CONTINUING!</span></div>";
-        } else {
-            $error2 = "";
-        }*/
-    ?>
-
     <div style="margin-top: .5em; margin-left: 5em;">
         <form action="{{ route('searchchecknumber') }}" method="post" name="form1" class="reduce-input form-inline content">
             <div class="form-group col-sm-4">

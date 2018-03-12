@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class BailMaster extends Model
 {
@@ -32,6 +33,17 @@ class BailMaster extends Model
         return $query->where('m_index_number', '=', $indexNumber)
                      ->where('m_index_year', '=', $indexYear)->get()->toArray();
     }
+
+    public function scopeGetIndexNumberLike($query, $indexNumber)
+    {
+        return $query->where(DB::raw("concat_ws('/', m_index_number, m_index_year)"), 'like', $indexNumber .'%')->get()->toArray();
+    }
+
+    public function scopeGetDefendantNameLike($query, $defendatName)
+    {
+        return $query->where(DB::raw("concat_ws(' ', m_def_first_name, m_def_last_name)"), 'like', $defendatName . "%")->get()->toArray();
+    }
+
 
     public function scopeGetMasterRecordById($query, $masterId)
     {

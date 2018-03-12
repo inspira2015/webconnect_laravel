@@ -11,7 +11,7 @@
     <title>Nassau County - Webconnect</title>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" crossorigin="anonymous">
     
     <link href="{{ asset('css/cashbailcss.css')}}" rel="stylesheet" type="text/css"/>
     <!-- <link href="http://webconnect/NC_Stylesheets/clean.css" rel="stylesheet" type="text/css" /> -->
