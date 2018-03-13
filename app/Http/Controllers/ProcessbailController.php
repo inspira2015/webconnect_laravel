@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\BailMaster;
 use App\Models\Courts;
+use App\Models\BailConfiguration;
 
 
 class ProcessbailController extends Controller
@@ -55,38 +56,38 @@ class ProcessbailController extends Controller
 
     public function searchresults(Request $request)
     {
-    	$termToSearch = $request->get('term','');
-        $termType = $request->get('search_term','');
-        $resultArray = $this->getCollectionResults($termToSearch);
+    	$termType = $request->get('term','');
+        $termToSearch = $request->get('search_term','');
+        $resultArray = $this->getTermFromUserInput($termToSearch);
+		$bailMaster = BailMaster::find($resultArray['m_id']);
+        $courtList = Courts::pluck('c_name', 'c_id')->toArray();
+        $stateList = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
 
-        dd($resultArray);
-        exit;
-
-
+        $indexArray = [
+                        'jailRecords' => array(),
+                        'totalCheckAmount' => '',
+                        'stateList'      => $stateList,
+                        'courtList' => $courtList,
+                        'processBail' => true,
+                      ];
+        return view('processbail.refundbails', compact('bailMaster'))->with($indexArray);
     }
-/*  private function getTermFromUserInput($find)
+
+ 	private function getTermFromUserInput($find)
     {
     	$splitArray = explode(" ", $find);
-
-    	s
-
-
-
     	return [
-    			 'index_year'     => $splitArray[0];
-    			 'defendant_name' => $splitArray[]
+    			 'm_id' 		  => $splitArray[0],
+    			 'index_year'     => $splitArray[1],
+    			 'defendant_name' => $splitArray[2]
     	];
-    }*/
+    }
 
 
-    private function getCollectionResults($find)
+    private function getCollectionResults(array $queryValues)
     {
-        $bailMaster = new BailMaster();
+       
 
-    	return array_merge(
-							$bailMaster->GetArrayIndexNumberLike($find),
-							$bailMaster->GetArrayDefendantNameLike($find)
-        				  );
     }
 
     /**
@@ -100,28 +101,48 @@ class ProcessbailController extends Controller
         $bailMaster = new BailMaster();
 
         if ($findType == 'Index_Number') {
-        	return $bailMaster->GetArrayIndexNumberLike($find);
+        	return array('Index' => $bailMaster->GetArrayIndexNumberLike($find));
         } else if ($findType == 'Defendant_name') {
-			return $bailMaster->GetArrayDefendantNameLike($find);
+			return array('Defendant' => $bailMaster->GetArrayDefendantNameLike($find));
+        } else if ($findType == 'Surety_name') {
+        	return array('Surety' => $bailMaster->GetArraySuretyNameLike($find));
         }
 
         return array_merge(
-							$bailMaster->GetArrayIndexNumberLike($find),
-							$bailMaster->GetArrayDefendantNameLike($find)
+							array('Index' => $bailMaster->GetArrayIndexNumberLike($find)),
+							array('Defendant' => $bailMaster->GetArrayDefendantNameLike($find)),
+							array('Surety' => $bailMaster->GetArraySuretyNameLike($find))
         				  );
     }
 
     private function builtSelectResponse($resultArray)
     {
     	$data = [];
-        foreach ($resultArray as $dummykey => $currentRecord) {
-        		$value = $currentRecord['m_index_number'] . '/' . 
-        				 $currentRecord['m_index_year'] . " " .
-        				 trim($currentRecord['m_def_first_name']) . " " .
-        				 trim($currentRecord['m_def_last_name']);
+        foreach ($resultArray as $key => $currentResult) {
+
+        	foreach ($currentResult as $dummykey => $currentRecord) {
+        		        $value = $currentRecord['m_id'] . ' ' .
+        		        $key . ' ' .
+        				$currentRecord['m_index_number'] . '/' . 
+        				$currentRecord['m_index_year'] . " " .
+        				$this->builtNameForAjaxControl($currentRecord, $key);
                 $data[] = ['value'=> $value, 'id'=> $currentRecord['m_id']];
+        	}
+
+
         }
         return $data;
+    }
+
+    private function builtNameForAjaxControl($currentDbRecord, $key)
+    {
+    	if ($key == 'Defendant') {
+    		return trim($currentDbRecord['m_def_first_name']) . " " .
+        		   trim($currentDbRecord['m_def_last_name']);
+    	}
+
+    	return trim($currentDbRecord['m_surety_first_name']) . " " .
+               trim($currentDbRecord['m_surety_last_name']);
     }
 
 }

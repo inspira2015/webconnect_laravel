@@ -44,6 +44,11 @@ class BailMaster extends Model
         return $query->where(DB::raw("concat_ws(' ', m_def_first_name, m_def_last_name)"), 'like', $defendatName . "%")->get()->toArray();
     }
 
+    public function scopeGetArraySuretyNameLike($query, $suretyName)
+    {
+        return $query->where(DB::raw("concat_ws(' ', m_surety_first_name, m_surety_last_name)"), 'like', $suretyName . "%")->get()->toArray();
+    }
+
     public function scopeGetIndexNumberLike($query, $indexNumber)
     {
         return $query->where(DB::raw("concat_ws('/', m_index_number, m_index_year)"), 'like', $indexNumber .'%')->get();

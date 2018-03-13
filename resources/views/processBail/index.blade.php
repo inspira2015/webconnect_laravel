@@ -5,7 +5,6 @@
     .error {
         color :#7F0000;
     }
-
 </style>
 
 <div style="background-image:url(images/back_orange_21.jpg); background-position:top left; background-repeat:no-repeat;  padding:10px;">
@@ -19,7 +18,7 @@
 
 
 <div class="container-800 center-screen">
-    <form name="processbails" id="processbails" method="post" action="{{ route('processbailsearch') }}" >
+    <form name="processbails" id="processbails" method="post" action="{{ route('processbailresults') }}" >
         {{ csrf_field() }}
         <div class="row">    
             <div class="col-8">
@@ -31,6 +30,7 @@
                         <ul class="dropdown-menu" role="menu">
                           <li><a href="#Index_Number">Index Number</a></li>
                           <li><a href="#Defendant_name">Defendant Name</a></li>
+                          <li><a href="#Surety_name">Surety Name</a></li>
                           <li class="divider"></li>
                         </ul>
                     </div>
@@ -43,8 +43,7 @@
                         <button class="btn btn-lg" type="submit"><span class="glyphicon glyphicon-search"></span></button>
                     </span>
                 </div>
-                                   <p><label id="search_term-error" class="error" for="search_term"></label></p>
-
+                <p><label id="search_term-error" class="error" for="search_term"></label></p>
             </div>
         </div>
     </form>

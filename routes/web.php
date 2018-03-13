@@ -36,4 +36,4 @@ Route::post('/enterbail/edit/manualentry', 'EnterBailManualController@editmanual
 
 Route::get('/processbail', 'ProcessbailController@index')->name('processbailsearch');
 Route::get('/processbail/ajax/findbail', 'ProcessbailController@ajaxfindbail')->name('ajaxfindbail');
-Route::post('/processbail/find/results', 'ProcessbailController@searchresults')->name('processbailsearch');
+Route::post('/processbail/find/results', 'ProcessbailController@searchresults')->name('processbailresults');
