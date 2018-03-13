@@ -170,5 +170,6 @@
 .body-content h1 {
 	font-size: 26px;
 	font-family: "Verdana", Geneva, sans-serif !important;
+  margin: 0px !important;
 }
 
