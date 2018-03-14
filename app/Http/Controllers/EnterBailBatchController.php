@@ -69,6 +69,7 @@ class EnterBailBatchController extends EnterBailController
                                        "rowValue"         => (int) $userInputData['court_no'][$value],
                                      ];
                 $bailMasterData = [
+                                    "m_id"                => 0,
                                     "j_check_number"      => $jailImportRecord->j_check_number,
                                     "m_index_number"      => $jailImportRecord->index_number,
                                     "m_index_year"        => $jailImportRecord->index_year,

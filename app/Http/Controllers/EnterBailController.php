@@ -68,6 +68,7 @@ class EnterBailController extends Controller
                                                 "m_id" => $bailMasterData['m_id'],
                                              ]);
 
+        $bailMaster->j_check_number = $bailMasterData['j_check_number'];
         $bailMaster->m_court_number = $bailMasterData['m_court_number'];
         $bailMaster->m_index_number = $bailMasterData['m_index_number'];
         $bailMaster->m_index_year = $bailMasterData['m_index_year'];
