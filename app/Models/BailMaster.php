@@ -66,7 +66,7 @@ class BailMaster extends Model
 
     public function BailTransactions()
     {
-        return $this->hasOne('App\Models\BailTransactions', 'm_id');
+        return $this->hasMany('App\Models\BailTransactions', 'm_id');
     }
 
     public function Courts()

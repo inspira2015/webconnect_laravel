@@ -81,6 +81,8 @@ class ProcessbailController extends Controller
 		$bailMaster = BailMaster::find($resultArray['m_id']);
         $courtList = Courts::pluck('c_name', 'c_id')->toArray();
         $stateList = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
+
+
         $balance = $bailMaster->m_receipt_amount - (
         											 $bailMaster->m_forfeit_amount + 
         											 $bailMaster->m_payment_amount + 
