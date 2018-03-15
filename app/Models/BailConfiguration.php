@@ -24,4 +24,10 @@ class BailConfiguration extends Model
                             'j_check_number',
                             'm_court_number'
                           ];
+    
+    public function scopeGetFeePercentaje($query)
+    {
+        return $query->where('bc_category', '=', 'bail_fee')
+                     ->where('bc_type', '=', 'regular')->get();
+    }    
 }

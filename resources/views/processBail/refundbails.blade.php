@@ -153,34 +153,76 @@
 					<td bgcolor="#FFFFFF" class="content"><div align="center">$ {{ $balance }}</div></td>
 				</tr>
 			</table>
-            <hr class="my-4">
-                <div style="width: 100%; text-align: left;">
-                    <h2>Transaction History</h2>
+        @include('chunks.transactionHistory')
+
+        <hr class="my-4">
+        <div style="width: 100%; text-align: left;">
+            <h2>Process Bail Options</h2>
+        </div>
+
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Refund-balance" data-whatever="@fat">Refund Balance</button>
+
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Refund-balance-with-fee" data-whatever="@fat">Refund Balance Retaining 3%</button>
+
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@fat">Partial Payment</button>
+
+   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@fat">MultiCheck</button>
+
+    <div class="modal fade" id="Refund-balance" tabindex="-1" role="dialog" aria-labelledby="Refund-balance">
+        <form name="bails" id="manual-bail-entry" method="post" action="{{ route('editbailmaster') }}" >
+            {{ csrf_field() }}
+            <input type="hidden" id="m_id" name="m_id" value="{{ old('m_id', $bailMaster->m_id) }}">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">Close this Dialog Box</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="m_def_first_name">Do you want to proceed with Full Refund?</label>
+                        </div>
+                        <div class="form-group">
+                            <strong>$ {{ $balance }}</strong>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close and Cancel</button>
+                        <button type="type" id="update-info" class="btn btn-primary">Reund Now</button>
+                    </div>
                 </div>
+            </div>
+        </form>
+    </div>
 
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">Date of Record</th>
-                        <th scope="col">Transaction</th>
-                        <th scope="col">Document</th>
-                        <th scope="col">Transaction Amount </th>
-                        <th scope="col">Check Number</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($bailMaster->BailTransactions as  $key => $item)
-                        <tr>    
-                            <th scope="row">{{ $item->t_created_at }}</th>
-                            <th scope="row">{{ $item->t_type }}</th>
-                            <th scope="row">{{ $item->t_numis_doc_id }}</th>
-                            <th scope="row">{{ $item->t_amount }}</th>
-                            <th scope="row">{{ $item->t_check_number }}</th>
+    <div class="modal fade" id="Refund-balance-with-fee" tabindex="-1" role="dialog" aria-labelledby="Refund-balance-with-fee">
+        <form name="bails" id="manual-bail-entry" method="post" action="{{ route('editbailmaster') }}" >
+            {{ csrf_field() }}
+            <input type="hidden" id="m_id" name="m_id" value="{{ old('m_id', $bailMaster->m_id) }}">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">Close this Dialog Box</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="m_def_first_name">Do you want to proceed with this Refund?</label>
+                        </div>
+                        <div class="form-group">
+                            <strong>$ {{ $balance }}</strong>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close and Cancel</button>
+                        <button type="type" id="update-info" class="btn btn-primary">Reund Now</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 
-                        </tr>
-                    @endforeach
-              </tbody>
-            </table>
+
     </div>
 </div>
 <script type="text/javascript">

@@ -85,17 +85,25 @@ class ProcessbailController extends Controller
         $dt = new Carbon($bailMaster->m_posted_date);
 		$m_posted_date =  $dt->format("m/d/Y"); 
 
+        
+
         $balance = $bailMaster->m_receipt_amount - (
         											 $bailMaster->m_forfeit_amount + 
         											 $bailMaster->m_payment_amount + 
         											 $bailMaster->m_city_fee_amount
         										    );
+        echo $this->calculateAmountAfterFee($balance);
+        exit;
+
         $indexArray = [
                         'jailRecords' => array(),
                         'balance' => round($balance, 2),
                         'stateList'      => $stateList,
                         'courtList' => $courtList,
                         'm_posted_date'  => $m_posted_date,
+                        'feeAmoumt' => [
+                                         'amount' 
+                            ],
                       ];
         return view('processbail.refundbails', compact('bailMaster'))->with($indexArray);
     }
@@ -113,6 +121,30 @@ class ProcessbailController extends Controller
     {
        
 
+    }
+
+    private function calculateAmountAfterFee($amount)
+    {
+        $amount = (float) $amount;
+        if ($amount <= 0) {
+            return 0;
+        }
+        return $amount * (1 - $this->getConfigPercentaje());
+    }
+
+    private function calculatePercentaje($amount)
+    {
+        $amount = (float) $amount;
+        if ($amount <= 0) {
+            return 0;
+        }
+        return $amount * $this->getConfigPercentaje();
+    }
+
+    private function getConfigPercentaje()
+    {
+        $feeRow = BailConfiguration::GetFeePercentaje();
+        return $feeRow[0]->bc_value / 100;
     }
 
     /**
