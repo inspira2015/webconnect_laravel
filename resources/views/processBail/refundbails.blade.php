@@ -102,7 +102,7 @@
                 </div>
                 <div class="col-sm-2 pb-3">
                     <label for="exampleAccount">Date Posted:</label>
-                    <input type="text" class="form-control" disabled id="m_posted_date" name="m_posted_date" value="{{ old('m_posted_date') }}" placeholder="MM/DD/YYY">
+                    <input type="text" class="form-control" disabled id="m_posted_date2" name="m_posted_date2" placeholder="MM/DD/YYY">
                 </div>
 				<hr class="my-5">
 				<div style="width: 100%; text-align: left;">
@@ -126,7 +126,6 @@
                 </div>
                 <div class="col-sm-2 pb-3">
                     <label for="m_surety_state">State</label>
-
                     {!! Form::select('m_surety_state', $stateList, $bailMaster->m_surety_state, array('class' => 'form-control',
                                                                                                        'disabled' => 'disabled')) !!}
                 </div>
@@ -186,27 +185,37 @@
 </div>
 <script type="text/javascript">
 
+    var old_posted_date = '{{ old('m_posted_date', $m_posted_date) }}';
+    var posted_date = new Date();
 
+    if (old_posted_date) {
+        posted_date = old_posted_date;
+    }
 
+    var date_input = $('input[name="m_posted_date"]'); //our date input has the name "date"
+    var date_input_disabled = $('input[name="m_posted_date2"]');
+    var container = $('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+    var options = {
+        format: 'mm/dd/yyyy',
+        container: container,
+        //todayHighlight: true,
+        autoclose: true,
+        forceParse: false,
+    };
+    date_input.datepicker(options).datepicker("setDate", posted_date);
+    date_input_disabled.datepicker(options).datepicker("setDate", posted_date);
+    
+    $('#exampleModal').on('show.bs.modal', function (event) {
+        var recipient = button.data('whatever'); // Extract info from data-* attributes
+        console.log('button:' + button);
+        var button = $(event.click); // Button that triggered the modal
+        console.log('button' + button);
 
-$('#exampleModal').on('show.bs.modal', function (event) {
-    var recipient = button.data('whatever'); // Extract info from data-* attributes
-    console.log('button:' + button);
-    var button = $(event.click); // Button that triggered the modal
-
-    console.log('button' + button);
-
-
-  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-  var modal = $(this);
-  modal.find('.modal-title').text('New message to ' + recipient);
-  modal.find('.modal-body input').val(recipient);
-});
-		
-
-
-
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this);
+        modal.find('.modal-title').text('New message to ' + recipient);
+        modal.find('.modal-body input').val(recipient);
+    });
 </script>
-
 @endsection

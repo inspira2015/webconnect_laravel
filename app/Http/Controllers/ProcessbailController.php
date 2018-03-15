@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\BailMaster;
 use App\Models\Courts;
@@ -81,7 +82,8 @@ class ProcessbailController extends Controller
 		$bailMaster = BailMaster::find($resultArray['m_id']);
         $courtList = Courts::pluck('c_name', 'c_id')->toArray();
         $stateList = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
-
+        $dt = new Carbon($bailMaster->m_posted_date);
+		$m_posted_date =  $dt->format("m/d/Y"); 
 
         $balance = $bailMaster->m_receipt_amount - (
         											 $bailMaster->m_forfeit_amount + 
@@ -93,7 +95,7 @@ class ProcessbailController extends Controller
                         'balance' => round($balance, 2),
                         'stateList'      => $stateList,
                         'courtList' => $courtList,
-                        'processBail' => true,
+                        'm_posted_date'  => $m_posted_date,
                       ];
         return view('processbail.refundbails', compact('bailMaster'))->with($indexArray);
     }

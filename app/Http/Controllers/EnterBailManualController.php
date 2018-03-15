@@ -8,6 +8,7 @@ use App\Models\BailConfiguration;
 use App\Models\Courts;
 use App\Models\BailMaster;
 use App\Models\BailTransactions;
+use Carbon\Carbon;
 use Redirect;
 use Auth;
 
@@ -117,7 +118,8 @@ class EnterBailManualController extends EnterBailController
         $stateList = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
         $manualEntry = $request->all();
         $bailMaster = BailMaster::firstOrNew(array('m_id' => (int) $manualEntry['master_id']));
-        $m_posted_date = $this->validatePostedDate($bailMaster->m_posted_date);
+        $dt = new Carbon($bailMaster->m_posted_date);
+        $m_posted_date =  $dt->format("m/d/Y"); 
 
         if (empty($queryResults)) {
 
@@ -151,12 +153,4 @@ class EnterBailManualController extends EnterBailController
                                  'record' =>  $bailMasterRow]);
     }
 
-    private function validatePostedDate($postedDate)
-    {
-        if (empty($postedDate)) {
-            return '';
-        }
-        
-        return date("m/d/Y", strtotime($postedDate));
-    }
 }
