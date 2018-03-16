@@ -2,6 +2,13 @@
 
 @section('content')
 
+<style type="text/css">
+    .top-margin15 {
+        margin-top: 15px;
+    }
+
+</style>
+
 <div class="body-content">
 	<h1>Process Bail Refund</h1>
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@fat">Edit Info</button>
@@ -104,6 +111,12 @@
                     <label for="exampleAccount">Date Posted:</label>
                     <input type="text" class="form-control" disabled id="m_posted_date2" name="m_posted_date2" placeholder="MM/DD/YYY">
                 </div>
+                <div class="col-sm-3 pb-3">
+                    <label for="m_court_number">Court Number: </label>
+                        {!! Form::select('m_court_number', $courtList, $bailMaster->m_court_number, array('class' => 'form-control',
+                         'disabled' => 'disabled')) !!}
+                </div>
+
 				<hr class="my-5">
 				<div style="width: 100%; text-align: left;">
 					<h2>Surety Data</h2>
@@ -160,67 +173,38 @@
             <h2>Process Bail Options</h2>
         </div>
 
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Refund-balance" data-whatever="@fat">Refund Balance</button>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                   <button type="button" class="btn btn-primary btn-lg top-margin15" data-toggle="modal" data-target="#Refund-balance" >Refund Balance</button>
+                </div>
+                <div class="col" >
+                    <button type="button" class="btn btn-primary btn-lg top-margin15" data-toggle="modal" data-target="#Refund-balance-with-fee" style="margin-top: 12px;">Refund Balance Retaining 3%</button>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" id="partial-payment" name="partial-payment" value="" style="margin-bottom: 5px;"  placeholder="Enter Payment Amount..">
 
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Refund-balance-with-fee" data-whatever="@fat">Refund Balance Retaining 3%</button>
-
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@fat">Partial Payment</button>
-
-   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@fat">MultiCheck</button>
-
-    <div class="modal fade" id="Refund-balance" tabindex="-1" role="dialog" aria-labelledby="Refund-balance">
-        <form name="bails" id="manual-bail-entry" method="post" action="{{ route('editbailmaster') }}" >
-            {{ csrf_field() }}
-            <input type="hidden" id="m_id" name="m_id" value="{{ old('m_id', $bailMaster->m_id) }}">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="exampleModalLabel">Close this Dialog Box</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="m_def_first_name">Do you want to proceed with Full Refund?</label>
-                        </div>
-                        <div class="form-group">
-                            <strong>$ {{ $balance }}</strong>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close and Cancel</button>
-                        <button type="type" id="update-info" class="btn btn-primary">Reund Now</button>
-                    </div>
+                     <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#Partial-payment" data-whatever="@fat">Partial Payment</button>
+                </div>
+                <div class="col">
+                     <input type="text"  style="margin-top: 5px;" class="form-control" id="multicheck-payment" name="multicheck-payment" value=""   placeholder="Enter Payment Amount..">
+                        {!! Form::select('court_check_list', $courtCheckList, '', array('class' => 'form-control',
+                        'id' => 'select_court_check')) !!}
+                     <button type="button" style="margin-top: 5px;" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#Multi-Check-payment" data-whatever="@fat">MultiCheck</button>
                 </div>
             </div>
-        </form>
-    </div>
+        </div>
 
-    <div class="modal fade" id="Refund-balance-with-fee" tabindex="-1" role="dialog" aria-labelledby="Refund-balance-with-fee">
-        <form name="bails" id="manual-bail-entry" method="post" action="{{ route('editbailmaster') }}" >
-            {{ csrf_field() }}
-            <input type="hidden" id="m_id" name="m_id" value="{{ old('m_id', $bailMaster->m_id) }}">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="exampleModalLabel">Close this Dialog Box</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="m_def_first_name">Do you want to proceed with this Refund?</label>
-                        </div>
-                        <div class="form-group">
-                            <strong>$ {{ $balance }}</strong>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close and Cancel</button>
-                        <button type="type" id="update-info" class="btn btn-primary">Reund Now</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
+        @include('chunks.transactionOptions')
+
+
+
+
+
+
+
+
+
 
 
     </div>
@@ -247,17 +231,34 @@
     date_input.datepicker(options).datepicker("setDate", posted_date);
     date_input_disabled.datepicker(options).datepicker("setDate", posted_date);
     
-    $('#exampleModal').on('show.bs.modal', function (event) {
-        var recipient = button.data('whatever'); // Extract info from data-* attributes
-        console.log('button:' + button);
-        var button = $(event.click); // Button that triggered the modal
-        console.log('button' + button);
 
-        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-        var modal = $(this);
-        modal.find('.modal-title').text('New message to ' + recipient);
-        modal.find('.modal-body input').val(recipient);
+    $(document).ready(function() {
+        var balance = parseFloat({{ $balance }});
+        var county_fee = parseFloat({{ $bailDetails['fee_percentaje'] }});
+
+        $('#Multi-Check-payment').on('show.bs.modal', function () {
+       // $('#Multi-Check-payment').on('load', function(){
+            console.log('test: ' + balance);
+            var multicheck_payment = parseFloat($('#multicheck-payment').val());
+            var check_court = $("#select_court_check option:selected").text();
+            var partial_amount_fee = parseFloat(multicheck_payment * county_fee);
+            var partial_plus_fee = parseFloat(multicheck_payment + partial_amount_fee);
+            var remain_balance = parseFloat(balance - partial_plus_fee);
+            
+                $('#multicheck-payment_modal').html(multicheck_payment);
+                $('#check_court').html(check_court);
+                $('#multicheck_amount_fee').html(partial_amount_fee);
+                $('#muticheck_balance').html(remain_balance);
+  
+                if (remain_balance < 0) {
+                    $('#refund-manual').attr("disabled", "disabled");
+                } else {
+                    $('#refund-manual').removeAttr("disabled");
+                }
+        });
+
+
     });
+  
 </script>
-@endsection
+@endsection                 

@@ -83,6 +83,8 @@ class ProcessbailController extends Controller
 		$bailMaster = BailMaster::find($resultArray['m_id']);
         $courtList = Courts::pluck('c_name', 'c_id')->toArray();
         $stateList = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
+        $courtCheckList = BailConfiguration::where('bc_category', 'check_court')->pluck('bc_value', 'bc_id')->toArray();
+        
         $dt = new Carbon($bailMaster->m_posted_date);
 		$m_posted_date =  $dt->format("m/d/Y"); 
 
@@ -92,19 +94,19 @@ class ProcessbailController extends Controller
         											 $bailMaster->m_city_fee_amount
         										    ), 2);
 
-
         $indexArray = [
-                        'jailRecords'   => array(),
-                        'balance'       => $balance,
-                        'stateList'     => $stateList,
-                        'courtList'     => $courtList,
-                        'm_posted_date' => $m_posted_date,
-                        'bailDetails'     => [
-                                            'total_balance'  => $balance,
-                                            'fee_percentaje' => CountyFee::getFeePercentaje(),
-                                            'fee_amount'     => $this->calculateFeeAmount($balance),
-                                            'remain_amount'  => $this->calculateAmountAfterFee($balance),
-                                           ],
+                        'jailRecords'    => array(),
+                        'balance'        => $balance,
+                        'stateList'      => $stateList,
+                        'courtList'      => $courtList,
+                        'courtCheckList' => $courtCheckList,
+                        'm_posted_date'  => $m_posted_date,
+                        'bailDetails'    => [
+                                             'total_balance'  => $balance,
+                                             'fee_percentaje' => CountyFee::getFeePercentaje(),
+                                             'fee_amount'     => $this->calculateFeeAmount($balance),
+                                             'remain_amount'  => $this->calculateAmountAfterFee($balance),
+                                            ],
                       ];
         return view('processbail.refundbails', compact('bailMaster'))->with($indexArray);
     }
