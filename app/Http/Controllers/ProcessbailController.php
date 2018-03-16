@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\BailMaster;
 use App\Models\Courts;
 use App\Models\BailConfiguration;
+use App\Facades\CountyFee;
 use Redirect;
 
 class ProcessbailController extends Controller
@@ -85,25 +86,25 @@ class ProcessbailController extends Controller
         $dt = new Carbon($bailMaster->m_posted_date);
 		$m_posted_date =  $dt->format("m/d/Y"); 
 
-        
-
-        $balance = $bailMaster->m_receipt_amount - (
+        $balance = round($bailMaster->m_receipt_amount - (
         											 $bailMaster->m_forfeit_amount + 
         											 $bailMaster->m_payment_amount + 
         											 $bailMaster->m_city_fee_amount
-        										    );
-        echo $this->calculateAmountAfterFee($balance);
-        exit;
+        										    ), 2);
+
 
         $indexArray = [
-                        'jailRecords' => array(),
-                        'balance' => round($balance, 2),
-                        'stateList'      => $stateList,
-                        'courtList' => $courtList,
-                        'm_posted_date'  => $m_posted_date,
-                        'feeAmoumt' => [
-                                         'amount' 
-                            ],
+                        'jailRecords'   => array(),
+                        'balance'       => $balance,
+                        'stateList'     => $stateList,
+                        'courtList'     => $courtList,
+                        'm_posted_date' => $m_posted_date,
+                        'bailDetails'     => [
+                                            'total_balance'  => $balance,
+                                            'fee_percentaje' => CountyFee::getFeePercentaje(),
+                                            'fee_amount'     => $this->calculateFeeAmount($balance),
+                                            'remain_amount'  => $this->calculateAmountAfterFee($balance),
+                                           ],
                       ];
         return view('processbail.refundbails', compact('bailMaster'))->with($indexArray);
     }
@@ -132,7 +133,7 @@ class ProcessbailController extends Controller
         return $amount * (1 - $this->getConfigPercentaje());
     }
 
-    private function calculatePercentaje($amount)
+    private function calculateFeeAmount($amount)
     {
         $amount = (float) $amount;
         if ($amount <= 0) {

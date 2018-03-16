@@ -178,6 +178,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         Adldap\Laravel\AdldapServiceProvider::class,
         Adldap\Laravel\AdldapAuthServiceProvider::class,
+        App\Providers\CountyFeeProvider::class,
+
     ],
 
     /*
@@ -226,7 +228,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'Adldap' => Adldap\Laravel\Facades\Adldap::class
+        'Adldap' => Adldap\Laravel\Facades\Adldap::class,
+        'CountyFee' => App\Facades\CountyFee::class,
 
     ],
 
