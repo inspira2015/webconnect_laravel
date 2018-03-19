@@ -16,7 +16,7 @@
     <link href="{{ asset('css/cashbailcss.css')}}" rel="stylesheet" type="text/css"/>
     <!-- <link href="http://webconnect/NC_Stylesheets/clean.css" rel="stylesheet" type="text/css" /> -->
     <link href="{{ asset('css/clean_old.css')}}" rel="stylesheet" type="text/css"/>
-    <link href="http://webconnect/NC_Stylesheets/intranet.css" rel="stylesheet" type="text/css">
+    <!-- <link href="http://webconnect/NC_Stylesheets/intranet.css" rel="stylesheet" type="text/css">-->
     
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
 
@@ -52,7 +52,7 @@
 </head>
 <body>
 <div id="container">
-    <table width="100%" height="121" cellpadding="0" cellspacing="0" border="0">
+    <table width="100%" height="85" cellpadding="0" cellspacing="0" border="0">
         <tr>
             <td> 
                 <div id="header">

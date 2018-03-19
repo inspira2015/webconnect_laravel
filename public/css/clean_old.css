@@ -9,10 +9,10 @@ body, html {
 	height:100%; /* needed for container min-height */
 }
 .wclogo {
-	background-image:url('../img/clean/Banner.jpg');
+	background-image:url('../img/clean/Banner_70.jpg');
 	background-position:TOP LEFT;
 	background-repeat:no-repeat;
-	height:121px;
+	height:85px;
 	width:800px;
 	float:left;
 }
@@ -46,7 +46,7 @@ div#header {
 	background-image:url('../img/clean/BannerRepeat.jpg');
 	background-position:top left;
 	background-repeat:repeat-x;
-	height:121px;
+	height:85px;
 	
 }
 	div#header p {
