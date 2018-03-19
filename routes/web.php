@@ -18,7 +18,6 @@ Route::get('/', function () {
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/home/cashBailManual', 'HomeController@downloadCashBailManual');
-
 Route::get('/import/jail/data', 'ImportDataController@importOldJailTable')->name('importjaildata');
 
 Route::get('/enterbail', 'EnterBailController@index')->name('enterbail');
@@ -33,8 +32,11 @@ Route::any('/enterbail/manualentry/processed', 'EnterBailManualController@proces
 Route::get('/enterbail/validateindexyear', 'EnterBailManualController@validateindexyear')->name('validateindexyear');
 Route::post('/enterbail/edit/manualentry', 'EnterBailManualController@editmanualrecord')->name('editmanualentry');
 
-
 Route::get('/processbail', 'ProcessbailController@index')->name('processbailsearch');
 Route::get('/processbail/ajax/findbail', 'ProcessbailController@ajaxfindbail')->name('ajaxfindbail');
 Route::any('/processbail/find/results', 'ProcessbailController@searchresults')->name('processbailresults');
 Route::post('/processbail/edit/bailmaster', 'ProcessbailController@editbailmaster')->name('editbailmaster');
+
+Route::post('/bailrefund/refundbalance', 'BailRefundProcessController@refundbalance')->name('refundbalance');
+Route::post('/bailrefund/partialrefund', 'BailRefundProcessController@partialrefund')->name('partialrefund');
+Route::post('/bailrefund/multicheck', 'BailRefundProcessController@multicheck')->name('multicheck');
