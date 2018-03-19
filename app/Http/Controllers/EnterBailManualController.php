@@ -33,7 +33,8 @@ class EnterBailManualController extends EnterBailController
         $courtList = Courts::pluck('c_name', 'c_id')->toArray();
         $stateList = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
         $bailMaster = BailMaster::firstOrNew(array('m_id' => 0));
-        $m_posted_date = $this->validatePostedDate($bailMaster->m_posted_date);
+        $dt = new Carbon($bailMaster->m_posted_date);
+        $m_posted_date =  $dt->format("m/d/Y"); 
 
         $indexArray = [
                         'courtList'      => $courtList,
