@@ -16,6 +16,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\ValidateTransactionBalance' => [
             'App\Listeners\BailTransactionListener',
         ],
+        'App\Events\RefundTransaction' => [
+            'App\Listeners\CreateRefundRecord',
+        ],
     ];
 
     /**

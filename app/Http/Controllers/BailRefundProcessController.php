@@ -38,7 +38,9 @@ class BailRefundProcessController extends EnterBailController
                 // Return Error
             }
 
-
+            $bailTransactions->m_id = $bailMaster->m_id;
+            $bailTransactions->t_total_refund = 5;
+            $bailTransactions->save();
             print_r($balance );
 
             echo "post";

@@ -179,7 +179,7 @@ return [
         Adldap\Laravel\AdldapServiceProvider::class,
         Adldap\Laravel\AdldapAuthServiceProvider::class,
         App\Providers\CountyFeeProvider::class,
-
+        App\Providers\BailTransactionsProvider::class,
     ],
 
     /*
