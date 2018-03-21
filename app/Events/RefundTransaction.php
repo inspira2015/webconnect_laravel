@@ -14,14 +14,17 @@ class RefundTransaction
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $transactionDetails;
+
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(array $transactionDetails)
     {
         //
+        $this->transactionDetails = $transactionDetails;
     }
 
     /**

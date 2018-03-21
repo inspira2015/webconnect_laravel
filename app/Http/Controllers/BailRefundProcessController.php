@@ -9,6 +9,8 @@ use App\Models\Courts;
 use App\Models\BailMaster;
 use App\Models\BailTransactions;
 use App\Events\ValidateTransactionBalance;
+use App\Events\RefundTransaction;
+
 use Event;
 use Session;
 
@@ -35,17 +37,32 @@ class BailRefundProcessController extends EnterBailController
             $balance = Event::fire(new ValidateTransactionBalance($bailMaster));
 
             if ($balance[0] <= 0) {
-                // Return Error
+                echo "no Balance";
+                exit;
             }
 
-            $bailTransactions->m_id = $bailMaster->m_id;
-            $bailTransactions->t_total_refund = 5;
-            $bailTransactions->save();
-            print_r($balance );
+            $transactionDetails = [ 'Payment' => 
+                                    [
+                                        'm_id'                 => $bailMaster->m_id,
+                                        't_created_at'         => date('Y-m-d G:i:s'),
+                                        't_numis_doc_id'       => 1,
+                                        't_debit_credit_index' => 'O',
+                                        't_type'               => 'P',
+                                        't_amount'             => 0,
+                                        't_fee_percentage'     => 0,
+                                        't_total_refund'       => $balance[0],
+                                        't_reversal_index'     => 0,
+                                        't_check_number'       => 'NIFS',
+                                        't_mult_check_index'   => 0,
+                                    ]
+                                  ];
 
-            echo "post";
+            
+            $newTransaction = Event::fire(new RefundTransaction($transactionDetails));
+
+        
         }
-        dd($userInput);
+        dd($newTransaction);
         exit;
 
     }
