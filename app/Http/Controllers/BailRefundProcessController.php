@@ -59,12 +59,10 @@ class BailRefundProcessController extends EnterBailController
 
             
             $newTransaction = Event::fire(new RefundTransaction($transactionDetails));
-
-        
         }
-        dd($newTransaction);
-        exit;
 
+        $searchTerm = "{$bailMaster->m_id} {$bailMaster->m_index_number}";
+        return redirect()->route('processbailresults', ['search_term' => $searchTerm]);
     }
 
     public function partialrefund(Request $request)
