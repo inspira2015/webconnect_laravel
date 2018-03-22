@@ -82,8 +82,8 @@ div#footer {
 	
 h2 {
 	font-family:Verdana, Arial, Helvetica, sans-serif;
-	color:#FFFFFF;
-	font-size:small;
+	color:#000;
+	font-size: 16px;
 	}
 .standard_link {color: #006699;}  /* visited link */
 .standard_link:visited {color: #006699;}  /* visited link */
@@ -153,4 +153,7 @@ div#navbar {
 .success-font {
 	color: #004d00;
 	font-size: 22px;
+}
+.bold-font {
+	font-weight: bold;
 }

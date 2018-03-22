@@ -238,7 +238,43 @@
 
         $('#Multi-Check-payment').on('show.bs.modal', function () {
        // $('#Multi-Check-payment').on('load', function(){
-            console.log('test: ' + balance);
+            var multicheck_payment = parseFloat($('#multicheck-payment').val());
+            var check_court = $("#select_court_check option:selected").text();
+            var partial_amount_fee = parseFloat(multicheck_payment * county_fee);
+            var partial_plus_fee = parseFloat(multicheck_payment + partial_amount_fee);
+            var remain_balance = parseFloat(balance - partial_plus_fee);
+
+                $('#multicheck-payment_modal').html(multicheck_payment);
+                $('#check_court').html(check_court);
+                $('#multicheck_amount_fee').html(partial_amount_fee);
+                $('#muticheck_balance').html(remain_balance);
+  
+                if (remain_balance < 0) {
+                    $('#refund-manual').attr("disabled", "disabled");
+                } else {
+                    $('#refund-manual').removeAttr("disabled");
+                }
+        });
+
+        $('.button-reverse').on('click', function() {
+            var transaction_id =  $(this).attr("data-transaction");
+            var transaction_amount = $('#t-amount-' + transaction_id).val();
+            var transaction_type = $(this).data('transaction-type');
+
+            if (transaction_type == 'P') {
+                var transaction_type_text = "Payment";
+            }
+            console.log(transaction_type);
+            $('#t_id').val(transaction_id);
+            $('#transaction-type').html(transaction_type_text);
+            $('#transaction-amount').html('$' + transaction_amount);
+        });
+
+        $('#Reverse-transaction').on('show.bs.modal', function () {
+       // $('#Multi-Check-payment').on('load', function(){
+       // $(this).parent().parent().attr('id');
+            var transaction_id =  $('#t_id').val();
+            console.log('test: ' + transaction_id);
             var multicheck_payment = parseFloat($('#multicheck-payment').val());
             var check_court = $("#select_court_check option:selected").text();
             var partial_amount_fee = parseFloat(multicheck_payment * county_fee);
@@ -256,6 +292,7 @@
                     $('#refund-manual').removeAttr("disabled");
                 }
         });
+
 
 
     });
