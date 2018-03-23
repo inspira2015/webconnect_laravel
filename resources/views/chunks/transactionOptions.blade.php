@@ -96,8 +96,11 @@
 
 <div class="modal fade" id="Multi-Check-payment" tabindex="-1" role="dialog" aria-labelledby="exampleMulti-Check-payment">
     <form name="bails" id="manual-bail-entry" method="post" action="{{ route('multicheck') }}" >
-                {{ csrf_field() }}
+        {{ csrf_field() }}
         <input type="hidden" id="m_id" name="m_id" value="{{ old('m_id', $bailMaster->m_id) }}">
+        <input type="hidden" id="multicheck_amount" name="multicheck_amount" value="">
+        <input type="hidden" id="courtcheck_id" name="courtcheck_id" value="">
+
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -123,7 +126,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close and Cancel</button>
-                    <button type="type" id="refund-manual" class="btn btn-primary">Refund Now</button>
+                    <button type="type" id="refund-multicheck" class="btn btn-primary">Refund Now</button>
                 </div>
             </div>
         </div>

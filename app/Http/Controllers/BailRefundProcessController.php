@@ -83,9 +83,31 @@ class BailRefundProcessController extends EnterBailController
     
     public function multicheck(Request $request)
     {
-        $userInput = $request->all();
-        $bailMaster = BailMaster::find(array('m_id' => $userInput['m_id']));
+        if ($request->isMethod('post')) {
+            $userInput = $request->all();
+            $bailMaster = BailMaster::find(array('m_id' => $userInput['m_id']))->first();
+            $bailTransactions = new BailTransactions();
+            $balance = Event::fire(new ValidateTransactionBalance($bailMaster));
 
+            if ($balance[0] <= 0) {
+                echo "no Balance";
+                exit;
+            }
+
+            $stdObject = new \stdClass();
+            $stdObject->refundType           = 'Multicheck';
+            $stdObject->bailMaster           = $bailMaster;
+            $stdObject->multiCheckAmount     = $userInput['multicheck_amount'];
+            $stdObject->balance              = $balance[0];
+            $stdObject->fee                  = CountyFee::getFeePercentaje();
+            $stdObject->t_multi_court_number = $userInput['courtcheck_id'];
+
+
+            $transactionDetails = $this->createTransactionArray($stdObject);
+            $newTransaction = Event::fire(new RefundTransaction($transactionDetails));
+        }
+        $searchTerm = "{$bailMaster->m_id} {$bailMaster->m_index_number}";
+        return redirect()->route('processbailresults', ['search_term' => $searchTerm]);
         dd($userInput);
         exit;
     }
@@ -103,6 +125,43 @@ class BailRefundProcessController extends EnterBailController
                 throw new \Exception('Invalid Transaction Array Type: ' . $objInfo->refundType);
             }
             $transactionArray['Payment'] = $transactionResultArray;
+
+        } elseif ($objInfo->refundType == 'Multicheck') {
+            $multiCheckFee = CountyFee::getAmountFee($objInfo->multiCheckAmount);
+
+            $transactionInfo                   = new \stdClass();
+            $transactionInfo->m_id             = $objInfo->bailMaster->m_id;
+            $transactionInfo->t_type           = 'C';
+            $transactionInfo->t_fee_percentage = $multiCheckFee;
+            $transactionResultArray            = $this->getTransactionArray($transactionInfo);
+
+            if ($transactionResultArray == false) {
+                throw new \Exception('Invalid Transaction Array Type: ' . $objInfo->refundType);
+            }
+            $transactionArray['Fee'] = $transactionResultArray;
+
+            $transactionInfo                       = new \stdClass();
+            $transactionInfo->m_id                 = $objInfo->bailMaster->m_id;
+            $transactionInfo->t_type               = 'PM';
+            $transactionInfo->t_total_refund       = $objInfo->multiCheckAmount;
+            $transactionInfo->t_multi_court_number = $objInfo->t_multi_court_number;
+
+            $transactionResultArray = $this->getTransactionArray($transactionInfo);
+
+            if ($transactionResultArray == false) {
+                throw new \Exception('Invalid Transaction Array Type: ' . $objInfo->refundType);
+            }
+            $transactionArray['Payment'] = $transactionResultArray;
+
+
+            $transactionInfo                 = new \stdClass();
+            $transactionInfo->m_id           = $objInfo->bailMaster->m_id;
+            $transactionInfo->t_type         = 'P';
+            $transactionInfo->t_total_refund = $objInfo->multiCheckAmount;
+            $transactionResultArray = $this->getTransactionArray($transactionInfo);
+
+
+
 
         } else {
             $transactionInfo = new \stdClass();
@@ -133,6 +192,28 @@ class BailRefundProcessController extends EnterBailController
             $transactionArray['Payment'] = $transactionResultArray;
         }
         return $transactionArray;
+    }
+
+    private function calculateMulticheckPayments($balance, $multiCheckAmount)
+    {
+        $multiCheckFee = CountyFee::getAmountFee($multiCheckAmount);
+
+        if ($balance == $multiCheckAmount) {
+            return [
+                     'countyFee'    => $multiCheckFee,
+                     'courtAmount'  => ($balance - $multiCheckFee),
+                     'suretyAmount' => 0,
+            ];
+        }
+
+        $courtAmount  = $multiCheckAmount + $multiCheckFee;
+        $suretyAmount = $balance - $courtAmount;
+        return [
+                     'countyFee'    => $multiCheckFee,
+                     'courtAmount'  => $courtAmount,
+                     'suretyAmount' => $suretyAmount,
+
+        ];
     }
 
     private function getTransactionArray($objInfo)

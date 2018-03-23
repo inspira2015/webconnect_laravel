@@ -230,23 +230,37 @@
         var county_fee = parseFloat({{ $bailDetails['fee_percentaje'] }});
 
         $('#Multi-Check-payment').on('show.bs.modal', function () {
-       // $('#Multi-Check-payment').on('load', function(){
             var multicheck_payment = parseFloat($('#multicheck-payment').val());
             var check_court = $("#select_court_check option:selected").text();
-            var partial_amount_fee = parseFloat(multicheck_payment * county_fee);
-            var partial_plus_fee = parseFloat(multicheck_payment + partial_amount_fee);
-            var remain_balance = parseFloat(balance - partial_plus_fee);
+            var check_court_id = $('#select_court_check').val();
 
-                $('#multicheck-payment_modal').html(multicheck_payment);
-                $('#check_court').html(check_court);
-                $('#multicheck_amount_fee').html(partial_amount_fee);
-                $('#muticheck_balance').html(remain_balance);
-  
-                if (remain_balance < 0) {
-                    $('#refund-manual').attr("disabled", "disabled");
-                } else {
-                    $('#refund-manual').removeAttr("disabled");
-                }
+            if (multicheck_payment == balance) {
+                var partial_amount_fee = parseFloat(multicheck_payment * county_fee);
+                var partial_plus_fee = parseFloat(multicheck_payment - partial_amount_fee);
+                var remain_balance = 0;
+                var multicheck_payment_show = partial_plus_fee;
+            } else {
+                var partial_amount_fee = parseFloat(multicheck_payment * county_fee);
+                var partial_plus_fee = parseFloat(multicheck_payment + partial_amount_fee);
+                var remain_balance = parseFloat(balance - partial_plus_fee);
+                var multicheck_payment_show = multicheck_payment;
+            }
+
+
+           
+            $('#multicheck-payment_modal').html(multicheck_payment_show);
+            $('#check_court').html(check_court);
+            $('#multicheck_amount_fee').html(partial_amount_fee);
+            $('#muticheck_balance').html(remain_balance);
+            $('#multicheck_amount').val(multicheck_payment);
+            $('#courtcheck_id').val(check_court_id);
+
+
+            if (remain_balance < 0) {
+                $('#refund-multicheck').attr("disabled", "disabled");
+            } else {
+                $('#refund-multicheck').removeAttr("disabled");
+            }
         });
 
         $('.button-reverse').on('click', function() {
