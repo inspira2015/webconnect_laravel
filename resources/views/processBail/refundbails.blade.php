@@ -200,13 +200,6 @@
 
 
 
-
-
-
-
-
-
-
     </div>
 </div>
 <script type="text/javascript">
@@ -271,8 +264,6 @@
         });
 
         $('#Reverse-transaction').on('show.bs.modal', function () {
-       // $('#Multi-Check-payment').on('load', function(){
-       // $(this).parent().parent().attr('id');
             var transaction_id =  $('#t_id').val();
             console.log('test: ' + transaction_id);
             var multicheck_payment = parseFloat($('#multicheck-payment').val());
@@ -291,6 +282,27 @@
                 } else {
                     $('#refund-manual').removeAttr("disabled");
                 }
+        });
+
+
+        $('#Partial-payment').on('show.bs.modal', function () {
+            var balance = parseFloat({{ $balance }});
+            var county_fee = parseFloat({{ $bailDetails['fee_percentaje'] }});
+            
+            var partial_amount = parseFloat($('#partial-payment').val());
+            var partial_amount_fee = partial_amount * county_fee;
+            var partial_plus_fee = partial_amount + partial_amount_fee;
+            var remain_balance = parseFloat(balance - partial_plus_fee);
+            
+            $('#partialAmount').html(partial_amount);
+            $('#partial_amount_fee').html(partial_amount_fee);
+            $('#remaining_balance').html(remain_balance);
+            $('#refund_amount').val(partial_amount);
+            if (remain_balance < 0) {
+                $('#refund-manual').attr("disabled", "disabled");
+            } else {
+                $('#refund-manual').removeAttr("disabled");
+            }
         });
 
 

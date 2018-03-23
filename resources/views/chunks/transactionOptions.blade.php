@@ -59,31 +59,12 @@
 </div>
 
 
-<div class="modal fade" id="Partial-payment" tabindex="-1" role="dialog" aria-labelledby="Partial-payment">
-    <script type="text/javascript">
-        $(document).ready(function() {
-            var balance = parseFloat({{ $balance }});
-            var county_fee = parseFloat({{ $bailDetails['fee_percentaje'] }});
-            $('#partial-payment').change(function() {
-                var partial_amount = parseFloat($('#partial-payment').val());
-                var partial_amount_fee = partial_amount * county_fee;
-                var partial_plus_fee = partial_amount + partial_amount_fee;
-                var remain_balance = parseFloat(balance - partial_plus_fee);
-                $('#partialAmount').html(partial_amount);
-                $('#partial_amount_fee').html(partial_amount_fee);
-                $('#remaining_balance').html(remain_balance);
-  
-                if (remain_balance < 0) {
-                    $('#refund-manual').attr("disabled", "disabled");
-                } else {
-                    $('#refund-manual').removeAttr("disabled");
-                }
-            });                   
-        });
-    </script>
+<div class="modal fade" id="Partial-payment" tabindex="-1" role="dialog" aria-labelledby="examplePartial-payment">
     <form name="bails" id="manual-bail-entry" method="post" action="{{ route('partialrefund') }}" >
         {{ csrf_field() }}
         <input type="hidden" id="m_id" name="m_id" value="{{ old('m_id', $bailMaster->m_id) }}">
+        <input type="hidden" id="refund_amount" name="refund_amount" value="">
+
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">

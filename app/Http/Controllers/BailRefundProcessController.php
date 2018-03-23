@@ -57,11 +57,28 @@ class BailRefundProcessController extends EnterBailController
 
     public function partialrefund(Request $request)
     {
-        $userInput = $request->all();
-        $bailMaster = BailMaster::find(array('m_id' => $userInput['m_id']));
+        if ($request->isMethod('post')) {
+            $userInput = $request->all();
+            $bailMaster = BailMaster::find(array('m_id' => $userInput['m_id']))->first();
+            $bailTransactions = new BailTransactions();
+            $balance = Event::fire(new ValidateTransactionBalance($bailMaster));
 
-        dd($userInput);
-        exit;
+            if ($balance[0] <= 0) {
+                echo "no Balance";
+                exit;
+            }
+
+            $stdObject = new \stdClass();
+            $stdObject->refundType = 'Partial';
+            $stdObject->bailMaster = $bailMaster;
+            $stdObject->balance    = $userInput['refund_amount'];
+            $stdObject->fee        = CountyFee::getFeePercentaje();
+
+            $transactionDetails = $this->createTransactionArray($stdObject);
+            $newTransaction = Event::fire(new RefundTransaction($transactionDetails));
+        }
+        $searchTerm = "{$bailMaster->m_id} {$bailMaster->m_index_number}";
+        return redirect()->route('processbailresults', ['search_term' => $searchTerm]);
     }
     
     public function multicheck(Request $request)
@@ -102,7 +119,12 @@ class BailRefundProcessController extends EnterBailController
             $transactionInfo = new \stdClass();
             $transactionInfo->m_id = $objInfo->bailMaster->m_id;
             $transactionInfo->t_type = 'P';
-            $transactionInfo->t_total_refund = CountyFee::getRemainAmountAfterFee($objInfo->balance);
+
+            if ($objInfo->refundType == 'Partial') {
+                $transactionInfo->t_total_refund = $objInfo->balance;
+            } else {
+                $transactionInfo->t_total_refund = CountyFee::getRemainAmountAfterFee($objInfo->balance);
+            }
             $transactionResultArray = $this->getTransactionArray($transactionInfo);
 
             if ($transactionResultArray == false) {
