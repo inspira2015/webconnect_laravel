@@ -25,6 +25,9 @@
                 @elseif ($item->t_type == 'P')
                     <th scope="row">$ {{ $item->t_total_refund }}</th>
                     <input type="hidden" name="t-amount" id="t-amount-{{ $item->t_id }}" value="{{ $item->t_total_refund }}">
+                @elseif ($item->t_type == 'C')
+                    <th scope="row">$ {{ $item->t_fee_percentage }}</th>
+                    <input type="hidden" name="t-amount" id="t-amount-{{ $item->t_id }}" value="{{ $item->t_fee_percentage }}">
                 @endif
                 <th scope="row">{{ $item->t_check_number }}</th>
                 <th scope="row">

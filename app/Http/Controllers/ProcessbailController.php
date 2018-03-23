@@ -118,19 +118,13 @@ class ProcessbailController extends Controller
     }
 
 
-    private function getCollectionResults(array $queryValues)
-    {
-       
-
-    }
-
     private function calculateAmountAfterFee($amount)
     {
         $amount = (float) $amount;
         if ($amount <= 0) {
             return 0;
         }
-        return $amount * (1 - $this->getConfigPercentaje());
+        return $amount * (1 - CountyFee::getFeePercentaje());
     }
 
     private function calculateFeeAmount($amount)
@@ -139,13 +133,7 @@ class ProcessbailController extends Controller
         if ($amount <= 0) {
             return 0;
         }
-        return $amount * $this->getConfigPercentaje();
-    }
-
-    private function getConfigPercentaje()
-    {
-        $feeRow = BailConfiguration::GetFeePercentaje();
-        return $feeRow[0]->bc_value / 100;
+        return $amount * CountyFee::getFeePercentaje();
     }
 
     /**
