@@ -57,16 +57,16 @@ class LoginController extends Controller
                 $userUid = 777;
             }
 
-            $userAllow = new UserAllow();
-            $userClearance = $userAllow->GetUserClearance($userUid);
+           // $userAllow = new UserAllow();
+          //  $userClearance = $userAllow->GetUserClearance($userUid);
 
-            if (empty($userClearance[0])) {
-                Session::flush();
-                Auth::logout();
-                $this->redirectLogin();
-            }
+            //if (empty($userClearance[0])) {
+            //    Session::flush();
+            //    Auth::logout();
+            //    $this->redirectLogin();
+           // }
 
-            Session::put('userClearance', $userClearance[0]);
+            //Session::put('userClearance', $userClearance[0]);
             $user = Auth::user();
 
             return redirect()->to('home')

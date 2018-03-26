@@ -55,7 +55,7 @@ class HomeController extends Controller
         $homeArray = [
                         'totalRows_approvals' => (int) $totalRows_approvals,
                         'batno' => (int) $batno,
-                        'user_lev' => (int) $user->ua_level,
+                       // 'user_lev' => (int) $user->ua_level,
                         'curbox' => 'B2',
                         'bodwidth' => '830px',
                         'LNfilename' => 'webconnect/navs/' . $mydir . '.php',

@@ -7,8 +7,7 @@
     <div style="width:100%; background-image:url({{ asset('img/cashbail/menu_right_25.jpg') }}); background-position:top right; background-repeat:no-repeat">
         <p class="content"><span style="font-weight: bold">Todays Batch Number Is</span>: <?php echo $batno; ?></p>
         <table width="498" border="0" cellpadding="0" cellspacing="5">
-            <?php 
-            if ($user_lev == 3) { ?>
+
 
             <?php 
                 if ($totalRows_approvals <= 0) : ?>
@@ -67,7 +66,7 @@
                         }
                     }
                 }
-} 
+
 ?>
             <tr>
               <td height="21" style="background-image:url({{ asset('img/cashbail/cashbailbuttons_18.jpg') }}); background-position: left top; background-repeat:no-repeat"><span style="font-weight: bold; padding-left:30px;"><a href="lookBail1.php" class="content">Bail Lookup </a>-</span> <span class="content">Search bails by defendant, index # or surety </span></td>
