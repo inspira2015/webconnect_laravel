@@ -127,41 +127,51 @@ class BailRefundProcessController extends EnterBailController
             $transactionArray['Payment'] = $transactionResultArray;
 
         } elseif ($objInfo->refundType == 'Multicheck') {
-            $multiCheckFee = CountyFee::getAmountFee($objInfo->multiCheckAmount);
+            $multiCheckTransaction = $this->calculateMulticheckPayments($objInfo->balance, $objInfo->multiCheckAmount);
 
-            $transactionInfo                   = new \stdClass();
-            $transactionInfo->m_id             = $objInfo->bailMaster->m_id;
-            $transactionInfo->t_type           = 'C';
-            $transactionInfo->t_fee_percentage = $multiCheckFee;
-            $transactionResultArray            = $this->getTransactionArray($transactionInfo);
+            if ($multiCheckTransaction['countyFee'] > 0) {
+                $transactionInfo                   = new \stdClass();
+                $transactionInfo->m_id             = $objInfo->bailMaster->m_id;
+                $transactionInfo->t_type           = 'C';
+                $transactionInfo->t_fee_percentage = $multiCheckTransaction['countyFee'];
+                $transactionResultArray            = $this->getTransactionArray($transactionInfo);
 
-            if ($transactionResultArray == false) {
-                throw new \Exception('Invalid Transaction Array Type: ' . $objInfo->refundType);
+                if ($transactionResultArray == false) {
+                    throw new \Exception('Invalid Transaction Array Type: ' . $objInfo->refundType);
+                }
+                $transactionArray['Fee'] = $transactionResultArray;
             }
-            $transactionArray['Fee'] = $transactionResultArray;
 
-            $transactionInfo                       = new \stdClass();
-            $transactionInfo->m_id                 = $objInfo->bailMaster->m_id;
-            $transactionInfo->t_type               = 'PM';
-            $transactionInfo->t_total_refund       = $objInfo->multiCheckAmount;
-            $transactionInfo->t_multi_court_number = $objInfo->t_multi_court_number;
+            if ($multiCheckTransaction['courtAmount'] > 0) {
+                $transactionInfo                       = new \stdClass();
+                $transactionInfo->m_id                 = $objInfo->bailMaster->m_id;
+                $transactionInfo->t_type               = 'PM';
+                $transactionInfo->t_total_refund       = $multiCheckTransaction['courtAmount'];
+                $transactionInfo->t_multi_court_number = $objInfo->t_multi_court_number;
 
-            $transactionResultArray = $this->getTransactionArray($transactionInfo);
+                $transactionResultArray = $this->getTransactionArray($transactionInfo);
 
-            if ($transactionResultArray == false) {
-                throw new \Exception('Invalid Transaction Array Type: ' . $objInfo->refundType);
+                if ($transactionResultArray == false) {
+                    throw new \Exception('Invalid Transaction Array Type: ' . $objInfo->refundType);
+                }
+                $transactionArray['Payment'] = $transactionResultArray;
             }
-            $transactionArray['Payment'] = $transactionResultArray;
 
 
-            $transactionInfo                 = new \stdClass();
-            $transactionInfo->m_id           = $objInfo->bailMaster->m_id;
-            $transactionInfo->t_type         = 'P';
-            $transactionInfo->t_total_refund = $objInfo->multiCheckAmount;
-            $transactionResultArray = $this->getTransactionArray($transactionInfo);
+            if ($multiCheckTransaction['suretyAmount'] > 0) {
+                $transactionInfo                       = new \stdClass();
+                $transactionInfo->m_id                 = $objInfo->bailMaster->m_id;
+                $transactionInfo->t_type               = 'PS';
+                $transactionInfo->t_total_refund       = $multiCheckTransaction['suretyAmount'];
+                $transactionInfo->t_multi_court_number = $objInfo->t_multi_court_number;
 
+                $transactionResultArray = $this->getTransactionArray($transactionInfo);
 
-
+                if ($transactionResultArray == false) {
+                    throw new \Exception('Invalid Transaction Array Type: ' . $objInfo->refundType);
+                }
+                $transactionArray['Payment_2'] = $transactionResultArray;
+            }
 
         } else {
             $transactionInfo = new \stdClass();
@@ -200,8 +210,8 @@ class BailRefundProcessController extends EnterBailController
 
         if ($balance == $multiCheckAmount) {
             return [
-                     'countyFee'    => $multiCheckFee,
-                     'courtAmount'  => ($balance - $multiCheckFee),
+                     'countyFee'    => (float) $multiCheckFee,
+                     'courtAmount'  => (float) ($balance - $multiCheckFee),
                      'suretyAmount' => 0,
             ];
         }
@@ -209,9 +219,9 @@ class BailRefundProcessController extends EnterBailController
         $courtAmount  = $multiCheckAmount + $multiCheckFee;
         $suretyAmount = $balance - $courtAmount;
         return [
-                     'countyFee'    => $multiCheckFee,
-                     'courtAmount'  => $courtAmount,
-                     'suretyAmount' => $suretyAmount,
+                     'countyFee'    => (float) $multiCheckFee,
+                     'courtAmount'  => (float) $courtAmount,
+                     'suretyAmount' => (float) $suretyAmount,
 
         ];
     }
