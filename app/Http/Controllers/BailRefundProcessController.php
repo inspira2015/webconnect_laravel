@@ -211,7 +211,7 @@ class BailRefundProcessController extends EnterBailController
         if ($balance == $multiCheckAmount) {
             return [
                      'countyFee'    => (float) $multiCheckFee,
-                     'courtAmount'  => (float) ($balance - $multiCheckFee),
+                     'courtAmount'  => (float) $multiCheckAmount,
                      'suretyAmount' => 0,
             ];
         }
@@ -220,7 +220,7 @@ class BailRefundProcessController extends EnterBailController
         $suretyAmount = $balance - $courtAmount;
         return [
                      'countyFee'    => (float) $multiCheckFee,
-                     'courtAmount'  => (float) $courtAmount,
+                     'courtAmount'  => (float) $multiCheckAmount,
                      'suretyAmount' => (float) $suretyAmount,
 
         ];
