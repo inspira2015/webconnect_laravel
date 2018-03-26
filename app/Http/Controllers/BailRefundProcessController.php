@@ -143,6 +143,7 @@ class BailRefundProcessController extends EnterBailController
                 throw new \Exception('Invalid Transaction Array Type: ' . $objInfo->refundType);
         }
         $transactionArray['Reversal'] = $transactionResultArray;
+        $transactionArray['Reversal_id'] = $objInfo->bailTransactions->t_id;
         return $transactionArray;
     }
 

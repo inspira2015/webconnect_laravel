@@ -40,7 +40,7 @@
                 @endif
                 <th scope="row">{{ $item->t_check_number }}</th>
                 <th scope="row">
-                    @if ($item->t_type == 'P' || $item->t_type == 'PM' || $item->t_type == 'PS')
+                    @if (($item->t_type == 'P' || $item->t_type == 'PM' || $item->t_type == 'PS') && $item->t_no_reversal != 1)
                         <button type="button" class="btn btn-primary btn-lg btn-warning button-reverse" 
                         data-toggle="modal" 
                         data-target="#Reverse-transaction" 
