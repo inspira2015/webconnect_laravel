@@ -40,3 +40,4 @@ Route::post('/processbail/edit/bailmaster', 'ProcessbailController@editbailmaste
 Route::post('/bailrefund/refundbalance', 'BailRefundProcessController@refundbalance')->name('refundbalance');
 Route::post('/bailrefund/partialrefund', 'BailRefundProcessController@partialrefund')->name('partialrefund');
 Route::post('/bailrefund/multicheck', 'BailRefundProcessController@multicheck')->name('multicheck');
+Route::post('/bailrefund/reversetransaction', 'BailRefundProcessController@reversetransaction')->name('reversetransaction');

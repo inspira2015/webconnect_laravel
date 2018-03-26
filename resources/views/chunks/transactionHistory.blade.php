@@ -34,10 +34,13 @@
                 @elseif ($item->t_type == 'PS')
                     <th scope="row">$ {{ $item->t_total_refund }}</th>
                     <input type="hidden" name="t-amount" id="t-amount-{{ $item->t_id }}" value="{{ $item->t_total_refund }}">
+                @elseif ($item->t_type == 'K')
+                    <th scope="row">$ {{ $item->t_amount }}</th>
+                    <input type="hidden" name="t-amount" id="t-amount-{{ $item->t_id }}" value="{{ $item->t_amount }}">
                 @endif
                 <th scope="row">{{ $item->t_check_number }}</th>
                 <th scope="row">
-                    @if ($item->t_type == 'P')
+                    @if ($item->t_type == 'P' || $item->t_type == 'PM' || $item->t_type == 'PS')
                         <button type="button" class="btn btn-primary btn-lg btn-warning button-reverse" 
                         data-toggle="modal" 
                         data-target="#Reverse-transaction" 
@@ -52,7 +55,7 @@
 
 
 <div class="modal fade" id="Reverse-transaction" tabindex="-1" role="dialog" aria-labelledby="Reverse-transactionExample">
-    <form name="reverse-payment" id="reverse-payment" method="post" action="{{ route('refundbalance') }}" >
+    <form name="reverse-payment" id="reverse-payment" method="post" action="{{ route('reversetransaction') }}" >
         {{ csrf_field() }}
         <input type="hidden" id="m_id" name="m_id" value="{{ old('m_id', $bailMaster->m_id) }}">
         <input type="hidden" id="t_id" name="t_id" value="">

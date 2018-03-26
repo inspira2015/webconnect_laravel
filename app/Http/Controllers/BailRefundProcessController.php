@@ -108,9 +108,44 @@ class BailRefundProcessController extends EnterBailController
         }
         $searchTerm = "{$bailMaster->m_id} {$bailMaster->m_index_number}";
         return redirect()->route('processbailresults', ['search_term' => $searchTerm]);
-        dd($userInput);
-        exit;
     }
+
+    public function reversetransaction(Request $request)
+    {
+         if ($request->isMethod('post')) {
+            $userInput = $request->all();
+            $bailMaster = BailMaster::find(array('m_id' => $userInput['m_id']))->first();
+            $bailTransactions = BailTransactions::find(array('t_id' => $userInput['t_id']))->first();
+            
+            $stdObject = new \stdClass();
+            $stdObject->refundType           = 'Reversal';
+            $stdObject->bailMaster           = $bailMaster;
+            $stdObject->bailTransactions     = $bailTransactions;
+
+            $transactionDetails = $this->createReversalTransaction($stdObject);
+            $newTransaction = Event::fire(new RefundTransaction($transactionDetails));     
+        }
+        $searchTerm = "{$bailMaster->m_id} {$bailMaster->m_index_number}";
+        return redirect()->route('processbailresults', ['search_term' => $searchTerm]);
+    }
+
+
+    private function createReversalTransaction($objInfo)
+    {
+        $transactionInfo = new \stdClass();
+        $transactionInfo->m_id = $objInfo->bailMaster->m_id;
+        $transactionInfo->t_type = 'K';
+        $transactionInfo->t_amount = $objInfo->bailTransactions->t_total_refund;
+        $transactionInfo->t_check_number = 'REVERSAL';
+        $transactionResultArray = $this->getTransactionArray($transactionInfo);
+            
+        if ($transactionResultArray == false) {
+                throw new \Exception('Invalid Transaction Array Type: ' . $objInfo->refundType);
+        }
+        $transactionArray['Reversal'] = $transactionResultArray;
+        return $transactionArray;
+    }
+
 
     private function createTransactionArray($objInfo)
     {
