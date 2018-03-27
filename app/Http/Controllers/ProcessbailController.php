@@ -82,6 +82,13 @@ class ProcessbailController extends Controller
     {
         $termToSearch   = $request->get('search_term','');
         $resultArray    = $this->getTermFromUserInput($termToSearch);
+
+        if (is_numeric($resultArray['m_id']) == false) {
+            $messages = [
+                            "\"{$resultArray['m_id']}\" was not found",
+                        ];
+            return redirect()->route('processbailsearch')->withErrors($messages);
+        }
 		$bailMaster     = BailMaster::find($resultArray['m_id']);
         $courtList      = Courts::pluck('c_name', 'c_id')->toArray();
         $stateList      = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();

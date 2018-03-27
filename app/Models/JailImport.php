@@ -13,6 +13,8 @@ class JailImport extends Model
      */
     protected $table = 'jail_import';
 
+    protected $primaryKey = 'j_id';
+
     private $totalJailAmount;
 
     private $resultJailRecord;
@@ -88,9 +90,26 @@ class JailImport extends Model
         return $jailRecords;
     }
 
-    public function scopeGetJailRecordsTotalByCheckNumber($query)
+    public function scopeGetJailRecordsTotalByCheckNumber($query, $checkNumber)
     {
-        return round($this->totalJailAmount, 2);
+        $checkNumber = (int) $checkNumber;
+        $result = 0;
+        $jailRecords = DB::select("
+                            SELECT 
+                                    SUM(ji.j_bail_amount/100) as total
+ 
+                            FROM      jail_import AS ji
+                            LEFT JOIN bail_master AS bm ON bm.j_check_number       = ji.j_check_number
+                                  AND SUBSTRING_INDEX(ji.j_index_number, '/', 1)   = bm.m_index_number
+                                  AND  SUBSTRING_INDEX(ji.j_index_number, '/', -1) = bm.m_index_year  
+                            WHERE 1
+                            AND ji.j_check_number = ?
+                            AND  bm.j_check_number IS NOT NULL", [$checkNumber]
+                        );
+        if (empty($jailRecords)) {
+            return $result;
+        }
+        return round($jailRecords[0]->total, 2);
     }
 
 

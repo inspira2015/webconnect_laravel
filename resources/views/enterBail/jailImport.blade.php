@@ -75,7 +75,6 @@
             <td valign="top"><h1>Enter Bail By Jail Check Number</h1></td>
         </tr>
     </table>
-
     <div style="margin-top: .5em; margin-left: 5em;">
         <form action="{{ route('searchchecknumber') }}" method="post" name="form1" class="reduce-input form-inline content">
             <div class="form-group col-sm-4">
@@ -88,10 +87,10 @@
                 <button type="submit" class="btn btn-primary btn-sm">Submit</button>
         </form>
         <hr>
- </div>
-        <form name="bails" id="form-bails" method="post" action="{{ route('processbails') }}" class="reduce-input form-inline content">
-            {{ csrf_field() }}
-    @if($processBail)
+    </div>
+    <form name="bails" id="form-bails" method="post" action="{{ route('processbails') }}" class="reduce-input form-inline content">
+        {{ csrf_field() }}
+        @if($processBail)
         <div style="margin-top: .5em; margin-left: 5em; width: 100%;">
             <div class="form-group">
                 <div class="form-group">
@@ -117,9 +116,9 @@
                  <p align="right">&nbsp;</p>
             </div>
         </div>
-   <br><br>
-    <hr style="width: 100%;">
-    @endif
+        <br><br>
+        <hr style="width: 100%;">
+        @endif
 
     @if(!empty($jailRecords))
         @if($processBail)

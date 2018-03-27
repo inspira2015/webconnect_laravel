@@ -9,26 +9,23 @@ use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use App\Models\BailMaster;
 
-
-class ValidateTransactionBalance
+class ImportJailRecord
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $bailMaster;
+    public $importArray;
     public $jailId;
-
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($bailMaster, $jailId)
+    public function __construct(array $importArray, $jailId)
     {
         //
-        $this->bailMaster = $bailMaster;
+        $this->importArray = $importArray;
         $this->jailId = $jailId;
     }
 

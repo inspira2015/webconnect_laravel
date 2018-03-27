@@ -45,6 +45,13 @@
                 <p><label id="search_term-error" class="error" for="search_term"></label></p>
             </div>
         </div>
+            @if ( $errors->count() > 0 )
+                <ul>
+                    @foreach( $errors->all() as $message )
+                        <li class="error"><strong>{{ $message }}</strong></li>
+                    @endforeach
+                </ul>
+            @endif
     </form>
 </div>
 

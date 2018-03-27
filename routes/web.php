@@ -25,7 +25,7 @@ Route::get('/enterbail/ajax/findcheck', 'EnterBailController@searchcheckajax')->
 
 Route::get('/enterbail/jailbatch', 'EnterBailBatchController@index')->name('jailcheck');
 Route::post('/enterbail/jailbatch/check/results', 'EnterBailBatchController@searchchecknumber')->name('searchchecknumber');
-Route::post('/enterbail/jailbatch/processed', 'EnterBailBatchController@processbails')->name('processbails');
+Route::any('/enterbail/jailbatch/processed', 'EnterBailBatchController@processbails')->name('processbails');
 
 Route::get('/enterbail/manualentry', 'EnterBailManualController@index')->name('manualentry');
 Route::any('/enterbail/manualentry/processed', 'EnterBailManualController@processmanualentry')->name('processmanualentry');

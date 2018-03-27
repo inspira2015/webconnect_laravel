@@ -28,7 +28,7 @@
 </div>
 
 <div class="modal fade" id="Refund-balance-with-fee" tabindex="-1" role="dialog" aria-labelledby="Refund-balance-with-fee">
-    <form name="bails" id="manual-bail-entry" method="post" action="{{ route('reversetransaction') }}" >
+    <form name="bails" id="manual-bail-entry" method="post" action="{{ route('refundbalance') }}" >
         {{ csrf_field() }}
         <input type="hidden" id="m_id" name="m_id" value="{{ old('m_id', $bailMaster->m_id) }}">
         <input type="hidden" id="refund_type" name="refund_type" value="fee">

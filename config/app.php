@@ -180,6 +180,8 @@ return [
         Adldap\Laravel\AdldapAuthServiceProvider::class,
         App\Providers\CountyFeeProvider::class,
         App\Providers\BailTransactionsProvider::class,
+        App\Providers\CheckNumberRecordsProvider::class,
+
     ],
 
     /*
@@ -230,6 +232,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Adldap' => Adldap\Laravel\Facades\Adldap::class,
         'CountyFee' => App\Facades\CountyFee::class,
+        'CheckNumberRecords' => App\Facades\CheckNumberRecords::class,
 
     ],
 

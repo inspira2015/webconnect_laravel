@@ -19,6 +19,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\RefundTransaction' => [
             'App\Listeners\CreateRefundRecord',
         ],
+        'App\Events\ImportJailRecord' => [
+            'App\Listeners\ValidateUniqueJailRecord',
+        ],
     ];
 
     /**
