@@ -7,7 +7,7 @@
 
 <table width="100%"  border="0" cellpadding="2" cellspacing="0" class="reduce-input reduce-width jailRecords">
     <tr style="font-weight: bold">
-        <td>Selected Rows</td>
+        <td><input type="checkbox" class="form-check-input" name="selectedAll" id="ckbCheckAll"></td>
         <td>Posted Date</td>
         <td>Date of Rec</td>
         <td>Def Last</td>
@@ -30,7 +30,7 @@
     @foreach($jailRecords as $key => $value)
         <tr class="<?php echo $value->duplicate; ?>">
             <td height="20" width="30">
-                <input type="checkbox" class="form-check-input" name="selected[<?php echo $value->j_id; ?>]"
+                <input type="checkbox" class="form-check-input checkBoxClass" name="selected[<?php echo $value->j_id; ?>]"
                 <?php if ($value->duplicate == 'duplicate-row') {
                     echo "disabled";
                 } ?>
@@ -65,3 +65,9 @@
         </tr>
     @endforeach
 </table>
+<script type="text/javascript">
+    $("#ckbCheckAll").click(function () {
+        $(".checkBoxClass").prop('checked', $(this).prop('checked'));
+    });
+
+</script>
