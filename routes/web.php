@@ -41,3 +41,7 @@ Route::post('/bailrefund/refundbalance', 'BailRefundProcessController@refundbala
 Route::post('/bailrefund/partialrefund', 'BailRefundProcessController@partialrefund')->name('partialrefund');
 Route::post('/bailrefund/multicheck', 'BailRefundProcessController@multicheck')->name('multicheck');
 Route::post('/bailrefund/reversetransaction', 'BailRefundProcessController@reversetransaction')->name('reversetransaction');
+
+
+Route::get('/forfeitures', 'ForfeituresController@index')->name('forfeitures');
+

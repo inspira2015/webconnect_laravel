@@ -11,7 +11,7 @@
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Enter Bail
+                        Enter Bail
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{{ route('jailcheck') }}">Enter Bail From Jail Check</a>
@@ -20,6 +20,17 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('processbailsearch') }}">Process Bail</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Forfeitures
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ route('forfeitures') }}">Select Bails to Mark For Forfeiture</a>
+                        <a class="dropdown-item" href="">Run Forfeiture Report (excel import)</a>
+                        <a class="dropdown-item" href="">Process Forfeitures</a>
+                        <a class="dropdown-item" href="">Forfeitures Post Report</a>
+                    </div>
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0">
