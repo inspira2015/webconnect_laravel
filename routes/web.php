@@ -41,8 +41,7 @@ Route::post('/bailrefund/partialrefund', 'BailRefundProcessController@partialref
 Route::post('/bailrefund/multicheck', 'BailRefundProcessController@multicheck')->name('multicheck');
 Route::post('/bailrefund/reversetransaction', 'BailRefundProcessController@reversetransaction')->name('reversetransaction');
 
-
 Route::get('/forfeitures', 'ForfeituresController@index')->name('forfeitures');
 Route::any('/forfeitures/find/results', 'ForfeituresController@ajaxSearchResults')->name('ajaxSearchResults');
-Route::get('/ajaxcall/findbailmaster', 'AjaxSearchController@searchBailMaster')->name('searchBailMaster');
 
+Route::get('/ajaxcall/findbailmaster', 'AjaxSearchController@searchBailMaster')->name('searchBailMaster');

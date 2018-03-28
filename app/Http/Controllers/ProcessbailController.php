@@ -125,6 +125,4 @@ class ProcessbailController extends Controller
         return $amount * CountyFee::getFeePercentaje();
     }
 
-
-
 }

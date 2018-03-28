@@ -25,11 +25,10 @@ class ValidateTransactionBalance
      *
      * @return void
      */
-    public function __construct($bailMaster, $jailId)
+    public function __construct($bailMaster)
     {
         //
         $this->bailMaster = $bailMaster;
-        $this->jailId = $jailId;
     }
 
     /**
