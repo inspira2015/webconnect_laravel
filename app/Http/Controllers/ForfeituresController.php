@@ -77,7 +77,7 @@ class ForfeituresController extends Controller
                                              'remain_amount'  => CountyFee::getRemainAmountAfterFee($balance),
                                             ],
                       ];
-        return view('processbail.refundbails', compact('bailMaster'))->with($indexArray);
+        return view('forfeitures.forfeituresMark', compact('bailMaster'))->with($indexArray);
     }
 
 }
