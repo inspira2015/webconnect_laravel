@@ -71,7 +71,7 @@
         });
 
 
-        src = "{{ route('ajaxfindbail') }}";
+        src = "{{ route('searchBailMaster') }}";
             $("#search_term").autocomplete({
                 change: function (event, ui) {
                     if (!ui.item) {

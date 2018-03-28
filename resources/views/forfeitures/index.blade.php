@@ -17,7 +17,7 @@
 
 
 <div class="container-800 center-screen">
-    <form name="processbails" id="processbails" method="post" action="{{ route('processbailresults') }}" >
+    <form name="forfeitures" id="forfeitures" method="post" action="{{ route('processbailresults') }}" >
         {{ csrf_field() }}
         <div class="row">    
             <div class="col-8">
@@ -71,7 +71,7 @@
         });
 
 
-        src = "{{ route('ajaxfindbail') }}";
+        src = "{{ route('searchBailMaster') }}";
             $("#search_term").autocomplete({
                 change: function (event, ui) {
                     if (!ui.item) {

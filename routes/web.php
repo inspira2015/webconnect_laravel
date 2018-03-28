@@ -33,7 +33,6 @@ Route::get('/enterbail/validateindexyear', 'EnterBailManualController@validatein
 Route::post('/enterbail/edit/manualentry', 'EnterBailManualController@editmanualrecord')->name('editmanualentry');
 
 Route::get('/processbail', 'ProcessbailController@index')->name('processbailsearch');
-Route::get('/processbail/ajax/findbail', 'ProcessbailController@ajaxfindbail')->name('ajaxfindbail');
 Route::any('/processbail/find/results', 'ProcessbailController@searchresults')->name('processbailresults');
 Route::post('/processbail/edit/bailmaster', 'ProcessbailController@editbailmaster')->name('editbailmaster');
 
@@ -44,4 +43,6 @@ Route::post('/bailrefund/reversetransaction', 'BailRefundProcessController@rever
 
 
 Route::get('/forfeitures', 'ForfeituresController@index')->name('forfeitures');
+Route::any('/forfeitures/find/results', 'ForfeituresController@ajaxSearchResults')->name('ajaxSearchResults');
+Route::get('/ajaxcall/findbailmaster', 'AjaxSearchController@searchBailMaster')->name('searchBailMaster');
 
