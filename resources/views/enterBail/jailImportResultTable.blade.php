@@ -3,9 +3,9 @@
 
 </div>
 <br><br>
-<p><strong>Total Check Amount: <span class="green-font font18 dollar-amount">{{ $totalCheckAmount }}</span> </strong></p>
+<p><strong>Total Check Amount: <span id="totalCheckAmount" class="green-font font18 dollar-amount">{{ $totalCheckAmount }}</span> </strong></p>
 
-<table width="100%"  border="0" cellpadding="2" cellspacing="0" class="reduce-input reduce-width jailRecords">
+<table width="100%" id="jailTable" border="0" cellpadding="2" cellspacing="0" class="reduce-input reduce-width jailRecords">
     <tr style="font-weight: bold">
         <td><input type="checkbox" class="form-check-input" name="selectedAll" id="ckbCheckAll"></td>
         <td>Posted Date</td>
@@ -29,8 +29,8 @@
 
     @foreach($jailRecords as $key => $value)
         <tr class="<?php echo $value->duplicate; ?>">
-            <td height="20" width="30">
-                <input type="checkbox" class="form-check-input checkBoxClass" name="selected[<?php echo $value->j_id; ?>]"
+            <td height="20" width="30" data-jid="{{$value->j_id}}">
+                <input type="checkbox" class="form-check-input checkBoxClass"  name="selected[<?php echo $value->j_id; ?>]" id="selected_<?php echo $value->j_id; ?>"
                 <?php if ($value->duplicate == 'duplicate-row') {
                     echo "disabled";
                 } ?>
@@ -66,8 +66,31 @@
     @endforeach
 </table>
 <script type="text/javascript">
+
+    var total_dollar_amount = function() {
+        var table = $("#jailTable");
+        var total = 0;
+        table.find('tr').each(function (i) {
+            var current_id = $(this).find('td').data('jid');
+            var bail_amount = $(this).find('td.dollar-amount').html();
+            var selector = $('#selected_' + current_id).is(':disabled');
+            if ($('#selected_' + current_id).is(':checked') || $('#selected_' + current_id).is(':disabled')) {
+                bail_amount = bail_amount.replace(/\$|,/g, '');
+                total = total + parseInt(bail_amount);
+            }
+        });
+        return total.toFixed(2);
+    };
+
+
     $("#ckbCheckAll").click(function () {
         $(".checkBoxClass").prop('checked', $(this).prop('checked'));
+        var test = total_dollar_amount();
+        $('#totalCheckAmount').html('$ ' + test);
     });
 
+    $('.checkBoxClass').change(function () {
+        var test = total_dollar_amount();
+        $('#totalCheckAmount').html('$ ' + test);
+    });
 </script>
