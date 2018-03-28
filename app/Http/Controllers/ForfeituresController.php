@@ -8,6 +8,7 @@ use App\Models\BailMaster;
 use App\Models\Courts;
 use App\Models\BailConfiguration;
 use App\Facades\CountyFee;
+use App\Facades\PostedData;
 use App\Events\ValidateTransactionBalance;
 use Redirect;
 use Event;
@@ -39,17 +40,19 @@ class ForfeituresController extends Controller
         return view('forfeitures.index')->with($indexArray);
     }
 
-    public function ajaxSearchResults(Request $request)
+    public function searchresults(Request $request)
     {
         $termToSearch   = $request->get('search_term','');
-        $resultArray    = $this->getTermFromUserInput($termToSearch);
+        $resultArray    = PostedData::getTermFromUserInput($termToSearch);
 
         if (is_numeric($resultArray['m_id']) == false) {
             $messages = [
                             "\"{$resultArray['m_id']}\" was not found",
                         ];
-            return redirect()->route('processbailsearch')->withErrors($messages);
+            return redirect()->route('forfeitures')->withErrors($messages);
         }
+
+
         $bailMaster     = BailMaster::find($resultArray['m_id']);
         $courtList      = Courts::pluck('c_name', 'c_id')->toArray();
         $stateList      = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
@@ -70,8 +73,8 @@ class ForfeituresController extends Controller
                         'bailDetails'    => [
                                              'total_balance'  => $balance,
                                              'fee_percentaje' => CountyFee::getFeePercentaje(),
-                                             'fee_amount'     => $this->calculateFeeAmount($balance),
-                                             'remain_amount'  => $this->calculateAmountAfterFee($balance),
+                                             'fee_amount'     => CountyFee::getAmountFee($balance),
+                                             'remain_amount'  => CountyFee::getRemainAmountAfterFee($balance),
                                             ],
                       ];
         return view('processbail.refundbails', compact('bailMaster'))->with($indexArray);

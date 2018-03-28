@@ -181,6 +181,7 @@ return [
         App\Providers\CountyFeeProvider::class,
         App\Providers\BailTransactionsProvider::class,
         App\Providers\CheckNumberRecordsProvider::class,
+        App\Providers\PostedDataProvider::class,
 
     ],
 
@@ -233,6 +234,7 @@ return [
         'Adldap' => Adldap\Laravel\Facades\Adldap::class,
         'CountyFee' => App\Facades\CountyFee::class,
         'CheckNumberRecords' => App\Facades\CheckNumberRecords::class,
+        'PostedData' => App\Facades\PostedData::class,
 
     ],
 

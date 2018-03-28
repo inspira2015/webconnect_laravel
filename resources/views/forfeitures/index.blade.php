@@ -17,7 +17,7 @@
 
 
 <div class="container-800 center-screen">
-    <form name="forfeitures" id="forfeitures" method="post" action="{{ route('processbailresults') }}" >
+    <form name="forfeitures" id="forfeitures" method="post" action="{{ route('forfeituresresults') }}" >
         {{ csrf_field() }}
         <div class="row">    
             <div class="col-8">

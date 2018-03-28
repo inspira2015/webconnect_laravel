@@ -8,6 +8,7 @@ use App\Models\BailMaster;
 use App\Models\Courts;
 use App\Models\BailConfiguration;
 use App\Facades\CountyFee;
+use App\Facades\PostedData;
 use App\Events\ValidateTransactionBalance;
 use Redirect;
 use Event;
@@ -63,7 +64,7 @@ class ProcessbailController extends Controller
     public function searchresults(Request $request)
     {
         $termToSearch   = $request->get('search_term','');
-        $resultArray    = $this->getTermFromUserInput($termToSearch);
+        $resultArray    = PostedData::getTermFromUserInput($termToSearch);
 
         if (is_numeric($resultArray['m_id']) == false) {
             $messages = [
@@ -91,38 +92,12 @@ class ProcessbailController extends Controller
                         'bailDetails'    => [
                                              'total_balance'  => $balance,
                                              'fee_percentaje' => CountyFee::getFeePercentaje(),
-                                             'fee_amount'     => $this->calculateFeeAmount($balance),
-                                             'remain_amount'  => $this->calculateAmountAfterFee($balance),
+                                             'fee_amount'     => CountyFee::getAmountFee($balance),
+                                             'remain_amount'  => CountyFee::getRemainAmountAfterFee($balance),
                                             ],
                       ];
         return view('processbail.refundbails', compact('bailMaster'))->with($indexArray);
     }
 
- 	private function getTermFromUserInput($find)
-    {
-    	$splitArray = explode(" ", $find);
-    	return [
-    			 'm_id' 		  => $splitArray[0],
-    		   ];
-    }
-
-
-    private function calculateAmountAfterFee($amount)
-    {
-        $amount = (float) $amount;
-        if ($amount <= 0) {
-            return 0;
-        }
-        return $amount * (1 - CountyFee::getFeePercentaje());
-    }
-
-    private function calculateFeeAmount($amount)
-    {
-        $amount = (float) $amount;
-        if ($amount <= 0) {
-            return 0;
-        }
-        return $amount * CountyFee::getFeePercentaje();
-    }
 
 }
