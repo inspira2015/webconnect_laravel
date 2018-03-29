@@ -37,17 +37,6 @@
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-
-    <?php 
-        $B1 = '#1a3972';
-        $B2 = '#0973c5';
-        $B3 = '#97c4e1';
-        $B4 = '#cadae7';
-        $OW = '#eff3f7';
-        $OR = '#fb6510';
-        $Y  = '#faeb31';
-        $W  = '#ffffff';
-    ?>
 </head>
 <body>
 <div id="container">
