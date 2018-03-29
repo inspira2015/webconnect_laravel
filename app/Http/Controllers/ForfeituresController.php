@@ -52,7 +52,6 @@ class ForfeituresController extends Controller
             return redirect()->route('forfeitures')->withErrors($messages);
         }
 
-
         $bailMaster     = BailMaster::find($resultArray['m_id']);
         $courtList      = Courts::pluck('c_name', 'c_id')->toArray();
         $stateList      = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();

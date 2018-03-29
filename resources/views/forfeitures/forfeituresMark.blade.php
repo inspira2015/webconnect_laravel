@@ -6,11 +6,24 @@
     .top-margin15 {
         margin-top: 15px;
     }
+    .btn {
+        border-radius: 1px solid transparent !important;
+        border: 1px solid transparent !important;
+    }
+      .slow .toggle-group { transition: left 0.7s; -webkit-transition: left 0.7s; }
 
 </style>
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 
 <div class="body-content">
 	<h1>Forfeitures</h1>
+    <hr class="my-3">
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" data-on="Click to Add" data-off="Remove" checked data-toggle="toggle" data-onstyle="success" data-style="slow">
+            Mark for Forfeitures
+        </label>
+    </div>
 
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
         <form name="bails" id="manual-bail-entry" method="post" action="{{ route('editbailmaster') }}" >
