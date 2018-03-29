@@ -45,3 +45,5 @@ Route::get('/forfeitures', 'ForfeituresController@index')->name('forfeitures');
 Route::any('/forfeitures/find/results', 'ForfeituresController@searchresults')->name('forfeituresresults');
 
 Route::get('/ajaxcall/findbailmaster', 'AjaxSearchController@searchBailMaster')->name('searchBailMaster');
+Route::any('/ajaxcall/forfeiture/action', 'AjaxSearchController@ajaxForfeituresAddRemove')->name('forfeituresControl');
+

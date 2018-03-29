@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 @section('content')
 
 <style type="text/css">
@@ -11,7 +10,6 @@
         border: 1px solid transparent !important;
     }
       .slow .toggle-group { transition: left 0.7s; -webkit-transition: left 0.7s; }
-
 </style>
     <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 
@@ -20,7 +18,7 @@
     <hr class="my-3">
     <div class="checkbox">
         <label>
-            <input type="checkbox" data-on="Click to Add" data-off="Remove" checked data-toggle="toggle" data-onstyle="success" data-style="slow">
+            <input type="checkbox" id="forfeituresCheckbox" name="forfeituresCheckbox" data-on="Click to Add" data-off="Remove" checked data-toggle="toggle" checked data-onstyle="success" data-style="slow">
             Mark for Forfeitures
         </label>
     </div>
@@ -185,7 +183,6 @@
     </div>
 </div>
 <script type="text/javascript">
-
     var old_posted_date = '{{ old('m_posted_date', $m_posted_date) }}';
     var posted_date = new Date();
 
@@ -206,10 +203,30 @@
     date_input.datepicker(options).datepicker("setDate", posted_date);
     date_input_disabled.datepicker(options).datepicker("setDate", posted_date);
     
-
     $(document).ready(function() {
         var balance = parseFloat({{ $balance }});
         var county_fee = parseFloat({{ $bailDetails['fee_percentaje'] }});
+
+
+        $('#forfeituresCheckbox').on('change', function () {
+            var toggle_state = $("#forfeituresCheckbox").is(":checked");   // true if checked (ON) or false (OFF)
+            
+            $.ajax({
+                    url: "{{ route('forfeituresControl') }}",
+                    dataType: "json",
+                    data : { checkbox : toggle_state },
+                    success: function(data) {
+                       console.log(data);
+                    }
+                });
+            if (toggle_state == 'true') {
+
+            }
+
+            console.log('toggle: ' + toggle_state);
+        });
+
+
 
         $('#Multi-Check-payment').on('show.bs.modal', function () {
             var multicheck_payment = parseFloat($('#multicheck-payment').val());
@@ -227,8 +244,6 @@
                 var remain_balance = parseFloat(balance - partial_plus_fee);
                 var multicheck_payment_show = multicheck_payment;
             }
-
-
            
             $('#multicheck-payment_modal').html(multicheck_payment_show);
             $('#check_court').html(check_court);
@@ -236,7 +251,6 @@
             $('#muticheck_balance').html(remain_balance);
             $('#multicheck_amount').val(multicheck_payment);
             $('#courtcheck_id').val(check_court_id);
-
 
             if (remain_balance < 0) {
                 $('#refund-multicheck').attr("disabled", "disabled");
@@ -268,18 +282,17 @@
             var partial_plus_fee = parseFloat(multicheck_payment + partial_amount_fee);
             var remain_balance = parseFloat(balance - partial_plus_fee);
             
-                $('#multicheck-payment_modal').html(multicheck_payment);
-                $('#check_court').html(check_court);
-                $('#multicheck_amount_fee').html(partial_amount_fee);
-                $('#muticheck_balance').html(remain_balance);
+            $('#multicheck-payment_modal').html(multicheck_payment);
+            $('#check_court').html(check_court);
+            $('#multicheck_amount_fee').html(partial_amount_fee);
+            $('#muticheck_balance').html(remain_balance);
   
-                if (remain_balance < 0) {
-                    $('#refund-manual').attr("disabled", "disabled");
-                } else {
-                    $('#refund-manual').removeAttr("disabled");
-                }
+            if (remain_balance < 0) {
+                $('#refund-manual').attr("disabled", "disabled");
+            } else {
+                $('#refund-manual').removeAttr("disabled");
+            }
         });
-
 
         $('#Partial-payment').on('show.bs.modal', function () {
             var balance = parseFloat({{ $balance }});
@@ -301,9 +314,6 @@
             }
         });
 
-
-
-    });
-  
+    });  
 </script>
 @endsection                 

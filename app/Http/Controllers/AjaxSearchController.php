@@ -57,6 +57,14 @@ class AjaxSearchController extends Controller
         return ['value'=>'No Result Found','id'=>''];    
     }
 
+    public function ajaxForfeituresAddRemove(Request $request)
+    {
+        $checkBoxAction = $request->get('checkbox');
+        print_r($checkBoxAction);
+
+        return response()->json(['name' => 'Abigail', 'state' => 'CA']);
+    }
+
     /**
      * [getResultsFromUserInput Returns a Result Array depends on the term to find]
      * @param  [type] $findType [description]
