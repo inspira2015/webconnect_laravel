@@ -16,6 +16,7 @@ class CreateJailImport extends Migration
         //
         Schema::create('jail_import', function (Blueprint $table) {
             $table->increments('j_id');
+            $table->dateTime('created_at')->nullable();
             $table->string('j_source', 2)->nullable();
             $table->integer('j_check_number')->nullable();
             $table->date('j_date_1')->nullable(); // what is date for?
