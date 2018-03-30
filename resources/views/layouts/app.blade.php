@@ -17,14 +17,12 @@
     <!-- <link href="http://webconnect/NC_Stylesheets/clean.css" rel="stylesheet" type="text/css" /> -->
     <link href="{{ asset('css/clean_old.css')}}" rel="stylesheet" type="text/css"/>
     <!-- <link href="http://webconnect/NC_Stylesheets/intranet.css" rel="stylesheet" type="text/css">-->
-    
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
-
 
     
     <link href="http://demo.expertphp.in/css/jquery.ui.autocomplete.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
-    
+
     <!-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> -->
    <!--  <link href="{{ asset('css/font-awesome-4.5.0/css/font-awesome.css') }}" rel="stylesheet"> -->
     <!-- <link href="{{ asset('css/pure/0.6.0/pure.css') }}" rel="stylesheet"> -->
@@ -38,17 +36,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.min.js"></script>
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-    <?php 
-        $B1 = '#1a3972';
-        $B2 = '#0973c5';
-        $B3 = '#97c4e1';
-        $B4 = '#cadae7';
-        $OW = '#eff3f7';
-        $OR = '#fb6510';
-        $Y  = '#faeb31';
-        $W  = '#ffffff';
-    ?>
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 </head>
 <body>
 <div id="container">

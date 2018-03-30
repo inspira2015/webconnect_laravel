@@ -44,6 +44,9 @@ class ForfeituresController extends Controller
     {
         $termToSearch   = $request->get('search_term','');
         $resultArray    = PostedData::getTermFromUserInput($termToSearch);
+        $forfeitureStatus = 0;
+        $updatedAt = false;
+        $userName = false;
 
         if (is_numeric($resultArray['m_id']) == false) {
             $messages = [
@@ -51,7 +54,6 @@ class ForfeituresController extends Controller
                         ];
             return redirect()->route('forfeitures')->withErrors($messages);
         }
-
 
         $bailMaster     = BailMaster::find($resultArray['m_id']);
         $courtList      = Courts::pluck('c_name', 'c_id')->toArray();
@@ -62,6 +64,13 @@ class ForfeituresController extends Controller
 
         $resultBalance = Event::fire(new ValidateTransactionBalance($bailMaster));
         $balance = round($resultBalance[0], 2);
+
+        if (isset($bailMaster->BailForfeitures->bf_id)) {
+            $forfeitureStatus = $bailMaster->BailForfeitures->bf_active;
+            $carbonDate = new Carbon($bailMaster->BailForfeitures->bf_updated_at);
+            $updatedAt = $carbonDate->toDayDateTimeString();
+            $userName = $bailMaster->BailForfeitures->User->name;
+        }
 
         $indexArray = [
                         'jailRecords'    => array(),
@@ -75,6 +84,11 @@ class ForfeituresController extends Controller
                                              'fee_percentaje' => CountyFee::getFeePercentaje(),
                                              'fee_amount'     => CountyFee::getAmountFee($balance),
                                              'remain_amount'  => CountyFee::getRemainAmountAfterFee($balance),
+                                            ],
+                        'bailForfeiture' => [
+                                             'bf_active' => $forfeitureStatus,
+                                             'bf_updated_at' => $updatedAt,
+                                             'user' => $userName,
                                             ],
                       ];
         return view('forfeitures.forfeituresMark', compact('bailMaster'))->with($indexArray);

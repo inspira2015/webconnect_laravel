@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\BailMaster;
 use App\Models\Courts;
 use App\Models\BailConfiguration;
+use App\Models\BailForfeitures;
 use App\Facades\CountyFee;
 use App\Events\ValidateTransactionBalance;
 use Redirect;
@@ -34,8 +35,6 @@ class AjaxSearchController extends Controller
         $indexArray = [
                         'message' => 'Sub Menu',
                       ];
-
-
         return view('forfeitures.index')->with($indexArray);
     }
 
@@ -55,6 +54,29 @@ class AjaxSearchController extends Controller
              return $data;
         }
         return ['value'=>'No Result Found','id'=>''];    
+    }
+
+    public function ajaxForfeituresAddRemove(Request $request)
+    {
+        $checkBoxAction = $request->get('checkbox');
+        $bailMasterId = $request->get('bailMaster_id');
+        $bailForfeiture = BailForfeitures::firstOrNew([
+                                                        'm_id' => $bailMasterId
+                                                     ]);
+        if ($checkBoxAction == 'true') {
+            $bailForfeiture->bf_active = 1;
+            $bailForfeiture->save();
+        } else {
+            $bailForfeiture->bf_active = 0;
+            $bailForfeiture->save();
+
+        }
+
+        return response()->json([
+                                  'bf_active' => $bailForfeiture->bf_active,
+                                  'bf_updated_at' => $bailForfeiture->bf_updated_at,
+                                  'user' => $bailForfeiture->User->name,
+                                ]);
     }
 
     /**

@@ -1,16 +1,39 @@
 @extends('layouts.app')
-
 @section('content')
 
 <style type="text/css">
     .top-margin15 {
         margin-top: 15px;
     }
+    .btn {
+        border-radius: 1px solid transparent !important;
+        border: 1px solid transparent !important;
+    }
+    .slow .toggle-group { transition: left 0.7s; -webkit-transition: left 0.7s; }
 
+    .green {
+        color: #006400;
+    }
+
+    .black {
+        color: #000;
+    }
 </style>
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 
 <div class="body-content">
-	<h1>Forfeitures</h1>
+	<h1><span id="forfeiture-title" class=""><strong>Forfeitures</strong></span></h1>
+    <hr class="my-3">
+        <div id="forfeiture-action"></div>
+        <div id="forfeiture-updated-date"></div>
+        <div id="forfeiture-user"></div>
+    <hr class="my-3">
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" id="forfeituresCheckbox" name="forfeituresCheckbox" data-on="Click to Add" data-off="Remove" checked data-toggle="toggle" checked data-onstyle="success" data-style="slow">
+            Mark for Forfeitures
+        </label>
+    </div>
 
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
         <form name="bails" id="manual-bail-entry" method="post" action="{{ route('editbailmaster') }}" >
@@ -172,7 +195,6 @@
     </div>
 </div>
 <script type="text/javascript">
-
     var old_posted_date = '{{ old('m_posted_date', $m_posted_date) }}';
     var posted_date = new Date();
 
@@ -193,10 +215,58 @@
     date_input.datepicker(options).datepicker("setDate", posted_date);
     date_input_disabled.datepicker(options).datepicker("setDate", posted_date);
     
-
     $(document).ready(function() {
         var balance = parseFloat({{ $balance }});
         var county_fee = parseFloat({{ $bailDetails['fee_percentaje'] }});
+        var bf_active = '{{ $bailForfeiture['bf_active'] }}';
+        var updated_at = '{{ $bailForfeiture['bf_updated_at'] }}';
+        var user_name = '{{ $bailForfeiture['user'] }}';
+
+        var action_message = function(bf_active, updated_at) {
+            if (bf_active == 1) {
+                $('#forfeiture-action').html('<span class="green"><strong> Added to Forfeiture </strong></span>');
+                $('#forfeiture-title').removeClass('black');
+                $('#forfeiture-title').addClass('green');
+            } else if(updated_at) {
+                $('#forfeiture-title').removeClass('green');
+                $('#forfeiture-action').html('<strong> Remove from Forfiture </strong>');
+            } else {
+                $('#forfeiture-title').removeClass('green');
+                $('#forfeiture-action').html('<strong> Not Added </strong>');
+            }
+        };
+
+        var update_info = function(updated_at) {
+            if (updated_at) {
+                $('#forfeiture-updated-date').html('Updated at: <strong>' + updated_at + '</strong>');
+            }
+        };
+
+        var username_info = function(user_name) {
+            if (user_name) {
+                $('#forfeiture-user').html('Last Updated By: <strong>' + user_name + '</strong>');
+            }
+        }
+
+        action_message(bf_active, updated_at);
+        update_info(updated_at);
+        username_info(user_name);
+ 
+        $('#forfeituresCheckbox').on('change', function () {
+            var toggle_state = $("#forfeituresCheckbox").is(":checked");
+            var m_id = "{{ $bailMaster->m_id }}";
+
+            $.ajax({
+                    url: "{{ route('forfeituresControl') }}",
+                    dataType: "json",
+                    data : { checkbox : toggle_state, bailMaster_id : m_id },
+                    success: function(data) {
+                        action_message(data.bf_active, data.bf_updated_at);
+                        update_info(data.bf_updated_at);
+                        username_info(data.user);
+                    }
+                });
+        });
 
         $('#Multi-Check-payment').on('show.bs.modal', function () {
             var multicheck_payment = parseFloat($('#multicheck-payment').val());
@@ -214,8 +284,6 @@
                 var remain_balance = parseFloat(balance - partial_plus_fee);
                 var multicheck_payment_show = multicheck_payment;
             }
-
-
            
             $('#multicheck-payment_modal').html(multicheck_payment_show);
             $('#check_court').html(check_court);
@@ -223,7 +291,6 @@
             $('#muticheck_balance').html(remain_balance);
             $('#multicheck_amount').val(multicheck_payment);
             $('#courtcheck_id').val(check_court_id);
-
 
             if (remain_balance < 0) {
                 $('#refund-multicheck').attr("disabled", "disabled");
@@ -255,18 +322,17 @@
             var partial_plus_fee = parseFloat(multicheck_payment + partial_amount_fee);
             var remain_balance = parseFloat(balance - partial_plus_fee);
             
-                $('#multicheck-payment_modal').html(multicheck_payment);
-                $('#check_court').html(check_court);
-                $('#multicheck_amount_fee').html(partial_amount_fee);
-                $('#muticheck_balance').html(remain_balance);
+            $('#multicheck-payment_modal').html(multicheck_payment);
+            $('#check_court').html(check_court);
+            $('#multicheck_amount_fee').html(partial_amount_fee);
+            $('#muticheck_balance').html(remain_balance);
   
-                if (remain_balance < 0) {
-                    $('#refund-manual').attr("disabled", "disabled");
-                } else {
-                    $('#refund-manual').removeAttr("disabled");
-                }
+            if (remain_balance < 0) {
+                $('#refund-manual').attr("disabled", "disabled");
+            } else {
+                $('#refund-manual').removeAttr("disabled");
+            }
         });
-
 
         $('#Partial-payment').on('show.bs.modal', function () {
             var balance = parseFloat({{ $balance }});
@@ -288,9 +354,6 @@
             }
         });
 
-
-
-    });
-  
+    });  
 </script>
 @endsection                 

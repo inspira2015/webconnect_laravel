@@ -77,6 +77,10 @@ class BailMaster extends Model
     public function BailConfiguration()
     {
         return $this->hasOne('App\Models\BailConfiguration', 'bc_id', 'm_surety_state');
+    }
 
+    public function BailForfeitures()
+    {
+        return $this->hasOne('App\Models\BailForfeitures', 'm_id', 'm_id');
     }
 }
