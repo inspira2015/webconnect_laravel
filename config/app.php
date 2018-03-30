@@ -183,6 +183,7 @@ return [
         App\Providers\CheckNumberRecordsProvider::class,
         App\Providers\PostedDataProvider::class,
         App\Providers\JailImportProvider::class,
+        App\Providers\BailForfeituresProvider::class,
 
     ],
 

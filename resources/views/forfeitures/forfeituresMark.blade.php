@@ -209,19 +209,17 @@
 
 
         $('#forfeituresCheckbox').on('change', function () {
-            var toggle_state = $("#forfeituresCheckbox").is(":checked");   // true if checked (ON) or false (OFF)
-            
+            var toggle_state = $("#forfeituresCheckbox").is(":checked");
+            var m_id = "{{ $bailMaster->m_id }}";
+
             $.ajax({
                     url: "{{ route('forfeituresControl') }}",
                     dataType: "json",
-                    data : { checkbox : toggle_state },
+                    data : { checkbox : toggle_state, bailMaster_id : m_id },
                     success: function(data) {
                        console.log(data);
                     }
                 });
-            if (toggle_state == 'true') {
-
-            }
 
             console.log('toggle: ' + toggle_state);
         });

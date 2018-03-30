@@ -30,6 +30,5 @@ class CreateUsersAllow extends Migration
     public function down()
     {
         //
-        Schema::dropIfExists('users_allow');
     }
 }
