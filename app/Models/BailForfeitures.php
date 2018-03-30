@@ -27,5 +27,8 @@ class BailForfeitures extends Model
                             'm_id'
                           ];
 
-
+    public function User()
+    {
+        return $this->hasOne('App\User', 'id', 'user_id');
+    }
 }

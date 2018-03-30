@@ -25,5 +25,4 @@ class BailTransactions extends Model
                             'm_court_number'
                           ];
 
-
 }

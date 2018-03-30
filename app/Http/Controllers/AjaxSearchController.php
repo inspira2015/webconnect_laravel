@@ -69,9 +69,14 @@ class AjaxSearchController extends Controller
         } else {
             $bailForfeiture->bf_active = 0;
             $bailForfeiture->save();
+
         }
 
-        return response()->json(['name' => 'Abigail', 'state' => 'CA']);
+        return response()->json([
+                                  'bf_active' => $bailForfeiture->bf_active,
+                                  'bf_updated_at' => $bailForfeiture->bf_updated_at,
+                                  'user' => $bailForfeiture->User->name,
+                                ]);
     }
 
     /**

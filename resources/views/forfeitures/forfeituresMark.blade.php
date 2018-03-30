@@ -9,12 +9,24 @@
         border-radius: 1px solid transparent !important;
         border: 1px solid transparent !important;
     }
-      .slow .toggle-group { transition: left 0.7s; -webkit-transition: left 0.7s; }
+    .slow .toggle-group { transition: left 0.7s; -webkit-transition: left 0.7s; }
+
+    .green {
+        color: #006400;
+    }
+
+    .black {
+        color: #000;
+    }
 </style>
     <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 
 <div class="body-content">
-	<h1>Forfeitures</h1>
+	<h1><span id="forfeiture-title" class=""><strong>Forfeitures</strong></span></h1>
+    <hr class="my-3">
+        <div id="forfeiture-action"></div>
+        <div id="forfeiture-updated-date"></div>
+        <div id="forfeiture-user"></div>
     <hr class="my-3">
     <div class="checkbox">
         <label>
@@ -206,8 +218,40 @@
     $(document).ready(function() {
         var balance = parseFloat({{ $balance }});
         var county_fee = parseFloat({{ $bailDetails['fee_percentaje'] }});
+        var bf_active = '{{ $bailForfeiture['bf_active'] }}';
+        var updated_at = '{{ $bailForfeiture['bf_updated_at'] }}';
+        var user_name = '{{ $bailForfeiture['user'] }}';
 
+        var action_message = function(bf_active, updated_at) {
+            if (bf_active == 1) {
+                $('#forfeiture-action').html('<span class="green"><strong> Added to Forfeiture </strong></span>');
+                $('#forfeiture-title').removeClass('black');
+                $('#forfeiture-title').addClass('green');
+            } else if(updated_at) {
+                $('#forfeiture-title').removeClass('green');
+                $('#forfeiture-action').html('<strong> Remove from Forfiture </strong>');
+            } else {
+                $('#forfeiture-title').removeClass('green');
+                $('#forfeiture-action').html('<strong> Not Added </strong>');
+            }
+        };
 
+        var update_info = function(updated_at) {
+            if (updated_at) {
+                $('#forfeiture-updated-date').html('Updated at: <strong>' + updated_at + '</strong>');
+            }
+        };
+
+        var username_info = function(user_name) {
+            if (user_name) {
+                $('#forfeiture-user').html('Last Updated By: <strong>' + user_name + '</strong>');
+            }
+        }
+
+        action_message(bf_active, updated_at);
+        update_info(updated_at);
+        username_info(user_name);
+ 
         $('#forfeituresCheckbox').on('change', function () {
             var toggle_state = $("#forfeituresCheckbox").is(":checked");
             var m_id = "{{ $bailMaster->m_id }}";
@@ -217,14 +261,12 @@
                     dataType: "json",
                     data : { checkbox : toggle_state, bailMaster_id : m_id },
                     success: function(data) {
-                       console.log(data);
+                        action_message(data.bf_active, data.bf_updated_at);
+                        update_info(data.bf_updated_at);
+                        username_info(data.user);
                     }
                 });
-
-            console.log('toggle: ' + toggle_state);
         });
-
-
 
         $('#Multi-Check-payment').on('show.bs.modal', function () {
             var multicheck_payment = parseFloat($('#multicheck-payment').val());
