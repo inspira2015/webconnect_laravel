@@ -100,10 +100,5 @@
 
         @yield('content')
     </div>
-
-  
-
-    <!-- Scripts -->
-
 </body>
 </html>

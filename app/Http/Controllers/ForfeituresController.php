@@ -94,4 +94,11 @@ class ForfeituresController extends Controller
         return view('forfeitures.forfeituresMark', compact('bailMaster'))->with($indexArray);
     }
 
+    public function createReport(Request $request)
+    {
+        $indexArray = [];
+
+        return view('forfeitures.forfeituresReport')->with($indexArray);
+    }
+
 }
