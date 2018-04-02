@@ -15,10 +15,45 @@
     </table>
 </div>
 
-
-<div class="container-800 center-screen">
-
+<div class="container-800" style ="padding-left: 25px;">
+    <div style="text-align: left; width: 400px;">
+        <form name="forfeituresReport" id="forfeituresReport" method="post" action="" >
+            <input type="text" name="search_term" id="search_term" class="form-control"  placeholder="Search term...">
+        </form>
+    </div>
+    <div style="margin-top: 15px; margin-left: 15px;">
+            Forfeitures for 45 Days Prior to Today
+    </div>
 </div>
+
+<div class="container-800" style ="padding-top: 25px; padding-left: 25px;">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Defendant</th>
+                <th>Address</th>
+                <th>City, State Zip</th>
+                <th>Surety</th>
+                <th>Date</th>
+                <th>Do After</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($bailForfeiture as  $key => $item)
+            <tr>
+                <td>{{ $item->BailMaster->m_def_first_name }}, {{ $item->BailMaster->m_def_last_name }}</td>
+                <td>{{ $item->BailMaster->m_surety_address }}</td>
+                <td>{{ $item->BailMaster->m_surety_city }}, {{ $item->BailMaster->m_surety_state }} {{ $item->BailMaster->m_surety_zip }}</td>
+                <td>{{ $item->BailMaster->m_surety_first_name }}, {{ $item->BailMaster->m_surety_last_name }}</td>
+                <td>{{ date('Y-m-d', strtotime($item->bf_updated_at)) }}</td>
+                <td>{{ date('Y-m-d', strtotime($item->bf_updated_at . ' + 45 days')) }}</td>
+            </tr>
+         
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
 
 <script type="text/javascript">
 

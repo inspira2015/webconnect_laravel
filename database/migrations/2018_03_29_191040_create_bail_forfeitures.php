@@ -19,6 +19,7 @@ class CreateBailForfeitures extends Migration
             $table->dateTime('bf_updated_at');
             $table->integer('m_id');
             $table->integer('bf_active');
+            $table->integer('bf_processed');
             $table->integer('user_id');
        });
     }

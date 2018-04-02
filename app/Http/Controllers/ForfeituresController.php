@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\BailMaster;
 use App\Models\Courts;
 use App\Models\BailConfiguration;
+use App\Models\BailForfeitures;
 use App\Facades\CountyFee;
 use App\Facades\PostedData;
 use App\Events\ValidateTransactionBalance;
@@ -96,9 +97,12 @@ class ForfeituresController extends Controller
 
     public function createReport(Request $request)
     {
-        $indexArray = [];
+        $bailForfeiture = BailForfeitures::GetForfeitureReport();
+        //dd($bailForfeiture->BailMaster);
+        //exit;
 
-        return view('forfeitures.forfeituresReport')->with($indexArray);
+        $indexArray = [];
+        return view('forfeitures.forfeituresReport', compact('bailForfeiture'))->with($indexArray);
     }
 
 }

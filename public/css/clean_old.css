@@ -148,7 +148,7 @@ div#navbar {
 	width: 400px;
 }
 .container-800 {
-	width: 800px;
+	width: 850px;
 }
 .success-font {
 	color: #004d00;
@@ -156,4 +156,10 @@ div#navbar {
 }
 .bold-font {
 	font-weight: bold;
+}
+.margin-left {
+	
+}
+.container-850 {
+	width: 850px;
 }
