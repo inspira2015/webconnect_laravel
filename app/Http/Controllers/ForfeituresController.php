@@ -105,4 +105,10 @@ class ForfeituresController extends Controller
         return view('forfeitures.forfeituresReport', compact('bailForfeiture'))->with($indexArray);
     }
 
+    public function processForfeitures(Request $request)
+    {
+        $indexArray = [];
+        return view('forfeitures.forfeituresProcess')->with($indexArray);
+    }
+
 }

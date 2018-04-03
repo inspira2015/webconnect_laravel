@@ -28,7 +28,7 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{{ route('forfeitures') }}">Select Bails to Mark For Forfeiture</a>
                         <a class="dropdown-item" href="{{ route('forfeituresreport') }}">Run Forfeiture Report (excel import)</a>
-                        <a class="dropdown-item" href="">Process Forfeitures</a>
+                        <a class="dropdown-item" href="{{ route('processforfeitures') }}">Process Forfeitures</a>
                         <a class="dropdown-item" href="">Forfeitures Post Report</a>
                     </div>
                 </li>
