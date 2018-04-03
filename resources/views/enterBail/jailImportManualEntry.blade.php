@@ -18,8 +18,7 @@
         {{ csrf_field() }}
 
         <div class="col-md-10 offset-md-1" style="margin-bottom: 50px;">
-            <hr class="my-5">
-
+            <hr class="my-3">
             <!-- form complex example -->
             <div class="form-row mt-4">
                 <div class="col-sm-3 pb-3">

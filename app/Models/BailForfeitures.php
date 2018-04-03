@@ -27,8 +27,18 @@ class BailForfeitures extends Model
                             'm_id'
                           ];
 
+    public function scopeGetForfeitureReport($query)
+    {
+        return $query->where('bf_processed', '=', '0')->get();
+    }
+
     public function User()
     {
         return $this->hasOne('App\User', 'id', 'user_id');
+    }
+
+    public function BailMaster()
+    {
+        return $this->hasOne('App\Models\BailMaster', 'm_id', 'bf_id');
     }
 }
