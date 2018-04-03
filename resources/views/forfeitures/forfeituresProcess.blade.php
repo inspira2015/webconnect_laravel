@@ -40,52 +40,48 @@
         <div class="form-row mt-4">
             <div class="col-sm-12 pb-3 row">
                 <div class="col-sm-2 pb-3">
-                    <label for="exampleAccount">Check Number:</label>
+                    <label for="exampleAccount"><strong>Check Number:</strong></label>
                     <input type="text" class="form-control" required id="m_posted_date" name="m_posted_date" value="">
                 </div>
-            </div>
-            <div class="col-sm-12 pb-3 row">
-                <div class="col-sm-2 pb-3">
+                <div class="col-sm-3 pb-3">
                     <label for="exampleAccount">Defendant First Name:</label>
                     <input type="text" class="form-control" required id="m_posted_date" name="m_posted_date" value="">
                 </div>
-                <div class="col-sm-2 pb-3">
+                <div class="col-sm-3 pb-3">
                     <label for="exampleCtrl">Defendant Last Name:</label>
                     <input type="text" class="form-control" required id="date_of_record" name="date_of_record" value="">
                 </div>
             </div>
 
-                <div class="col-sm-2 pb-3">
-                    <label for="exampleAccount">Surety First Name:</label>
-                    <input type="text" class="form-control" required id="m_posted_date" name="m_posted_date" value="">
-                </div>
-                <div class="col-sm-2 pb-3">
-                    <label for="exampleCtrl">Surety Last Name:</label>
-                    <input type="text" class="form-control" required id="date_of_record" name="date_of_record" value="">
-                </div>
-                <div class="col-sm-2 pb-3">
-                    <label for="t_numis_doc_id">Adress:</label>
-                    <input type="text" class="form-control" id="t_numis_doc_id" name="t_numis_doc_id" value="" placeholder="">
-                </div>
-                <div class="col-sm-2 pb-3">
-                    <label for="m_def_first_name">City:</label>
-                    <input type="text" class="form-control" id="m_def_first_name" name="m_def_first_name" value=""  required>
-                </div>
-                <div class="col-sm-2 pb-3">
-                    <label for="m_def_last_name">State</label>
-                    <input type="text" class="form-control" id="m_def_last_name" name="m_def_last_name" value="" required>
-                </div>
-                <div class="col-sm-1 pb-3">
-                    <label for="m_index_number">Zip: </label>
-                    <input type="text" class="form-control" id="m_index_number" name="m_index_number" placeholder="" value="" required>
-                    <div id="indexyear_message" class="" style="padding-top: 0px; overflow: hidden; font-size: 11px; font-weight: bold;">
-                    </div>
-                </div>
-               
+            <div class="col-sm-2 pb-3">
+                <label for="exampleAccount">Surety First Name:</label>
+                <input type="text" class="form-control" required id="m_posted_date" name="m_posted_date" value="">
             </div>
-            <button type="submit" class="btn btn-lg btn-primary">Insert Bail Record</button>
+            <div class="col-sm-2 pb-3">
+                <label for="exampleCtrl">Surety Last Name:</label>
+                <input type="text" class="form-control" required id="date_of_record" name="date_of_record" value="">
+            </div>
+            <div class="col-sm-2 pb-3">
+                <label for="t_numis_doc_id">Adress:</label>
+                <input type="text" class="form-control" id="t_numis_doc_id" name="t_numis_doc_id" value="" placeholder="">
+            </div>
+            <div class="col-sm-2 pb-3">
+                <label for="m_def_first_name">City:</label>
+                <input type="text" class="form-control" id="m_def_first_name" name="m_def_first_name" value=""  required>
+            </div>
+            <div class="col-sm-2 pb-3">
+                <label for="m_def_last_name">State</label>
+                <input type="text" class="form-control" id="m_def_last_name" name="m_def_last_name" value="" required>
+            </div>
+            <div class="col-sm-1 pb-3">
+                <label for="m_index_number">Zip: </label>
+                <input type="text" class="form-control" id="m_index_number" name="m_index_number" placeholder="" value="" required>
+                <div id="indexyear_message" class="" style="padding-top: 0px; overflow: hidden; font-size: 11px; font-weight: bold;"></div>
+            </div>
         </div>
-    </form>
+        <button type="submit" class="btn btn-lg btn-primary">Insert Bail Record</button>
+    </div>
+</form>
 <script type="text/javascript">
 
     $(document).ready(function(e){
