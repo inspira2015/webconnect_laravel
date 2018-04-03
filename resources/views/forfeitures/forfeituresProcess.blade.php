@@ -18,7 +18,13 @@
 <div class="container-800" style ="padding-left: 25px;">
     <div style="text-align: left; width: 400px;">
         <form name="forfeituresReport" id="forfeituresReport" method="post" action="" >
-            <input type="text" name="search_term" id="search_term" class="form-control"  placeholder="Search term...">
+            <div class="input-group">
+                <input type="text" name="search_term" id="search_term" class="form-control"  placeholder="Search term...">
+               <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">Run Batch</button>
+               </span>
+            </div>
+
         </form>
     </div>
     <div style="margin-top: 15px; margin-left: 15px;">
