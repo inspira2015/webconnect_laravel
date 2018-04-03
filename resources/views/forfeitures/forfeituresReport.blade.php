@@ -48,12 +48,10 @@
                 <td>{{ date('Y-m-d', strtotime($item->bf_updated_at)) }}</td>
                 <td>{{ date('Y-m-d', strtotime($item->bf_updated_at . ' + 45 days')) }}</td>
             </tr>
-         
             @endforeach
         </tbody>
     </table>
 </div>
-
 
 <script type="text/javascript">
 
@@ -69,7 +67,6 @@
         $('.ui-autocomplete-input').click( function() {
             console.log('yes');
         });
-
 
         src = "{{ route('searchBailMaster') }}";
             $("#search_term").autocomplete({
@@ -97,7 +94,6 @@
                 });
             },
             minLength: 3,
-           
         });
     });
 

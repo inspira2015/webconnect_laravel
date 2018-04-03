@@ -107,8 +107,16 @@ class ForfeituresController extends Controller
 
     public function processForfeitures(Request $request)
     {
-        $indexArray = [];
-        return view('forfeitures.forfeituresProcess')->with($indexArray);
+        $bailForfeiture = BailForfeitures::GetForfeitureReport();
+        $stateList = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
+
+        //dd($bailForfeiture[0]->BailMaster);
+        //exit;
+
+        $indexArray = [
+                        'stateList'      => $stateList,
+                      ];        
+        return view('forfeitures.forfeituresProcess', compact('bailForfeiture'))->with($indexArray);
     }
 
 }

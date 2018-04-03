@@ -32,55 +32,56 @@
     </div>
 </div>
 
-<form name="bails" id="manual-bail-entry" method="post" action="{{ route('processmanualentry') }}" >
+<form name="bails" id="manual-bail-entry" method="post" style="background-color: lightgray; padding-bottom: 5px;" action="{{ route('processmanualentry') }}" >
     {{ csrf_field() }}
-    <div class="col-md-10 " style="margin-bottom: 50px;">
+    <div class="col-md-10 " style="margin-bottom: 10px;">
        <hr class="my-3">
         <!-- form complex example -->
+        @foreach ($bailForfeiture as  $key => $item)
         <div class="form-row mt-4">
             <div class="col-sm-12 pb-3 row">
                 <div class="col-sm-2 pb-3">
                     <label for="exampleAccount"><strong>Check Number:</strong></label>
-                    <input type="text" class="form-control" required id="m_posted_date" name="m_posted_date" value="">
+                    <input type="text" class="form-control" required id="m_posted_date" name="m_posted_date" value="MANUAL">
                 </div>
                 <div class="col-sm-3 pb-3">
                     <label for="exampleAccount">Defendant First Name:</label>
-                    <input type="text" class="form-control" required id="m_posted_date" name="m_posted_date" value="">
+                    <input type="text" class="form-control" required id="m_def_first_name" name="m_def_first_name" value="{{ old('m_def_first_name',  $item->BailMaster->m_def_first_name) }}">
                 </div>
                 <div class="col-sm-3 pb-3">
                     <label for="exampleCtrl">Defendant Last Name:</label>
-                    <input type="text" class="form-control" required id="date_of_record" name="date_of_record" value="">
+                    <input type="text" class="form-control" required id="m_def_last_name" name="m_def_last_name" value="{{ old('m_def_last_name',  $item->BailMaster->m_def_last_name) }}">
                 </div>
             </div>
 
             <div class="col-sm-2 pb-3">
                 <label for="exampleAccount">Surety First Name:</label>
-                <input type="text" class="form-control" required id="m_posted_date" name="m_posted_date" value="">
+                <input type="text" class="form-control" required id="m_surety_first_name" name="m_surety_first_name" value="{{ old('m_surety_first_name',  $item->BailMaster->m_surety_first_name) }}">
             </div>
             <div class="col-sm-2 pb-3">
                 <label for="exampleCtrl">Surety Last Name:</label>
-                <input type="text" class="form-control" required id="date_of_record" name="date_of_record" value="">
+                <input type="text" class="form-control" required id="m_surety_last_name" name="m_surety_last_name" value="{{ old('m_surety_last_name',  $item->BailMaster->m_surety_last_name) }}">
             </div>
             <div class="col-sm-2 pb-3">
-                <label for="t_numis_doc_id">Adress:</label>
-                <input type="text" class="form-control" id="t_numis_doc_id" name="t_numis_doc_id" value="" placeholder="">
+                <label for="m_surety_address">Adress:</label>
+                <input type="text" class="form-control" id="m_surety_address" name="m_surety_address" value="{{ old('m_surety_address',  $item->BailMaster->m_surety_address) }}">
             </div>
             <div class="col-sm-2 pb-3">
-                <label for="m_def_first_name">City:</label>
-                <input type="text" class="form-control" id="m_def_first_name" name="m_def_first_name" value=""  required>
+                <label for="m_surety_city">City:</label>
+                <input type="text" class="form-control" id="m_surety_city" name="m_surety_city" value="{{ old('m_surety_city',  $item->BailMaster->m_surety_city) }}"  required>
             </div>
             <div class="col-sm-2 pb-3">
                 <label for="m_def_last_name">State</label>
-                <input type="text" class="form-control" id="m_def_last_name" name="m_def_last_name" value="" required>
-            </div>
+                {!! Form::select('m_surety_state', $stateList, $item->BailMaster->m_surety_state, array('class' => 'form-control')) !!}            </div>
             <div class="col-sm-1 pb-3">
-                <label for="m_index_number">Zip: </label>
-                <input type="text" class="form-control" id="m_index_number" name="m_index_number" placeholder="" value="" required>
+                <label for="m_surety_zip">Zip: </label>
+                <input type="text" class="form-control" id="m_surety_zip" name="m_surety_zip" placeholder="" value="{{ old('m_surety_zip',  $item->BailMaster->m_surety_zip) }}" required>
                 <div id="indexyear_message" class="" style="padding-top: 0px; overflow: hidden; font-size: 11px; font-weight: bold;"></div>
             </div>
         </div>
-        <button type="submit" class="btn btn-lg btn-primary">Insert Bail Record</button>
+    @endforeach
     </div>
+    <button type="submit" class="btn btn-lg btn-primary">Process Forfeitures</button>
 </form>
 <script type="text/javascript">
 
