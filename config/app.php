@@ -184,6 +184,7 @@ return [
         App\Providers\PostedDataProvider::class,
         App\Providers\JailImportProvider::class,
         App\Providers\BailForfeituresProvider::class,
+        App\Providers\ExcelHelperProvider::class,
 
     ],
 
@@ -237,6 +238,7 @@ return [
         'CountyFee' => App\Facades\CountyFee::class,
         'CheckNumberRecords' => App\Facades\CheckNumberRecords::class,
         'PostedData' => App\Facades\PostedData::class,
+        'ExcelHelper' => App\Facades\ExcelHelper::class,
 
     ],
 

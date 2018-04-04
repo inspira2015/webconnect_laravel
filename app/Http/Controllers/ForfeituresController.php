@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
@@ -10,7 +9,10 @@ use App\Models\BailConfiguration;
 use App\Models\BailForfeitures;
 use App\Facades\CountyFee;
 use App\Facades\PostedData;
+use App\Facades\ExcelHelper;
 use App\Events\ValidateTransactionBalance;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Redirect;
 use Event;
 
@@ -105,6 +107,54 @@ class ForfeituresController extends Controller
         return view('forfeitures.forfeituresReport', compact('bailForfeiture'))->with($indexArray);
     }
 
+    public function createExcelReport(Request $request)
+    {
+        $titles = [
+                    'Defendant Full Name',
+                    'Address',
+                    'City, State Zip',
+                    'Surety Full Name',
+                    'Forfeit Date',
+                    'Forfeit Do After Date'
+                  ];
+        $bailForfeiture = BailForfeitures::GetForfeitureReport();
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $optionData = [
+                        'Column' => [
+                                      'start' => 'B',
+                                    ],
+                        'Row' => [
+                                    'start' => 2,
+                                 ],
+                        'Values' => $titles,
+                        'Bold' => true,
+                        'Font_Size' => 11,
+                      ];
+
+        ExcelHelper::CreateHeader($sheet, $optionData);
+        $preparedArray = $this->prepareDataArray($bailForfeiture);
+
+        $optionData = [
+                        'Column' => [
+                                      'start' => 'B',
+                                    ],
+                        'Row' => [
+                                    'start' => 3,
+                                 ],
+                        'Values' => $preparedArray,
+                        'Bold' => false,
+                        'Font_Size' => 10,
+                      ];
+        ExcelHelper::CreateBody($sheet, $optionData);
+
+        $writer = new Xlsx($spreadsheet);
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment; filename="file.xlsx"');
+        $writer->save("php://output");
+    }
+
     public function processForfeitures(Request $request)
     {
         $bailForfeiture = BailForfeitures::GetForfeitureReport();
@@ -118,5 +168,20 @@ class ForfeituresController extends Controller
                       ];        
         return view('forfeitures.forfeituresProcess', compact('bailForfeiture'))->with($indexArray);
     }
+
+    private function prepareDataArray($bailForfeiture)
+    {
+        $resultArray = [];
+        foreach ($bailForfeiture as $key => $item) {
+            $resultArray[$key][] = $item->BailMaster->m_def_first_name . ', ' . $item->BailMaster->m_def_last_name;
+            $resultArray[$key][] = $item->BailMaster->m_surety_address;
+            $resultArray[$key][] = $item->BailMaster->m_surety_city . ", {$item->BailMaster->m_surety_state} {$item->BailMaster->m_surety_zip}";
+            $resultArray[$key][] = $item->BailMaster->m_surety_first_name . ', ' . $item->BailMaster->m_surety_last_name;
+            $resultArray[$key][] = $item->bf_updated_at;
+            $resultArray[$key][] = $item->getReportDate();
+        }
+        return $resultArray;
+    }
+
 
 }

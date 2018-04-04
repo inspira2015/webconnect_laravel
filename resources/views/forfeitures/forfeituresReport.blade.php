@@ -53,6 +53,10 @@
     </table>
 </div>
 
+<div class="container-800" style ="padding-top: 25px; padding-left: 25px;">
+    <a href="{{ route('forfeituresExcel') }}">Download Forfeitures Excel Report</a>
+</div>
+
 <script type="text/javascript">
 
     $(document).ready(function(e){
