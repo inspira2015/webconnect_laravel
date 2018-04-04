@@ -44,6 +44,7 @@ Route::post('/bailrefund/reversetransaction', 'BailRefundProcessController@rever
 Route::get('/forfeitures', 'ForfeituresController@index')->name('forfeitures');
 Route::any('/forfeitures/find/results', 'ForfeituresController@searchresults')->name('forfeituresresults');
 Route::any('/forfeitures/report', 'ForfeituresController@createReport')->name('forfeituresreport');
+Route::get('/forfeitures/excel/report', 'ForfeituresController@createExcelReport')->name('forfeituresExcel');
 Route::any('/forfeitures/process', 'ForfeituresController@processForfeitures')->name('processforfeitures');
 
 

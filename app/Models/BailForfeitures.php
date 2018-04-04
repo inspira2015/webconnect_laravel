@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class BailForfeitures extends Model
 {
@@ -40,5 +41,18 @@ class BailForfeitures extends Model
     public function BailMaster()
     {
         return $this->hasOne('App\Models\BailMaster', 'm_id', 'bf_id');
+    }
+
+    public function getReportDate()
+    {
+        $newDate = new Carbon($this->bf_updated_at);
+        $newDate->addDays(45);
+        return $newDate->format('Y-m-d');
+    }
+
+    public function getBfUpdatedAtAttribute($value)
+    {
+        $newDate = new Carbon($value);
+        return $newDate->format('Y-m-d');
     }
 }
