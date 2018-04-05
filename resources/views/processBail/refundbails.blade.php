@@ -145,7 +145,6 @@
  };
  date_input.datepicker(options).datepicker("setDate", posted_date);
  date_input_disabled.datepicker(options).datepicker("setDate", posted_date);
- 
 
  $(document).ready(function() {
   var balance = parseFloat({{ $balance }});
@@ -190,7 +189,6 @@
    if (transaction_type == 'P') {
     var transaction_type_text = "Payment";
    }
-   console.log(transaction_type);
    $('#t_id').val(transaction_id);
    $('#transaction-type').html(transaction_type_text);
    $('#transaction-amount').html('$' + transaction_amount);
@@ -198,7 +196,6 @@
 
   $('#Reverse-transaction').on('show.bs.modal', function () {
    var transaction_id =  $('#t_id').val();
-   console.log('test: ' + transaction_id);
    var multicheck_payment = parseFloat($('#multicheck-payment').val());
    var check_court = $("#select_court_check option:selected").text();
    var partial_amount_fee = parseFloat(multicheck_payment * county_fee);

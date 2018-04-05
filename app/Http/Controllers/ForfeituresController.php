@@ -102,7 +102,7 @@ class ForfeituresController extends Controller
         //exit;
 
         $indexArray = [];
-        return view('forfeitures.forfeituresReport', compact('bailForfeiture'))->with($indexArray);
+        return view('forfeitures.Report', compact('bailForfeiture'))->with($indexArray);
     }
 
     public function createExcelReport(Request $request)
