@@ -1,11 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<style type="text/css">
- .error {
-  color :#7F0000;
- }
-</style>
 
 <div style="background-image:url(images/back_orange_21.jpg); background-position:top left; background-repeat:no-repeat;  padding:10px;">
  <table width="100%" border="0" cellspacing="0" cellpadding="2">
@@ -17,8 +12,13 @@
 
 <div class="container-800" style ="padding-left: 25px;">
  <div style="text-align: left; width: 400px;">
-  <form name="forfeituresReport" id="forfeituresReport" method="post" action="" >
-   <input type="text" name="search_term" id="search_term" class="form-control"  placeholder="Search term...">
+  <form name="forfeituresReport" id="forfeituresReport" method="post" action="{{ route('forfeituresreport') }}" >
+    <div class="input-group">
+      <input type="text" name="report_date" id="report_date" class="form-control"  placeholder="Search Date...">
+        <span class="input-group-btn">
+          <button class="btn btn-primary" type="button">Run Batch</button>
+        </span>
+   </div>
   </form>
  </div>
  <div style="margin-top: 15px; margin-left: 15px;">
