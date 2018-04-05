@@ -28,21 +28,21 @@
       <div class="form-group">
         <div class="form-group">
           <label for="docno"><strong>Document Number: </strong></label>
-          <div class="col-sm-4">
-            <input type="text" name="docno" required class="form-control form-control-sm" id="docno" placeholder="Document Number">
+          <div class="col-sm-6">
+            <input type="text" name="docno" required class="form-control" size="25" id="docno" placeholder="Document Number">
           </div>
         </div>
         <br><br>
         <div class="form-group ">
           <label for="court_number"><strong>Court Number: </strong></label>
             <div class="col-sm-4">
-              {!! Form::select('court_number', $courtList, null, array('class' => 'form-control form-control-sm')) !!}
+              {!! Form::select('court_number', $courtList, null, array('class' => 'form-control')) !!}
             </div>
         </div>
         <div class="form-group"> <!-- Date input -->
           <label class="control-label" for="date_of_record"><strong>Date of Record: </strong></label>
           <div class="col-sm-4">
-            <input class="form-control form-control-sm" id="date_of_record" name="date_of_record" placeholder="MM/DD/YYY" type="text"/>
+            <input class="form-control" id="date_of_record" name="date_of_record" placeholder="MM/DD/YYY" type="text"/>
           </div>
         </div>
           <p align="right">&nbsp;</p>

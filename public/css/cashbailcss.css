@@ -210,7 +210,6 @@
     color: #FFF!important;
 }
 .error {
-    width: 200px !important;
     color:#FF0000!important;
 }
 .font18 {
@@ -222,3 +221,9 @@
 .green-font {
     color: #003300;
 }
+.green {
+  color: #008000!important;
+}
+.top-margin15 {
+  margin-top: 15px;
+ }

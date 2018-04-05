@@ -2,13 +2,6 @@
 
 @section('content')
 
-<style type="text/css">
- .top-margin15 {
-  margin-top: 15px;
- }
-
-</style>
-
 <div class="body-content">
  <h1>Process Bail Refund</h1>
  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@fat">Edit Info</button>
@@ -197,9 +190,6 @@
 
   @include('chunks.transactionOptions')
 
-
-
-
  </div>
 </div>
 <script type="text/javascript">
@@ -246,15 +236,12 @@
     var multicheck_payment_show = multicheck_payment;
    }
 
-
-     
    $('#multicheck-payment_modal').html(multicheck_payment_show);
    $('#check_court').html(check_court);
    $('#multicheck_amount_fee').html(partial_amount_fee);
    $('#muticheck_balance').html(remain_balance);
    $('#multicheck_amount').val(multicheck_payment);
    $('#courtcheck_id').val(check_court_id);
-
 
    if (remain_balance < 0) {
     $('#refund-multicheck').attr("disabled", "disabled");
@@ -298,11 +285,9 @@
     }
   });
 
-
   $('#Partial-payment').on('show.bs.modal', function () {
    var balance = parseFloat({{ $balance }});
    var county_fee = parseFloat({{ $bailDetails['fee_percentaje'] }});
-   
    var partial_amount = parseFloat($('#partial-payment').val());
    var partial_amount_fee = partial_amount * county_fee;
    var partial_plus_fee = partial_amount + partial_amount_fee;
@@ -318,9 +303,6 @@
     $('#refund-manual').removeAttr("disabled");
    }
   });
-
-
-
  });
   
 </script>

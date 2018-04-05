@@ -1,14 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<style type="text/css">
-.error {
-  color: #FF0000!important;
-}
-.green {
-  color: #008000!important;
-}
-</style>
 
 <div class="body-content">
   <h1>Enter Bail Manually</h1>   
