@@ -38,8 +38,6 @@ class ForfeituresController extends Controller
         $indexArray = [
                         'message' => 'Sub Menu',
                       ];
-
-
         return view('forfeitures.index')->with($indexArray);
     }
 
