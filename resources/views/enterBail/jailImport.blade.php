@@ -2,57 +2,7 @@
 
 @section('content')
 
-<style type="text/css">
-.reduce-input input.form-control {
-   height: 27px !important;
-}
-.reduce-input select.form-control {
-   height: 27px !important;
-}
-.jailRecords table {
-    border-collapse: collapse;
-    width: 100%;
-}
-.jailRecords th {
-    font-size: 75%;
-    text-align: left;
-    padding: 2px;
-}
-.reduce-width select.form-control {
-    width: 100%;
-    font-size: 11px;
-}
-.reduce-width input.form-control {
-    width: 100%;
-    padding: 0;
-}
-.jailRecords td {
-    font-size: 75%;
-    text-align: center;
-    padding: 2px;
-}
-.jailRecords tr:nth-child(even) {
-    background-color: #ccc
-}
-.duplicate-row {
-    background-color: #8B0000!important;
-    color: #FFF!important;
-}
-.error {
-    width: 200px !important;
-    color:#FF0000!important;
-}
-.font18 {
-    font-size: 18px;
-}
-.blue-font {
-    color: #2a4e6c;
-}
-.green-font {
-    color: #003300;
-}
-</style>
-<div style="background-image:url({{ asset('img/cashbail/back_red_21.jpg') }}); background-position:top left; background-repeat:no-repeat;  padding:10px;">
+<div style=" background-position:top left; background-repeat:no-repeat;  padding:10px;">
   <table width="100%" border="0" cellspacing="0" cellpadding="2">
     <tr>
       <td valign="top"><h1>Enter Bail By Jail Check Number</h1></td>
@@ -60,14 +10,14 @@
   </table>
   <div style="margin-top: .5em; margin-left: 5em;">
     <form action="{{ route('searchchecknumber') }}" method="post" name="form1" class="reduce-input form-inline content">
-      <div class="form-group col-sm-4">
-        {{ csrf_field() }}
-        <label for="check_no"><strong>Enter Check Number:</strong></label>
-        <div class="col-sm-4">
-          <input type="text" name="check_no" class="form-control form-control-sm" id="check_no" aria-describedby="emailHelp" placeholder="Check Number">
-        </div>
+      {{ csrf_field() }}
+      <div class="input-group">
+        <label for="check_no" style="padding-right: 5px;"><strong>Enter Check Number:</strong></label>
+        <input type="text" name="check_no" class="form-control" id="check_no" placeholder="Check Number">
+        <span class="input-group-btn">
+          <button class="btn btn-primary" type="submit">Submit!</button>
+        </span>
       </div>
-      <button type="submit" class="btn btn-primary btn-sm">Submit</button>
     </form>
     <hr>
   </div>
