@@ -84,6 +84,7 @@
         </div>
         <input type="hidden" name="m_id" value="{{ $bailMaster->m_id }}">
       </div>
+      <hr class="my-3">
       <button type="submit" class="btn btn-lg btn-primary">Insert Bail Record</button>
     </div>
   </form>
