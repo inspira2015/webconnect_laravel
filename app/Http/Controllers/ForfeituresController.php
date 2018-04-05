@@ -97,11 +97,21 @@ class ForfeituresController extends Controller
 
     public function createReport(Request $request)
     {
+        $reportDate = date("Y-m-d");
+        if ($request->isMethod('post')) {
+            $all = $request->all();
+            dd($all);
+            exit;
+
+        }
         $bailForfeiture = BailForfeitures::GetForfeitureReport();
         //dd($bailForfeiture->BailMaster);
         //exit;
-
-        $indexArray = [];
+        $dt = new Carbon($reportDate);
+        $reportDate =  $dt->format("m/d/Y"); 
+        $indexArray = [
+                        'report_date' => $reportDate,
+                      ];
         return view('forfeitures.Report', compact('bailForfeiture'))->with($indexArray);
     }
 

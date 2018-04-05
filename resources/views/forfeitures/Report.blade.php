@@ -13,10 +13,11 @@
 <div class="container-800" style ="padding-left: 25px;">
  <div style="text-align: left; width: 400px;">
   <form name="forfeituresReport" id="forfeituresReport" method="post" action="{{ route('forfeituresreport') }}" >
+    {{ csrf_field() }}
     <div class="input-group">
-      <input type="text" name="report_date" id="report_date" class="form-control"  placeholder="Search Date...">
+      <input type="text" name="report_date" id="report_date" class="form-control"  placeholder="MM/DD/YYY">
         <span class="input-group-btn">
-          <button class="btn btn-primary" type="button">Run Batch</button>
+          <button class="btn btn-primary" type="submit">Run Batch</button>
         </span>
    </div>
   </form>
@@ -59,58 +60,74 @@
 
 <script type="text/javascript">
 
- $(document).ready(function(e){
-  $('.search-panel .dropdown-menu').find('a').click(function(e) {
-   e.preventDefault();
-   var param = $(this).attr("href").replace("#","");
-   $('#search_param').attr('value', param);
-   var concept = $(this).text();
-   $('.search-panel span#search_concept').text(concept);
-  });
+  $(document).ready(function(e) {
+    var old_date_of_record = '{{ $report_date }}';
+    var date_of_record = new Date();
+    
+    if (old_date_of_record) {
+      date_of_record = old_date_of_record;
+    }
+    
+    var date_input = $('input[name="report_date"]'); //our date input has the name "date"
+    var container = $('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+    var options = {
+      format: 'mm/dd/yyyy',
+      container: container,
+      //todayHighlight: true,
+      autoclose: true,
+      forceParse: false,
+    };
+    date_input.datepicker(options).datepicker("setDate", date_of_record);
 
-  $('.ui-autocomplete-input').click( function() {
-   console.log('yes');
-  });
-
-  src = "{{ route('searchBailMaster') }}";
-   $("#search_term").autocomplete({
-    change: function (event, ui) {
-     if (!ui.item) {
-      //http://api.jqueryui.com/autocomplete/#event-change -
-      // The item selected from the menu, if any. Otherwise the property is null
-      //so clear the item for force selection
-      $("#search_term").val("");
-     }
-   },
-   source: function(request, response) {
-    var search_param = $('#search_param').attr('value');
-    $.ajax({
-     url: src,
-     dataType: "json",
-     data: {
-      term : request.term,
-      search_term : search_param
-     },
-     success: function(data) {
-      response(data);
-     }
+    $('.search-panel .dropdown-menu').find('a').click(function(e) {
+      e.preventDefault();
+      var param = $(this).attr("href").replace("#","");
+      $('#search_param').attr('value', param);
+      var concept = $(this).text();
+      $('.search-panel span#search_concept').text(concept);
     });
-   },
-   minLength: 3,
+
+    $('.ui-autocomplete-input').click( function() {
+      console.log('yes');
+    });
+
+    src = "{{ route('searchBailMaster') }}";
+    $("#search_term").autocomplete({
+      change: function (event, ui) {
+        if (!ui.item) {
+          //http://api.jqueryui.com/autocomplete/#event-change -
+          // The item selected from the menu, if any. Otherwise the property is null
+          //so clear the item for force selection
+          $("#search_term").val("");
+        }
+      },
+      source: function(request, response) {
+        var search_param = $('#search_param').attr('value');
+        $.ajax({
+          url: src,
+          dataType: "json",
+          data: {
+            term : request.term,
+            search_term : search_param
+          },
+          success: function(data) {
+            response(data);
+          }
+        });
+      },
+      minLength: 3,
+    });
   });
- });
 
- $( "#processbails" ).validate({
-  /*debug: true,*/
-  success: function(label,element) {
-   label.hide();
-  },
-
-  rules: {
-   search_term: {
-    required: true,
-   }
-  }
- });
+  $( "#processbails" ).validate({
+    success: function(label,element) {
+      label.hide();
+    },
+    rules: {
+      search_term: {
+        required: true,
+      }
+    }
+  });
 </script>
 @endsection
