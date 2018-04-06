@@ -1,11 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<style type="text/css">
- .error {
-  color :#7F0000;
- }
-</style>
 
 <div style="background-image:url(images/back_orange_21.jpg); background-position:top left; background-repeat:no-repeat;  padding:10px;">
  <table width="100%" border="0" cellspacing="0" cellpadding="2">
