@@ -52,15 +52,23 @@
         </div>
         <div class="col-sm-1 pb-3">
           <label for="exampleCtrl">Date:</label>
+          02/02/2018
         </div>
         <div class="col-sm-1 pb-3">
           <label for="exampleCtrl">Do After:</label>
+          02/02/2018
         </div>
         <div class="col-sm-1 pb-3">
           <label for="exampleCtrl">Amount:</label>
+          <div style="width: 100%;">
+            $ 750.00
+          </div>
         </div>
-        <div class="col-sm-2 pb-3">
+        <div class="form-group">
           <label for="exampleCtrl">Forfeit Bail:</label>
+            <div style="margin-left: 35px;">
+              <input type="checkbox" class="form-check-input checkBoxClass"  name="" id="">
+            </div>
         </div>
       </div>
       <div class="col-sm-2 pb-3">
