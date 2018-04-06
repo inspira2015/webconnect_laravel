@@ -174,7 +174,7 @@ class ForfeituresController extends Controller
         $indexArray = [
                         'stateList'      => $stateList,
                       ];        
-        return view('forfeitures.forfeituresProcess', compact('bailForfeiture'))->with($indexArray);
+        return view('forfeitures.Process', compact('bailForfeiture'))->with($indexArray);
     }
 
     private function prepareDataArray($bailForfeiture)
