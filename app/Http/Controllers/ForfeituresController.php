@@ -168,8 +168,8 @@ class ForfeituresController extends Controller
         $bailForfeiture = BailForfeitures::GetForfeitureReport();
         $stateList = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
 
-        //dd($bailForfeiture[0]->BailMaster);
-        //exit;
+        dd($bailForfeiture[0]);
+        exit;
 
         $indexArray = [
                         'stateList'      => $stateList,
@@ -189,6 +189,15 @@ class ForfeituresController extends Controller
             $resultArray[$key][] = $item->getReportDate();
         }
         return $resultArray;
+    }
+
+    private function prepareForfeitureProcess($bailForfeiture)
+    {
+        $resultArray = [];
+
+                $resultBalance = Event::fire(new ValidateTransactionBalance($bailMaster));
+
+
     }
 
 
