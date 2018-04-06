@@ -50,13 +50,17 @@
           <label for="exampleCtrl">Defendant Last Name:</label>
           <input type="text" class="form-control" required id="m_def_last_name" name="m_def_last_name" value="{{ old('m_def_last_name',  $item->BailMaster->m_def_last_name) }}">
         </div>
-        <div class="col-sm-1 pb-3">
+        <div class="col-sm-2 pb-3">
           <label for="exampleCtrl">Date:</label>
-          02/02/2018
+          <div style="width: 100%;">
+            {{ date('m/d/Y', strtotime($item->bf_updated_at)) }}
+          </div>
         </div>
-        <div class="col-sm-1 pb-3">
+        <div class="col-sm-2 pb-3">
           <label for="exampleCtrl">Do After:</label>
-          02/02/2018
+            <div style="width: 100%;">
+              {{ date('m/d/Y', strtotime('45 day', strtotime($item->bf_updated_at))) }}
+            </div>
         </div>
         <div class="col-sm-1 pb-3">
           <label for="exampleCtrl">Amount:</label>
