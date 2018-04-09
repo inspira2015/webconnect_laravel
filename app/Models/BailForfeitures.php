@@ -33,6 +33,12 @@ class BailForfeitures extends Model
         return $query->where('bf_processed', '=', '0')->get();
     }
 
+    public function scopeGetForfeitureReportByDate($query, $date)
+    {
+        return $query->where('bf_processed', '=', '0')
+                     ->where('bf_updated_at', '<=', $date)->get();
+    }
+
     public function User()
     {
         return $this->hasOne('App\User', 'id', 'user_id');

@@ -61,7 +61,7 @@ class ForfeituresController extends Controller
         $stateList      = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
         $courtCheckList = BailConfiguration::where('bc_category', 'check_court')->pluck('bc_value', 'bc_id')->toArray();
         $dt = new Carbon($bailMaster->m_posted_date);
-        $m_posted_date =  $dt->format("m/d/Y"); 
+        $m_posted_date =  $dt->format("m/d/Y");
 
         $resultBalance = Event::fire(new ValidateTransactionBalance($bailMaster));
         $balance = round($resultBalance[0], 2);
@@ -99,16 +99,11 @@ class ForfeituresController extends Controller
     {
         $reportDate = date("Y-m-d");
         if ($request->isMethod('post')) {
-            $all = $request->all();
-            dd($all);
-            exit;
-
+            $reportDate = date("Y-m-d", strtotime($request->input('report_date')));
         }
-        $bailForfeiture = BailForfeitures::GetForfeitureReport();
-        //dd($bailForfeiture->BailMaster);
-        //exit;
+        $bailForfeiture = BailForfeitures::GetForfeitureReportByDate($reportDate);
         $dt = new Carbon($reportDate);
-        $reportDate =  $dt->format("m/d/Y"); 
+        $reportDate =  $dt->format("m/d/Y");
         $indexArray = [
                         'report_date' => $reportDate,
                       ];
@@ -167,14 +162,19 @@ class ForfeituresController extends Controller
     {
         $bailForfeiture = BailForfeitures::GetForfeitureReport();
         $stateList = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
+        $forfeituresDetails = $this->prepareForfeitureProcess($bailForfeiture);
 
-        dd($bailForfeiture[0]);
-        exit;
+        if ($request->isMethod('post')) {
+            $all = $request->all();
+            dd($all);
+            exit;
+        }
 
         $indexArray = [
-                        'stateList'      => $stateList,
-                      ];        
-        return view('forfeitures.Process', compact('bailForfeiture'))->with($indexArray);
+                        'stateList' => $stateList,
+                        'ffdetails' => $forfeituresDetails,
+                      ];
+        return view('forfeitures.Process')->with($indexArray);
     }
 
     private function prepareDataArray($bailForfeiture)
@@ -194,10 +194,24 @@ class ForfeituresController extends Controller
     private function prepareForfeitureProcess($bailForfeiture)
     {
         $resultArray = [];
+        $count = 0;
 
-                $resultBalance = Event::fire(new ValidateTransactionBalance($bailMaster));
-
-
+        foreach ($bailForfeiture as $key => $value) {
+            $resultArray[$count]['bf_id'] = $value->bf_id;
+            $resultArray[$count]['m_def_first_name'] = $value->BailMaster->m_def_first_name;
+            $resultArray[$count]['m_def_last_name'] = $value->BailMaster->m_def_last_name;
+            $resultArray[$count]['bf_updated_at'] = $value->bf_updated_at;
+            $resultBalance = Event::fire(new ValidateTransactionBalance($value->BailMaster));
+            $resultArray[$count]['amount'] = $resultBalance[0];
+            $resultArray[$count]['m_surety_first_name'] = $value->BailMaster->m_surety_first_name;
+            $resultArray[$count]['m_surety_last_name'] = $value->BailMaster->m_surety_last_name;
+            $resultArray[$count]['m_surety_address'] = $value->BailMaster->m_surety_address;
+            $resultArray[$count]['m_surety_city'] = $value->BailMaster->m_surety_city;
+            $resultArray[$count]['m_surety_state'] = $value->BailMaster->m_surety_state;
+            $resultArray[$count]['m_surety_zip'] = $value->BailMaster->m_surety_zip;
+            $count++;
+        }
+        return $resultArray;
     }
 
 

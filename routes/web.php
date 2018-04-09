@@ -22,7 +22,6 @@ Route::get('/import/jail/data', 'ImportDataController@importOldJailTable')->name
 
 Route::get('/enterbail', 'EnterBailController@index')->name('enterbail');
 Route::get('/enterbail/ajax/findcheck', 'EnterBailController@searchcheckajax')->name('searchcheckajax');
-
 Route::get('/enterbail/jailbatch', 'EnterBailBatchController@index')->name('jailcheck');
 Route::post('/enterbail/jailbatch/check/results', 'EnterBailBatchController@searchchecknumber')->name('searchchecknumber');
 Route::any('/enterbail/jailbatch/processed', 'EnterBailBatchController@processbails')->name('processbails');
