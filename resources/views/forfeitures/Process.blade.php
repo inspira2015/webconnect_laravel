@@ -67,6 +67,7 @@
           <label for="exampleCtrl">Amount:</label>
           <div style="width: 100%;">
             $ {{ $item['amount'] }}
+            <input  name="amount[{{ $item['bf_id'] }}]" type="hidden" value="{{ $item['amount'] }}">
           </div>
         </div>
         <div class="form-group">
@@ -94,7 +95,7 @@
       </div>
       <div class="col-sm-1 pb-3">
         <label for="m_def_last_name">State</label>
-        {!! Form::select('m_surety_state', $stateList, $item['m_surety_state'], array('class' => 'form-control')) !!}
+        {!! Form::select('m_surety_state[' . $item['bf_id'] . ']', $stateList, $item['m_surety_state'], array('class' => 'form-control')) !!}
       </div>
       <div class="col-sm-1 pb-3">
         <label for="m_surety_zip">Zip: </label>
