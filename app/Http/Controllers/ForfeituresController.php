@@ -163,6 +163,9 @@ class ForfeituresController extends Controller
         $bailForfeiture = BailForfeitures::GetForfeitureReport();
         $stateList = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
         $forfeituresDetails = $this->prepareForfeitureProcess($bailForfeiture);
+        $processForm = $request->all();
+
+
 
         if ($request->isMethod('post')) {
 
@@ -171,20 +174,25 @@ class ForfeituresController extends Controller
             $bailForfeitureArray = $request->input('bf_id');
             $todayDate = date('Y-m-d');
             foreach ($bailForfeitureArray as $key => $value) {
+                echo $processForm['amount'][$value];
+                echo "<br>";
+                print_r($value);
 
                 $bailTransactionData = [
                                         "t_type"               => 'R',
                                         "t_numis_doc_id"       => 1,
                                         "t_created_at"         => $todayDate,
                                         "t_debit_credit_index" => 'O',
-                                        "t_amount"             => $bailAmount,
+                                        "t_amount"             => $processForm['amount'][$value],
                                         "t_fee_percentage"     => 0,
                                         "t_total_refund"       => 0,
                                         "t_reversal_index"     => '',
                                        ];
 
-                $this->addTransactionRecord($bailTransactionData, $bailMasterId);
+              //  $this->addTransactionRecord($bailTransactionData, $bailMasterId);
             }
+            dd($processForm);
+            exit;
 
 /*
                                              (?, --court_no
