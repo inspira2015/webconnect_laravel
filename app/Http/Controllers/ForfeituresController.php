@@ -10,11 +10,13 @@ use App\Models\BailForfeitures;
 use App\Facades\CountyFee;
 use App\Facades\PostedData;
 use App\Facades\ExcelHelper;
+use App\Facades\CreateTransaction;
 use App\Events\ValidateTransactionBalance;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Redirect;
 use Event;
+use DB;
 
 class ForfeituresController extends Controller
 {
@@ -165,69 +167,13 @@ class ForfeituresController extends Controller
         $forfeituresDetails = $this->prepareForfeitureProcess($bailForfeiture);
         $processForm = $request->all();
 
-
-
         if ($request->isMethod('post')) {
-
-
-
             $bailForfeitureArray = $request->input('bf_id');
             $todayDate = date('Y-m-d');
+
             foreach ($bailForfeitureArray as $key => $value) {
-                echo $processForm['amount'][$value];
-                echo "<br>";
-                print_r($value);
-
-                $bailTransactionData = [
-                                        "t_type"               => 'R',
-                                        "t_numis_doc_id"       => 1,
-                                        "t_created_at"         => $todayDate,
-                                        "t_debit_credit_index" => 'O',
-                                        "t_amount"             => $processForm['amount'][$value],
-                                        "t_fee_percentage"     => 0,
-                                        "t_total_refund"       => 0,
-                                        "t_reversal_index"     => '',
-                                       ];
-
-              //  $this->addTransactionRecord($bailTransactionData, $bailMasterId);
+                CreateTransaction::AddForfeiture($processForm['amount'][$value], $value);
             }
-            dd($processForm);
-            exit;
-
-/*
-                                             (?, --court_no
-                                             ?,  --index_no
-                                             ?,  --index_year
-                                             ?,  --posted_date
-                                             ?,  --NUMIS_doc_id
-                                             ?,  --time_of_entry
-                                             ?,  --date_of_record
-                                             'O', --debit_credit_ind
-                                             'F', --transaction_type
-                                             ?,  --transaction_amt
-                                             '0', --fee_percentage
-                                             ?,  --total_refund_amt
-                                             ' ',  --reversal_ind
-                                             ?,  --check_number
-                                             ' ',  --mult_check_ind
-                                             ?,  --refid
-                                             ?,  --last_update_date
-                                             ?   --last_update_oper
-
-
-
-            $bailTransactionData = [
-                                     "t_type"               => 'R',
-                                     "t_numis_doc_id"       => 1,
-                                     "t_created_at"         => $processDate,
-                                     "t_debit_credit_index" => 'I',
-                                     "t_amount"             => $bailAmount,
-                                     "t_fee_percentage"     => 0,
-                                     "t_total_refund"       => 0,
-                                     "t_reversal_index"     => '',
-                                   ];
-            $this->addTransactionRecord($bailTransactionData, $bailMasterId);*/
-
         }
 
         $indexArray = [

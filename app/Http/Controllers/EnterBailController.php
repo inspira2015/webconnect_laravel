@@ -9,6 +9,7 @@ use App\Models\Courts;
 use App\Models\BailMaster;
 use App\Models\BailTransactions;
 use App\Models\BailConfiguration;
+use App\Facades\CreateTransaction;
 
 use Redirect;
 use Auth;
@@ -47,7 +48,7 @@ class EnterBailController extends Controller
 
     public function searchcheckajax(Request $request)
     {
-        $query = $request->get('term','');
+        $query = $request->get('term', '');
         $jailImport = new JailImport();
         $jailRecords = $jailImport->GetCheckNumbersLikeInput($query);
         $data = array();
@@ -55,11 +56,11 @@ class EnterBailController extends Controller
         foreach ($jailRecords as $dummykey => $currentRecord) {
                 $data[] = ['value'=> $currentRecord->j_check_number, 'id'=> $currentRecord->j_id];
         }
-        
+
         if (count($data)) {
              return $data;
         }
-        return ['value'=>'No Result Found','id'=>''];    
+        return ['value'=>'No Result Found','id'=>''];
     }
 
     protected function addBailMasterRecord(array $bailMasterData)
@@ -91,38 +92,13 @@ class EnterBailController extends Controller
         return $bailMaster->m_id;
     }
 
-    protected function addTransactionRecord(array $bailTransactionData, $bailMasterId = false)
-    {
-        if (!$bailMasterId) {
-            return false;
-        }
-
-        $bailTransaction = BailTransactions::firstOrNew([
-                                                          "m_id"   => $bailMasterId,
-                                                          "t_type" => $bailTransactionData['t_type'],
-                                                        ]);
-
-        $bailTransaction->m_id = $bailMasterId;
-        $bailTransaction->t_numis_doc_id = $bailTransactionData['t_numis_doc_id'];
-        $bailTransaction->t_created_at = $bailTransactionData['t_created_at'];
-        $bailTransaction->t_debit_credit_index = $bailTransactionData['t_debit_credit_index'];
-        $bailTransaction->t_type = $bailTransactionData['t_type'];
-        $bailTransaction->t_amount = $bailTransactionData['t_amount'];
-        $bailTransaction->t_fee_percentage = $bailTransactionData['t_fee_percentage'];
-        $bailTransaction->t_total_refund =  $bailTransactionData['t_total_refund'];
-        $bailTransaction->t_reversal_index =  $bailTransactionData['t_reversal_index'];'';
-        $bailTransaction->save();
-        return $bailTransaction->t_id;
-    }
-
-
     protected function convertDate($date)
     {
         return date('Y-m-d', strtotime($date));
     }
 
     protected function getCorrectCourtNumber($courtValues)
-    {   
+    {
         if ($courtValues['defualtValue'] !== $courtValues['globalValue']) {
 
             if ($courtValues['defualtValue'] == $courtValues['rowValue']) {
