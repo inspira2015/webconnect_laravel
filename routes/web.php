@@ -30,7 +30,7 @@ Route::any('/enterbail/jailbatch/processed', 'EnterBailBatchController@processba
 Route::get('/enterbail/manualentry', 'EnterBailManualController@index')->name('manualentry');
 Route::any('/enterbail/manualentry/processed', 'EnterBailManualController@processmanualentry')->name('processmanualentry');
 Route::get('/enterbail/validateindexyear', 'EnterBailManualController@validateindexyear')->name('validateindexyear');
-Route::post('/enterbail/edit/manualentry', 'EnterBailManualController@editmanualrecord')->name('editmanualentry');
+Route::post('/enterbail/edit/manualentry', 'EnterBailManualController@editManualRecord')->name('editmanualentry');
 
 Route::get('/processbail', 'ProcessbailController@index')->name('processbailsearch');
 Route::any('/processbail/find/results', 'ProcessbailController@searchresults')->name('processbailresults');

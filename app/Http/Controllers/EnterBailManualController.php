@@ -34,7 +34,7 @@ class EnterBailManualController extends EnterBailController
         $stateList = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
         $bailMaster = BailMaster::firstOrNew(array('m_id' => 0));
         $dt = new Carbon($bailMaster->m_posted_date);
-        $m_posted_date =  $dt->format("m/d/Y"); 
+        $m_posted_date =  $dt->format("m/d/Y");
 
         $indexArray = [
                         'courtList'      => $courtList,
@@ -70,7 +70,7 @@ class EnterBailManualController extends EnterBailController
             if (isset($userInputData['m_comments_ind'])) {
                 $bailComments = 'Y';
             }
-            
+
             $bailMasterData = [
                                     "m_id"                => $userInputData['m_id'],
                                     "j_check_number"      => '',
@@ -109,18 +109,20 @@ class EnterBailManualController extends EnterBailController
 
         }
         $bailMaster = BailMaster::find($bailMasterId);
-        return view('enterBail.processmanualentry', compact('bailMaster'));
+        $transaction = $bailMaster->BailTransactions->where('t_type', '=', 'R')->first();
+        return view('enterBail.processmanualentry', compact('bailMaster'))->with(['transaction' => $transaction]);
     }
 
-    public function editmanualrecord(Request $request)
+    public function editManualRecord(Request $request)
     {
-
         $courtList = Courts::pluck('c_name', 'c_id')->toArray();
         $stateList = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
         $manualEntry = $request->all();
         $bailMaster = BailMaster::firstOrNew(array('m_id' => (int) $manualEntry['master_id']));
+        $transaction = $bailMaster->BailTransactions->where('t_type', '=', 'R')->first();
+
         $dt = new Carbon($bailMaster->m_posted_date);
-        $m_posted_date =  $dt->format("m/d/Y"); 
+        $m_posted_date =  $dt->format("m/d/Y");
 
         if (empty($queryResults)) {
 
@@ -129,7 +131,7 @@ class EnterBailManualController extends EnterBailController
                         'courtList'      => $courtList,
                         'stateList'      => $stateList,
                         'edit'           => true,
-                        't_numis_doc_id' => $bailMaster->BailTransactions->t_numis_doc_id,
+                        't_numis_doc_id' => $transaction->t_numis_doc_id,
                         'm_posted_date'  => $m_posted_date,
                       ];
         return view('enterBail.jailImportManualEntry', compact('bailMaster'))->with($indexArray);

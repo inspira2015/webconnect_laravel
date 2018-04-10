@@ -14,7 +14,7 @@
  </div>
  <div class="center-screen row text-center container-800">
   <div class="col-xs-6 col-md-6">Validation Number:</div>
-  <div class="col-xs-6 col-md-6"><strong>{{ $bailMaster->BailTransactions->t_numis_doc_id }}</strong></div>
+  <div class="col-xs-6 col-md-6"><strong>{{ $transaction->t_numis_doc_id }}</strong></div>
  </div>
  <div class="center-screen row text-center container-800">
   <div class="col-xs-6 col-md-6">Defendant First Name:</div>
@@ -73,7 +73,7 @@
    {{ csrf_field() }}
    <input type="hidden" name="master_id" value="{{ $bailMaster->m_id }}">
     <button type="submit" class="btn btn-warning ">Edit Record</button>
-    
+
     <a href="{{ route('home') }}">
      <button type="button" id="done" class="btn btn-success">Return to Menu</button>
     </a>
