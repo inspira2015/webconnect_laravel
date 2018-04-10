@@ -185,7 +185,7 @@ return [
         App\Providers\JailImportProvider::class,
         App\Providers\BailForfeituresProvider::class,
         App\Providers\ExcelHelperProvider::class,
-
+        App\Providers\CreateTransactionProvider::class,
     ],
 
     /*
