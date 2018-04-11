@@ -109,6 +109,8 @@ class ForfeituresController extends Controller
         $indexArray = [
                         'report_date' => $reportDate,
                       ];
+
+
         return view('forfeitures.Report', compact('bailForfeiture'))->with($indexArray);
     }
 
@@ -169,7 +171,6 @@ class ForfeituresController extends Controller
 
         if ($request->isMethod('post')) {
             $bailForfeitureArray = $request->input('bf_id');
-            $todayDate = date('Y-m-d');
 
             foreach ($bailForfeitureArray as $key => $value) {
                 CreateTransaction::AddForfeiture($processForm['amount'][$value], $value);
@@ -177,10 +178,28 @@ class ForfeituresController extends Controller
         }
 
         $indexArray = [
-                        'stateList' => $stateList,
-                        'ffdetails' => $forfeituresDetails,
+                        'stateList'      => $stateList,
+                        'ffdetails'      => $forfeituresDetails,
+                        'forfeitureForm' => empty($forfeituresDetails),
                       ];
         return view('forfeitures.Process')->with($indexArray);
+    }
+
+    public function postReport(Request $request)
+    {
+        $reportDate = date("Y-m-d");
+
+        if ($request->isMethod('post')) {
+            $reportDate = date("Y-m-d", strtotime($request->input('report_date')));
+        }
+        $bailForfeiture = BailForfeitures::GetProcessedForfeitureReportByDate($reportDate);
+        $dt = new Carbon($reportDate);
+        $reportDate =  $dt->format("m/d/Y");
+        $indexArray = [
+                        'report_date' => $reportDate,
+                      ];
+
+        return view('forfeitures.PostReport', compact('bailForfeiture'))->with($indexArray);
     }
 
     private function prepareDataArray($bailForfeiture)

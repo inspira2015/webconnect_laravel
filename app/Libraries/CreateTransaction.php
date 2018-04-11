@@ -2,6 +2,7 @@
 
 namespace App\Libraries;
 use App\Models\BailTransactions;
+use App\Models\BailForfeitures;
 use App\Facades\CountyFee;
 use DB;
 
@@ -32,9 +33,12 @@ class CreateTransaction
         return $bailTransaction->t_id;
     }
 
-    public function AddForfeiture($amount, $bailMasterId)
+    public function AddForfeiture($amount, $forfeitureId)
     {
         $todayDate = date('Y-m-d');
+        $bailForfeiture = BailForfeitures::find($forfeitureId);
+        $bailMasterId = $bailForfeiture->m_id;
+
         DB::beginTransaction();
         $feePercentaje = CountyFee::getAmountFee($amount);
         $bailTransactionData = [
@@ -49,6 +53,7 @@ class CreateTransaction
                                ];
         if (!$this->add($bailTransactionData, $bailMasterId)) {
             DB::rollback();
+            return false;
         }
 
         $amountAfterFee = CountyFee::getRemainAmountAfterFee($amount);
@@ -64,7 +69,14 @@ class CreateTransaction
                                ];
         if (!$this->add($bailTransactionData, $bailMasterId)) {
             DB::rollback();
+            return false;
         }
+
+        // Update Forfeiture Record mark it as processed
+        $bailForfeiture->bf_processed = 1;
+        $bailForfeiture->save();
         DB::commit();
+        unset($bailForfeiture);
+        return true;
     }
 }

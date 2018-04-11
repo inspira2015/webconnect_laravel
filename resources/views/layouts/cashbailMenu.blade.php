@@ -29,7 +29,7 @@
       <a class="dropdown-item" href="{{ route('forfeitures') }}">Select Bails to Mark For Forfeiture</a>
       <a class="dropdown-item" href="{{ route('forfeituresreport') }}">Run Forfeiture Report (excel import)</a>
       <a class="dropdown-item" href="{{ route('processforfeitures') }}">Process Forfeitures</a>
-      <a class="dropdown-item" href="">Forfeitures Post Report</a>
+      <a class="dropdown-item" href="{{ route('postReportForfeiture') }}">Forfeitures Post Report</a>
      </div>
     </li>
    </ul>
