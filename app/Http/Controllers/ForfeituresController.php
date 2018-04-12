@@ -100,6 +100,7 @@ class ForfeituresController extends Controller
     public function createReport(Request $request)
     {
         $reportDate = date("Y-m-d");
+
         if ($request->isMethod('post')) {
             $reportDate = date("Y-m-d", strtotime($request->input('report_date')));
         }
@@ -109,8 +110,6 @@ class ForfeituresController extends Controller
         $indexArray = [
                         'report_date' => $reportDate,
                       ];
-
-
         return view('forfeitures.Report', compact('bailForfeiture'))->with($indexArray);
     }
 
@@ -164,18 +163,21 @@ class ForfeituresController extends Controller
 
     public function processForfeitures(Request $request)
     {
-        $bailForfeiture = BailForfeitures::GetForfeitureReport();
-        $stateList = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
-        $forfeituresDetails = $this->prepareForfeitureProcess($bailForfeiture);
-        $processForm = $request->all();
-
         if ($request->isMethod('post')) {
+            $processForm = $request->all();
             $bailForfeitureArray = $request->input('bf_id');
 
             foreach ($bailForfeitureArray as $key => $value) {
-                CreateTransaction::AddForfeiture($processForm['amount'][$value], $value);
+                $formDetails['amount'] = $processForm['amount'][$value];
+                $formDetails['t_check_number'] = $processForm['t_check_number'];
+                CreateTransaction::AddForfeiture($formDetails, $value);
             }
         }
+
+        $bailForfeiture = BailForfeitures::GetForfeitureReport();
+        $stateList = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
+        $forfeituresDetails = $this->prepareForfeitureProcess($bailForfeiture);
+        $formDetails = [];
 
         $indexArray = [
                         'stateList'      => $stateList,
@@ -193,6 +195,7 @@ class ForfeituresController extends Controller
             $reportDate = date("Y-m-d", strtotime($request->input('report_date')));
         }
         $bailForfeiture = BailForfeitures::GetProcessedForfeitureReportByDate($reportDate);
+
         $dt = new Carbon($reportDate);
         $reportDate =  $dt->format("m/d/Y");
         $indexArray = [

@@ -27,36 +27,57 @@
  </div>
 </div>
 
-<div class="container-800" style ="padding-top: 25px; padding-left: 25px;">
- <table class="table table-bordered">
+<div class="container-nine" style ="padding-top: 25px; padding-left: 25px;">
+ <table class="table table-bordered" style="width: auto !important;">
   <thead>
    <tr>
-    <th>Defendant</th>
-    <th>Address</th>
-    <th>City, State Zip</th>
-    <th>Surety</th>
-    <th>Date</th>
-    <th>Do After</th>
+    <th>Defendant Name</th>
+    <th>Index/Year</th>
+    <th>Posted Document</th>
+    <th>Date of Record</th>
+    <th>Amount  Reversal</th>
+    <th>Check Number</th>
+    <th>Date Check</th>
+    <th>Paid</th>
    </tr>
   </thead>
   <tbody>
    @foreach ($bailForfeiture as  $key => $item)
-   <tr>
-    <td>{{ $item->BailMaster->m_def_first_name }}, {{ $item->BailMaster->m_def_last_name }}</td>
-    <td>{{ $item->BailMaster->m_surety_address }}</td>
-    <td>{{ $item->BailMaster->m_surety_city }}, {{ $item->BailMaster->m_surety_state }} {{ $item->BailMaster->m_surety_zip }}</td>
-    <td>{{ $item->BailMaster->m_surety_first_name }}, {{ $item->BailMaster->m_surety_last_name }}</td>
-    <td>{{ date('Y-m-d', strtotime($item->bf_updated_at)) }}</td>
-    <td>{{ date('Y-m-d', strtotime($item->bf_updated_at . ' + 45 days')) }}</td>
-   </tr>
+    @php
+      $defendantName = $item->BailMaster->m_def_first_name . ', ' . $item->BailMaster->m_def_last_name;
+      $indexYear = $item->BailMaster->m_index_number . '/' . $item->BailMaster->m_index_year;
+    @endphp
+
+    @foreach ($item->BailMaster->BailTransactions as $transaction)
+      @if ($transaction->t_type == 'F' || $transaction->t_type == 'A')
+        @php
+          $amount = 0;
+          if ($transaction->t_type == 'F') {
+            $amount = $transaction->t_total_refund;
+          }
+
+          if ($transaction->t_type == 'A') {
+            $amount = $transaction->t_fee_percentage;
+          }
+        @endphp
+        <tr>
+          <td>{{ $defendantName }}</td>
+          <td>{{ $indexYear }}</td>
+          <td>{{ $transaction->t_numis_doc_id }}</td>
+          <td>{{ date('m/d/Y', strtotime($transaction->t_created_at)) }}</td>
+          <td>{{ $amount }}</td>
+          <td>{{ $transaction->t_check_number }}</td>
+          <td></td>
+          <td>{{ $transaction->t_type }}</td>
+        </tr>
+      @endif
+    @endforeach
    @endforeach
   </tbody>
  </table>
 </div>
 
-<div class="container-800" style ="padding-top: 25px; padding-left: 25px;">
- <a href="{{ route('forfeituresExcel') }}">Download Forfeitures Excel Report</a>
-</div>
+
 
 <script type="text/javascript">
 

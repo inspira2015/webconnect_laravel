@@ -20,22 +20,20 @@ class CreateTransaction
                                                           "t_type" => $bailTransactionData['t_type'],
                                                         ]);
 
-        $bailTransaction->m_id = $bailMasterId;
-        $bailTransaction->t_numis_doc_id = $bailTransactionData['t_numis_doc_id'];
-        $bailTransaction->t_created_at = $bailTransactionData['t_created_at'];
-        $bailTransaction->t_debit_credit_index = $bailTransactionData['t_debit_credit_index'];
-        $bailTransaction->t_type = $bailTransactionData['t_type'];
-        $bailTransaction->t_amount = $bailTransactionData['t_amount'];
-        $bailTransaction->t_fee_percentage = $bailTransactionData['t_fee_percentage'];
-        $bailTransaction->t_total_refund =  $bailTransactionData['t_total_refund'];
-        $bailTransaction->t_reversal_index =  $bailTransactionData['t_reversal_index'];'';
+        $bailTransactionData['m_id'] = $bailMasterId;
+
+        foreach ($bailTransactionData as $key => $value) {
+            $bailTransaction->$key = $value;
+        }
         $bailTransaction->save();
         return $bailTransaction->t_id;
     }
 
-    public function AddForfeiture($amount, $forfeitureId)
+    public function AddForfeiture($formDetails, $forfeitureId)
     {
         $todayDate = date('Y-m-d');
+        $amount = $formDetails['amount'];
+        $t_check_number = $formDetails['t_check_number'];
         $bailForfeiture = BailForfeitures::find($forfeitureId);
         $bailMasterId = $bailForfeiture->m_id;
 
@@ -50,6 +48,7 @@ class CreateTransaction
                                 "t_fee_percentage"     => $feePercentaje,
                                 "t_total_refund"       => 0,
                                 "t_reversal_index"     => '',
+                                "t_check_number"       => $t_check_number,
                                ];
         if (!$this->add($bailTransactionData, $bailMasterId)) {
             DB::rollback();
@@ -66,6 +65,7 @@ class CreateTransaction
                                 "t_fee_percentage"     => 0,
                                 "t_total_refund"       => $amountAfterFee,
                                 "t_reversal_index"     => '',
+                                "t_check_number"       => $t_check_number,
                                ];
         if (!$this->add($bailTransactionData, $bailMasterId)) {
             DB::rollback();

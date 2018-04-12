@@ -6,7 +6,7 @@
       <div class="col-sm-12 pb-3 row">
         <div class="col-sm-2 pb-3">
           <label for="exampleAccount"><strong>Check Number:</strong></label>
-          <input type="text" class="form-control" required id="m_posted_date" name="m_posted_date" value="MANUAL">
+          <input type="text" class="form-control" required id="t_check_number" name="t_check_number" value="MANUAL">
         </div>
       </div>
     </div>
