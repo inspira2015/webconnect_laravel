@@ -7,7 +7,7 @@
  <div style="width:100%; background-image:url({{ asset('img/cashbail/menu_right_25.jpg') }}); background-position:top right; background-repeat:no-repeat">
   <p class="content"><span style="font-weight: bold">Todays Batch Number Is</span>: <?php echo $batno; ?></p>
   <table width="498" border="0" cellpadding="0" cellspacing="5">
-   <?php 
+   <?php
     if ($totalRows_approvals <= 0) : ?>
    <tr>
     <td height="21" style="background-image:url({{ asset('img/cashbail/cashbailbuttons_03.jpg') }}); background-position: left top; background-repeat:no-repeat">
@@ -21,7 +21,7 @@
    </tr>
    <tr>
     <td height="21" style="background-image:url({{ asset('img/cashbail/cashbailbuttons_08.jpg') }}); background-position: left top; background-repeat:no-repeat">
-     <span style="font-weight: bold; padding-left:30px;"><a href="forfmenu.php" class="content">Forfeitures</a> -</span> <span class="content">process forfeiture orders </span>
+     <span style="font-weight: bold; padding-left:30px;"><a href="{{ route('forfeitures') }}" class="content">Forfeitures</a> -</span> <span class="content">process forfeiture orders </span>
     </td>
    </tr>
    <tr>
@@ -52,7 +52,7 @@
     </td>
    </tr>
    <?php endif; ?>
-   <?php   
+   <?php
     if ($totalRows_approvals > 0) {
      $appr = $fa_approvals['sent_user'];
      if ($appr != $_SESSION['samaccountname']) {
@@ -60,7 +60,7 @@
    <tr>
    <td height="21" style="background-image:url({{ asset('img/cashbail/cashbailbuttons_18.jpg') }}); background-position: left top; background-repeat:no-repeat"><span style="font-weight: bold; padding-left:30px;"><a class="content" href="apprchecks.php">Approve Bails</a>  -</span> <span class="content">approve todays bails and send to NIFS </span></td>
    </tr>
-   <?php 
+   <?php
       }
      }
     }
