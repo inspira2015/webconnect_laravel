@@ -47,6 +47,8 @@ Route::get('/forfeitures/excel/report', 'ForfeituresController@createExcelReport
 Route::any('/forfeitures/process', 'ForfeituresController@processForfeitures')->name('processforfeitures');
 Route::any('/forfeitures/post/report', 'ForfeituresController@postReport')->name('postReportForfeiture');
 
-
 Route::get('/ajaxcall/findbailmaster', 'AjaxSearchController@searchBailMaster')->name('searchBailMaster');
 Route::any('/ajaxcall/forfeiture/action', 'AjaxSearchController@ajaxForfeituresAddRemove')->name('forfeituresControl');
+
+
+Route::get('/remission', 'RemissionController@index')->name('remission');
