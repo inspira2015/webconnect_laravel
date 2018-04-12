@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use DB;
 
 class BailForfeitures extends Model
 {
@@ -36,7 +37,7 @@ class BailForfeitures extends Model
     public function scopeGetForfeitureReportByDate($query, $date)
     {
         return $query->where('bf_processed', '=', '0')
-                     ->where('bf_updated_at', '<=', $date)->get();
+                     ->where(DB::raw('DATE_FORMAT(bf_updated_at, "%Y-%m-%d")'), '<=', $date)->get();
     }
 
     public function scopeGetProcessedForfeitureReportByDate($query, $date)

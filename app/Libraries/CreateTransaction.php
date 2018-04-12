@@ -33,6 +33,9 @@ class CreateTransaction
     {
         $todayDate = date('Y-m-d');
         $amount = $formDetails['amount'];
+        if ($amount <= 0) {
+            return false;
+        }
         $t_check_number = $formDetails['t_check_number'];
         $bailForfeiture = BailForfeitures::find($forfeitureId);
         $bailMasterId = $bailForfeiture->m_id;

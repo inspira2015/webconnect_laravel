@@ -69,25 +69,10 @@ class EnterBailController extends Controller
                                                 "m_id" => $bailMasterData['m_id'],
                                              ]);
 
-        $bailMaster->j_check_number = $bailMasterData['j_check_number'];
-        $bailMaster->m_court_number = $bailMasterData['m_court_number'];
-        $bailMaster->m_index_number = $bailMasterData['m_index_number'];
-        $bailMaster->m_index_year = $bailMasterData['m_index_year'];
-        $bailMaster->m_posted_date = $bailMasterData['m_posted_date'];
-        $bailMaster->m_def_last_name = $bailMasterData['m_def_last_name'];
-        $bailMaster->m_def_first_name = $bailMasterData['m_def_first_name'];
-        $bailMaster->m_surety_last_name = $bailMasterData['m_surety_last_name'];
-        $bailMaster->m_surety_first_name = $bailMasterData['m_surety_first_name'];
-        $bailMaster->m_forfeit_amount = $bailMasterData['m_forfeit_amount'];
-        $bailMaster->m_payment_amount = $bailMasterData['m_payment_amount'];
-        $bailMaster->m_city_fee_amount = $bailMasterData['m_city_fee_amount'];
-        $bailMaster->m_receipt_amount = $bailMasterData['m_receipt_amount'];
-        $bailMaster->m_comments_ind =  $bailMasterData['m_comments_ind'];
-        $bailMaster->m_status = $bailMasterData['m_status'];
-        $bailMaster->m_surety_address = $bailMasterData['m_surety_address'];
-        $bailMaster->m_surety_city = $bailMasterData['m_surety_city'];
-        $bailMaster->m_surety_state = $bailMasterData['m_surety_state'];
-        $bailMaster->m_surety_zip = $bailMasterData['m_surety_zip'];
+        foreach ($bailMasterData as $key => $value) {
+            $bailMaster->$key = $value;
+        }
+
         $bailMaster->save();
         return $bailMaster->m_id;
     }
