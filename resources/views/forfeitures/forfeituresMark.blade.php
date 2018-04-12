@@ -2,17 +2,11 @@
 @section('content')
 
 <style type="text/css">
- .top-margin15 {
-  margin-top: 15px;
- }
  .btn {
   border-radius: 1px solid transparent !important;
   border: 1px solid transparent !important;
  }
  .slow .toggle-group { transition: left 0.7s; -webkit-transition: left 0.7s; }
- .green {
-  color: #006400;
- }
  .black {
   color: #000;
  }

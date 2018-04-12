@@ -9,6 +9,7 @@ use App\Models\BailMaster;
 use App\Models\Courts;
 use App\Facades\CheckNumberRecords;
 use App\Events\ImportJailRecord;
+use App\Facades\CreateTransaction;
 
 use Event;
 use Session;
@@ -26,7 +27,7 @@ class EnterBailBatchController extends EnterBailController
         $this->middleware('auth');
     }
 
-    
+
     /**
      * [jailImport Display Enter Bail by Jail Import]
      * @return [type] [description]
@@ -58,7 +59,7 @@ class EnterBailBatchController extends EnterBailController
 
             $processDate = date('Y-m-d G:i:s');
             $checkNumber = Session::get('checkNumber');
-            
+
             foreach ($jailIdArray AS $key => $value) {
                 if (!isset($userInputData['selected'][$value])) {
                     continue;
@@ -112,7 +113,7 @@ class EnterBailBatchController extends EnterBailController
                                          "t_total_refund"       => 0,
                                          "t_reversal_index"     => '',
                                        ];
-                $this->addTransactionRecord($bailTransactionData, $bailMasterId);
+                CreateTransaction::add($bailTransactionData, $bailMasterId);
             }
 
             $checkNumber = Session::get('checkNumber');

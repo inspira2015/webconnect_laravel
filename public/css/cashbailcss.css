@@ -174,3 +174,56 @@
 /**
  *  New Styles
 **/
+.reduce-input input.form-control {
+   height: 27px !important;
+}
+.reduce-input select.form-control {
+   height: 27px !important;
+}
+.jailRecords table {
+    border-collapse: collapse;
+    width: 100%;
+}
+.jailRecords th {
+    font-size: 75%;
+    text-align: left;
+    padding: 2px;
+}
+.reduce-width select.form-control {
+    width: 100%;
+    font-size: 11px;
+}
+.reduce-width input.form-control {
+    width: 100%;
+    padding: 0;
+}
+.jailRecords td {
+    font-size: 75%;
+    text-align: center;
+    padding: 2px;
+}
+.jailRecords tr:nth-child(even) {
+    background-color: #ccc
+}
+.duplicate-row {
+    background-color: #8B0000!important;
+    color: #FFF!important;
+}
+.error {
+    color:#FF0000!important;
+}
+.font18 {
+    font-size: 18px;
+}
+.blue-font {
+    color: #2a4e6c;
+}
+.green-font {
+    color: #003300;
+}
+.green {
+  color: #008000!important;
+}
+.top-margin15 {
+  margin-top: 15px;
+ }

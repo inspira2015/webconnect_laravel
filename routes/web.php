@@ -22,7 +22,6 @@ Route::get('/import/jail/data', 'ImportDataController@importOldJailTable')->name
 
 Route::get('/enterbail', 'EnterBailController@index')->name('enterbail');
 Route::get('/enterbail/ajax/findcheck', 'EnterBailController@searchcheckajax')->name('searchcheckajax');
-
 Route::get('/enterbail/jailbatch', 'EnterBailBatchController@index')->name('jailcheck');
 Route::post('/enterbail/jailbatch/check/results', 'EnterBailBatchController@searchchecknumber')->name('searchchecknumber');
 Route::any('/enterbail/jailbatch/processed', 'EnterBailBatchController@processbails')->name('processbails');
@@ -46,6 +45,7 @@ Route::any('/forfeitures/find/results', 'ForfeituresController@searchresults')->
 Route::any('/forfeitures/report', 'ForfeituresController@createReport')->name('forfeituresreport');
 Route::get('/forfeitures/excel/report', 'ForfeituresController@createExcelReport')->name('forfeituresExcel');
 Route::any('/forfeitures/process', 'ForfeituresController@processForfeitures')->name('processforfeitures');
+Route::any('/forfeitures/post/report', 'ForfeituresController@postReport')->name('postReportForfeiture');
 
 
 Route::get('/ajaxcall/findbailmaster', 'AjaxSearchController@searchBailMaster')->name('searchBailMaster');

@@ -8,6 +8,8 @@ use App\Models\BailConfiguration;
 use App\Models\Courts;
 use App\Models\BailMaster;
 use App\Models\BailTransactions;
+use App\Facades\CreateTransaction;
+
 use Carbon\Carbon;
 use Redirect;
 use Auth;
@@ -105,7 +107,7 @@ class EnterBailManualController extends EnterBailController
                                     "t_total_refund"       => 0,
                                     "t_reversal_index"     => '',
                                    ];
-            $this->addTransactionRecord($bailTransactionData, $bailMasterId);
+            CreateTransaction::add($bailTransactionData, $bailMasterId);
 
         }
         $bailMaster = BailMaster::find($bailMasterId);
