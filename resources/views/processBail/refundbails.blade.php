@@ -37,7 +37,7 @@
 .commentList {
     padding:0;
     list-style:none;
-    max-height:200px;
+    max-height: 300px;
     overflow:auto;
 }
 .commentList li {
@@ -167,24 +167,47 @@
         <button type="button" class="close" aria-hidden="true">&times;</button>
       </div>
       <div class="actionBox">
-        <ul class="commentList">
+        <ul class="commentList" id="comment_list">
           @foreach ($bailMaterComments as  $key => $item)
             <li>
               <div class="commentText">
                 <p class="">{{$item->comment}}</p>
                 <span class="date sub-text">{{ $item->getDateForComment() }}</span>
+                <button id="removeButton" data-id="{{$item->id}}" data-toggle="modal" data-target="#removeComment" class="btn btn-sm btn-danger">Remove</button>
               </div>
             </li>
           @endforeach
         </ul>
         <form class="form-inline" role="form">
           <div class="form-group">
-            <input class="form-control" type="text" placeholder="Your comments" />
+
+            <input id="new-comment" data-id="{{$bailMasterId}}" class="form-control" type="text" placeholder="Your comments" />
           </div>
           <div class="form-group">
-            <button class="btn btn-default">Add</button>
+            <button id="commentButton" class="btn btn-default">Add</button>
           </div>
         </form>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="removeComment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Are you sure to remove this comment?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            ...
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Remove Comment</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -244,7 +267,39 @@
  date_input.datepicker(options).datepicker("setDate", posted_date);
  date_input_disabled.datepicker(options).datepicker("setDate", posted_date);
 
- $(document).ready(function() {
+  $(document).ready(function() {
+    src = "{{ route('addComment') }}";
+
+    $('#commentButton').click(function (event) {
+      event.preventDefault();
+
+      var bail_master_id = $('#new-comment').data('id');
+      var new_comment = $.trim($('#new-comment').val());
+
+      if (!new_comment) {
+        return ;
+      }
+
+      $.ajax({
+        url: src,
+        dataType: "json",
+        data: {
+               "_token": "{{ csrf_token() }}",
+               "type": "bailmaster",
+               "id": bail_master_id,
+               "newComment": new_comment,
+        },
+        success: function(data) {
+          console.log(data.comment);
+          $("#comment_list").append('<li><div class="commentText"><p class="">' + data.comment + '</p><span class="date sub-text">' + data.added_at + '</span></li>');
+        }
+      });
+
+      $('#new-comment').val('');
+  });
+
+
+
   var balance = parseFloat({{ $balance }});
   var county_fee = parseFloat({{ $bailDetails['fee_percentaje'] }});
 
@@ -330,6 +385,12 @@
     $('#refund-manual').removeAttr("disabled");
    }
   });
+
+  $('#removeComment').on('show.bs.modal', function () {
+    console.log('test comment');
+  });
+
+
  });
 
 </script>

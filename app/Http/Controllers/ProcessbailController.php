@@ -88,6 +88,7 @@ class ProcessbailController extends Controller
 
         $indexArray = [
                         'jailRecords'    => array(),
+                        'bailMasterId'   => $bailMasterId,
                         'balance'        => $balance,
                         'stateList'      => $stateList,
                         'courtList'      => $courtList,
