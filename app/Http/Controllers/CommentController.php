@@ -47,10 +47,29 @@ class CommentController extends Controller
         $newComment->save();
 
         return response()->json([
+                                  'id'       => $newComment->id,
                                   'comment'  => $newComment->comment,
                                   'added_at' => $newComment->getDateForComment(),
                                 ]);
     }
+
+    public function removeComment(Request $request)
+    {
+        $removeResponse = false;
+        $formData = $request->all();
+        $user = Auth::user();
+        $bailComment = BailComments::find($formData['id']);
+
+        if ($bailComment->id) {
+            $bailComment->delete();
+            $removeResponse = true;
+        }
+
+        return response()->json([
+                                 'remove_comment'  => $removeResponse,
+                               ]);
+    }
+
 
     private function getTableName($commentType)
     {

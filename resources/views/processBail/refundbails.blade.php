@@ -10,7 +10,7 @@
 }
 .titleBox {
     background-color:#fdfdfd;
-    padding:10px;
+    padding: 5px;
 }
 .titleBox label{
   color:#444;
@@ -42,7 +42,7 @@
 }
 .commentList li {
     margin:0;
-    margin-top:10px;
+    margin-top:7px;
 }
 .commentList li > div {
     display:table-cell;
@@ -160,58 +160,7 @@
     </table>
     <hr class="my-3">
 
-    <!-- start -->
-    <div class="detailBox">
-      <div class="titleBox">
-        <label><h2>Comments</h2></label>
-        <button type="button" class="close" aria-hidden="true">&times;</button>
-      </div>
-      <div class="actionBox">
-        <ul class="commentList" id="comment_list">
-          @foreach ($bailMaterComments as  $key => $item)
-            <li>
-              <div class="commentText">
-                <p class="">{{$item->comment}}</p>
-                <span class="date sub-text">{{ $item->getDateForComment() }}</span>
-                <button id="removeButton" data-id="{{$item->id}}" data-toggle="modal" data-target="#removeComment" class="btn btn-sm btn-danger">Remove</button>
-              </div>
-            </li>
-          @endforeach
-        </ul>
-        <form class="form-inline" role="form">
-          <div class="form-group">
-
-            <input id="new-comment" data-id="{{$bailMasterId}}" class="form-control" type="text" placeholder="Your comments" />
-          </div>
-          <div class="form-group">
-            <button id="commentButton" class="btn btn-default">Add</button>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="removeComment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Are you sure to remove this comment?</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            ...
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Remove Comment</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ends -->
+    @include('chunks.comments')
 
     @include('chunks.transactionHistory')
 
@@ -291,7 +240,9 @@
         },
         success: function(data) {
           console.log(data.comment);
-          $("#comment_list").append('<li><div class="commentText"><p class="">' + data.comment + '</p><span class="date sub-text">' + data.added_at + '</span></li>');
+          $("#comment_list").append('<li><div class="commentText"><p class="">' + data.comment + '</p><span class="date sub-text">' + data.added_at + '</span>'+
+            '<button id="removeButton" data-id="' + data.id + '"  data-toggle="modal" data-target="#removeComment" class="removeComment btn btn-sm btn-danger">Remove</button>'
+            +'</li>');
         }
       });
 
@@ -386,9 +337,41 @@
    }
   });
 
-  $('#removeComment').on('show.bs.modal', function () {
-    console.log('test comment');
+
+
+  $('#removeComment').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget); // Button that triggered the modal
+    var comment_id = button.data('id');
+    var recipient = button.siblings("p").html(); // Extract info from data-* attributes
+    $('.modal-body').html(recipient);
+    $('.removeNow').data('id', comment_id);
+    console.log(comment_id);
   });
+
+
+  $('.removeNow').click(function () {
+    var commentId = $(this).data('id');
+    var src_remove = "{{ route('removeComment') }}";
+
+    $.ajax({
+      url: src_remove,
+      dataType: "json",
+      data: {
+              "_token": "{{ csrf_token() }}",
+              "type": "bailmaster",
+              "id": commentId,
+      },
+      success: function(data) {
+        if (data.remove_comment) {
+          $('#' + 'comment' + commentId).remove();
+        }
+      }
+    })
+
+    $('#removeComment').modal('toggle');
+  });
+
+
 
 
  });
