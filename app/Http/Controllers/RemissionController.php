@@ -98,7 +98,7 @@ class RemissionController extends Controller
                                              'remain_amount'  => CountyFee::getRemainAmountAfterFee($balance),
                                             ],
                       ];
-        return view('processbail.refundbails', compact('bailMaster', 'bailMaterComments'))->with($indexArray);
+        return view('remission.searchresults', compact('bailMaster', 'bailMaterComments'))->with($indexArray);
     }
 
 }
