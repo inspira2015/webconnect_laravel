@@ -51,7 +51,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close and Cancel</button>
-					<button type="type" id="update-info" class="btn btn-primary">Reund Now</button>
+					<button type="type" id="update-info" class="btn btn-primary">Refund Now</button>
 				</div>
 			</div>
 		</div>

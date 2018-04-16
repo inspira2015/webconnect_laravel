@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\BailMaster;
 use App\Models\Courts;
 use App\Models\BailConfiguration;
+use App\Models\BailComments;
 use App\Facades\CountyFee;
 use App\Facades\PostedData;
 use App\Events\ValidateTransactionBalance;
@@ -72,18 +73,22 @@ class ProcessbailController extends Controller
                         ];
             return redirect()->route('processbailsearch')->withErrors($messages);
         }
-		$bailMaster     = BailMaster::find($resultArray['m_id']);
-        $courtList      = Courts::pluck('c_name', 'c_id')->toArray();
-        $stateList      = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
-        $courtCheckList = BailConfiguration::where('bc_category', 'check_court')->pluck('bc_value', 'bc_id')->toArray();
+        $bailMasterId      = (int) $resultArray['m_id'];
+		$bailMaster        = BailMaster::find($bailMasterId);
+        $courtList         = Courts::pluck('c_name', 'c_id')->toArray();
+        $stateList         = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
+        $courtCheckList    = BailConfiguration::where('bc_category', 'check_court')->pluck('bc_value', 'bc_id')->toArray();
+        $bailMaterComments = BailComments::GetBailMasterComments($bailMasterId);
+
         $dt = new Carbon($bailMaster->m_posted_date);
-		$m_posted_date =  $dt->format("m/d/Y"); 
+		$m_posted_date =  $dt->format("m/d/Y");
 
         $resultBalance = Event::fire(new ValidateTransactionBalance($bailMaster));
         $balance = round($resultBalance[0], 2);
 
         $indexArray = [
                         'jailRecords'    => array(),
+                        'bailMasterId'   => $bailMasterId,
                         'balance'        => $balance,
                         'stateList'      => $stateList,
                         'courtList'      => $courtList,
@@ -96,8 +101,6 @@ class ProcessbailController extends Controller
                                              'remain_amount'  => CountyFee::getRemainAmountAfterFee($balance),
                                             ],
                       ];
-        return view('processbail.refundbails', compact('bailMaster'))->with($indexArray);
+        return view('processbail.refundbails', compact('bailMaster', 'bailMaterComments'))->with($indexArray);
     }
-
-
 }
