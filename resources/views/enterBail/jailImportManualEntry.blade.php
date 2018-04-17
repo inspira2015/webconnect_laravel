@@ -1,9 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
+<hr class="bail-entry">
 
 <div class="body-content">
-  <h1>Enter Bail Manually</h1>   
+  <h1>Enter Bail Manually</h1>
   <form name="bails" id="manual-bail-entry" method="post" action="{{ route('processmanualentry') }}" >
     {{ csrf_field() }}
     <div class="col-md-10 offset-md-1" style="margin-bottom: 50px;">
