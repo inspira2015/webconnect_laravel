@@ -2,6 +2,8 @@
 
 @section('content')
 
+<hr class="bail-entry">
+
 <div>
   <table width="100%" border="0" cellspacing="0" cellpadding="2">
     <tr>

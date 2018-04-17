@@ -227,3 +227,14 @@
 .top-margin15 {
   margin-top: 15px;
  }
+ .bail-entry {
+  width: 98%;
+  display: block;
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+  margin-left: auto;
+  margin-right: auto;
+  border-width: 5px;
+  border-color: #b30000;
+  text-align: left;
+}
