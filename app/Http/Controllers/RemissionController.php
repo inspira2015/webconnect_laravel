@@ -60,13 +60,15 @@ class RemissionController extends Controller
     public function searchresults(Request $request)
     {
         $termToSearch   = $request->get('search_term','');
+        $module         = 'remission';
         $resultArray    = PostedData::getTermFromUserInput($termToSearch);
 
         if (is_numeric($resultArray['m_id']) == false) {
             $messages = [
-                            "\"{$resultArray['m_id']}\" was not found",
+                            "\"{$termToSearch}\" was not found",
                         ];
-            return redirect()->route('processbailsearch')->withErrors($messages);
+            $returnRoute = PostedData::getErrorRedirectRoute($module);
+            return redirect()->route($returnRoute)->withErrors($messages);
         }
         $bailMasterId      = (int) $resultArray['m_id'];
         $bailMaster        = BailMaster::find($bailMasterId);
@@ -89,7 +91,7 @@ class RemissionController extends Controller
                         'stateList'      => $stateList,
                         'courtList'      => $courtList,
                         'courtCheckList' => $courtCheckList,
-                        'module'         => 'remission',
+                        'module'         => $module,
                         'm_posted_date'  => $m_posted_date,
                         'bailDetails'    => [
                                              'total_balance'  => $balance,

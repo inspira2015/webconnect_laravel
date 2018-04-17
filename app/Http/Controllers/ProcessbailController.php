@@ -71,14 +71,16 @@ class ProcessbailController extends Controller
 
     public function searchresults(Request $request)
     {
-        $termToSearch   = $request->get('search_term','');
+        $termToSearch   = $request->get('search_term', '');
+        $module         = 'processbail';
         $resultArray    = PostedData::getTermFromUserInput($termToSearch);
 
         if (is_numeric($resultArray['m_id']) == false) {
             $messages = [
                             "\"{$resultArray['m_id']}\" was not found",
                         ];
-            return redirect()->route('processbailsearch')->withErrors($messages);
+            $returnRoute = PostedData::getErrorRedirectRoute($module);
+            return redirect()->route($returnRoute)->withErrors($messages);
         }
         $bailMasterId      = (int) $resultArray['m_id'];
 		$bailMaster        = BailMaster::find($bailMasterId);
@@ -102,7 +104,7 @@ class ProcessbailController extends Controller
                         'courtList'      => $courtList,
                         'courtCheckList' => $courtCheckList,
                         'm_posted_date'  => $m_posted_date,
-                        'module'         => 'processbail',
+                        'module'         => $module,
                         'bailDetails'    => [
                                              'total_balance'  => $balance,
                                              'fee_percentaje' => CountyFee::getFeePercentaje(),

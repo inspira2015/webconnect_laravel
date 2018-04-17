@@ -19,4 +19,13 @@ class PostedData
     			 'm_id' 		  => $splitArray[0],
     		   ];
     }
+
+    public function getErrorRedirectRoute($module)
+    {
+        if ($module == 'remission') {
+            return 'remission';
+        } else {
+            return 'processbailsearch';
+        }
+    }
 }
