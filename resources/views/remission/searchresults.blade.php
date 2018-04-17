@@ -1,76 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<style type="text/css">
-
-.detailBox {
-    width: 95%;
-    border:1px solid #bbb;
-    margin: 20px;
-}
-.titleBox {
-    background-color:#fdfdfd;
-    padding: 5px;
-}
-.titleBox label{
-  color:#444;
-  margin:0;
-  display:inline-block;
-}
-
-.commentBox {
-    padding:10px;
-    border-top:1px dotted #bbb;
-}
-.commentBox .form-group:first-child, .actionBox .form-group:first-child {
-    width:80%;
-}
-.commentBox .form-group:nth-child(2), .actionBox .form-group:nth-child(2) {
-    width:18%;
-}
-.actionBox .form-group * {
-    width:100%;
-}
-.taskDescription {
-    margin-top:10px 0;
-}
-.commentList {
-    padding:0;
-    list-style:none;
-    max-height: 300px;
-    overflow:auto;
-}
-.commentList li {
-    margin:0;
-    margin-top:7px;
-}
-.commentList li > div {
-    display:table-cell;
-}
-.commenterImage {
-    width:30px;
-    margin-right:5px;
-    height:100%;
-    float:left;
-}
-.commenterImage img {
-    width:100%;
-    border-radius:50%;
-}
-.commentText p {
-    margin:0;
-}
-.sub-text {
-    color:#aaa;
-    font-family:verdana;
-    font-size:11px;
-}
-.actionBox {
-    border-top:1px dotted #bbb;
-    padding:10px;
-}
-</style>
-
+<hr class="bail-remission">
 
 <div class="body-content">
   <h1>Remissions</h1>

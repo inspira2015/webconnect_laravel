@@ -1,11 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<style type="text/css">
- .error {
-  color :#7F0000;
- }
-</style>
+<hr class="bail-forfeiture">
 
 <div style="background-image:url(images/back_orange_21.jpg); background-position:top left; background-repeat:no-repeat;  padding:10px;">
  <table width="100%" border="0" cellspacing="0" cellpadding="2">
@@ -17,7 +13,7 @@
 <div class="container-800 center-screen">
  <form name="forfeitures" id="forfeitures" method="post" action="{{ route('forfeituresresults') }}" >
   {{ csrf_field() }}
-  <div class="row">    
+  <div class="row">
    <div class="col-8">
     <div class="input-group">
      <div class="input-group-btn search-panel">
@@ -32,7 +28,7 @@
       </ul>
      </div>
      <input type="hidden" name="search_param" value="all" id="search_param">
-     <input type="hidden" name="autocomplete" value="" id="autocomplete">         
+     <input type="hidden" name="autocomplete" value="" id="autocomplete">
      <input type="text" name="search_term" id="search_term" class="form-control"  placeholder="Search term...">
      <span class="input-group-btn">
       <button class="btn btn-lg" type="submit"><span class="glyphicon glyphicon-search"></span></button>
@@ -88,7 +84,7 @@
     });
    },
    minLength: 3,
-     
+
   });
  });
 
