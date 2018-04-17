@@ -13,6 +13,7 @@ use App\Facades\PostedData;
 use App\Events\ValidateTransactionBalance;
 use Redirect;
 use Event;
+use Session;
 
 class ProcessbailController extends Controller
 {
@@ -37,13 +38,14 @@ class ProcessbailController extends Controller
                         'message' => 'Sub Menu',
                       ];
 
-
         return view('processbail.index')->with($indexArray);
     }
 
     public function editbailmaster(Request $request)
     {
     	$formData = $request->all();
+        $redirectModule = $formData['module'];
+
     	$bailMaster = BailMaster::find($formData['m_id']);
     	$bailMaster->m_def_first_name = trim($formData['m_def_first_name']);
     	$bailMaster->m_def_last_name = trim($formData['m_def_last_name']);
@@ -58,7 +60,12 @@ class ProcessbailController extends Controller
     	$bailMaster->m_surety_zip = trim($formData['m_surety_zip']);
     	$bailMaster->save();
     	$searchTerm = "{$bailMaster->m_id} {$bailMaster->m_index_number}";
-		return redirect()->route('processbailresults', ['search_term' => $searchTerm]);
+
+        if ($redirectModule == 'remission') {
+            return redirect()->route('remissionsearch');
+        } else {
+            return redirect()->route('processbailresults');
+        }
     }
 
 
@@ -79,6 +86,7 @@ class ProcessbailController extends Controller
         $stateList         = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
         $courtCheckList    = BailConfiguration::where('bc_category', 'check_court')->pluck('bc_value', 'bc_id')->toArray();
         $bailMaterComments = BailComments::GetBailMasterComments($bailMasterId);
+        session(['search_term' => $termToSearch]);
 
         $dt = new Carbon($bailMaster->m_posted_date);
 		$m_posted_date =  $dt->format("m/d/Y");
@@ -94,6 +102,7 @@ class ProcessbailController extends Controller
                         'courtList'      => $courtList,
                         'courtCheckList' => $courtCheckList,
                         'm_posted_date'  => $m_posted_date,
+                        'module'         => 'processbail',
                         'bailDetails'    => [
                                              'total_balance'  => $balance,
                                              'fee_percentaje' => CountyFee::getFeePercentaje(),

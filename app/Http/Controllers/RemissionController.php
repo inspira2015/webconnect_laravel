@@ -46,8 +46,6 @@ class RemissionController extends Controller
         $indexArray = [
                         'message' => 'Sub Menu',
                       ];
-
-
         return view('remission.index')->with($indexArray);
     }
 
@@ -76,6 +74,7 @@ class RemissionController extends Controller
         $stateList         = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
         $courtCheckList    = BailConfiguration::where('bc_category', 'check_court')->pluck('bc_value', 'bc_id')->toArray();
         $bailMaterComments = BailComments::GetBailMasterComments($bailMasterId);
+        session(['search_term' => $termToSearch]);
 
         $dt = new Carbon($bailMaster->m_posted_date);
         $m_posted_date =  $dt->format("m/d/Y");
@@ -90,6 +89,7 @@ class RemissionController extends Controller
                         'stateList'      => $stateList,
                         'courtList'      => $courtList,
                         'courtCheckList' => $courtCheckList,
+                        'module'         => 'remission',
                         'm_posted_date'  => $m_posted_date,
                         'bailDetails'    => [
                                              'total_balance'  => $balance,

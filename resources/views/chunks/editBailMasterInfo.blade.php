@@ -2,6 +2,8 @@
   <form name="bails" id="manual-bail-entry" method="post" action="{{ route('editbailmaster') }}" >
     {{ csrf_field() }}
     <input type="hidden" id="m_id" name="m_id" value="{{ old('m_id', $bailMaster->m_id) }}">
+    <input type="hidden" id="module" name="module" value="{{ $module }}">
+
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -65,6 +67,6 @@
           <button type="type" id="update-info" class="btn btn-primary">Save Changes</button>
          </div>
         </div>
-      </div>
-    </form>
-  </div>
+    </div>
+  </form>
+</div>

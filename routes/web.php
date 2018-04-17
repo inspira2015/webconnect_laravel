@@ -54,4 +54,4 @@ Route::any('/ajaxcall/remove/comment', 'CommentController@removeComment')->name(
 
 
 Route::get('/remission', 'RemissionController@index')->name('remission');
-Route::post('/remission/find/results', 'RemissionController@searchresults')->name('remissionsearch');
+Route::any('/remission/find/results', 'RemissionController@searchresults')->name('remissionsearch');
