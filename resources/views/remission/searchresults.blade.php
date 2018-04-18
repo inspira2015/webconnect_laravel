@@ -15,31 +15,7 @@
       @include('chunks.comments')
       @include('chunks.transactionHistory')
     <hr class="my-4">
-    <div style="width: 100%; text-align: left;">
-      <h2>Process Bail Options</h2>
-    </div>
-    <div class="container">
-      <div class="row">
-        <div class="col">
-          <button type="button" class="btn btn-primary btn-lg top-margin15" data-toggle="modal" data-target="#Refund-balance" >Refund Balance</button>
-        </div>
-        <div class="col" >
-          <button type="button" class="btn btn-primary btn-lg top-margin15" data-toggle="modal" data-target="#Refund-balance-with-fee" style="margin-top: 12px;">Refund Balance Retaining 3%</button>
-        </div>
-        <div class="col">
-          <input type="text" class="form-control" id="partial-payment" name="partial-payment" value="" style="margin-bottom: 5px;"  placeholder="Enter Payment Amount..">
 
-          <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#Partial-payment" data-whatever="@fat">Partial Payment</button>
-        </div>
-        <div class="col">
-          <input type="text"  style="margin-top: 5px;" class="form-control" id="multicheck-payment" name="multicheck-payment" value=""   placeholder="Enter Payment Amount..">
-          {!! Form::select('court_check_list', $courtCheckList, '', array('class' => 'form-control',
-      'id' => 'select_court_check')) !!}
-          <button type="button" style="margin-top: 5px;" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#Multi-Check-payment" data-whatever="@fat">MultiCheck</button>
-        </div>
-      </div>
-    </div>
-    @include('chunks.transactionOptions')
   </div>
 </div>
 <script type="text/javascript">
