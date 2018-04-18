@@ -16,35 +16,24 @@
  </thead>
  <tbody>
   @foreach ($bailMaster->BailTransactions as  $key => $item)
-   <tr>    
+   <tr>
     <th scope="row">{{ $item->t_created_at }}</th>
     <th scope="row">{{ $item->t_type }}</th>
     <th scope="row">{{ $item->t_numis_doc_id }}</th>
-    @if ($item->t_type == 'R')
-     <th  scope="row">$ {{ $item->t_amount }}</th>
-    @elseif ($item->t_type == 'P')
-     <th scope="row">$ {{ $item->t_total_refund }}</th>
-     <input type="hidden" name="t-amount" id="t-amount-{{ $item->t_id }}" value="{{ $item->t_total_refund }}">
-    @elseif ($item->t_type == 'C')
-     <th scope="row">$ {{ $item->t_fee_percentage }}</th>
-     <input type="hidden" name="t-amount" id="t-amount-{{ $item->t_id }}" value="{{ $item->t_fee_percentage }}">
-    @elseif ($item->t_type == 'PM')
-     <th scope="row">$ {{ $item->t_total_refund }}</th>
-     <input type="hidden" name="t-amount" id="t-amount-{{ $item->t_id }}" value="{{ $item->t_total_refund }}">
-    @elseif ($item->t_type == 'PS')
-     <th scope="row">$ {{ $item->t_total_refund }}</th>
-     <input type="hidden" name="t-amount" id="t-amount-{{ $item->t_id }}" value="{{ $item->t_total_refund }}">
-    @elseif ($item->t_type == 'K')
-     <th scope="row">$ {{ $item->t_amount }}</th>
-     <input type="hidden" name="t-amount" id="t-amount-{{ $item->t_id }}" value="{{ $item->t_amount }}">
-    @endif
+    @php
+        $transactionValidation->setTransactionModel($item);
+    @endphp
+    <th scope="row">$ {{ $transactionValidation->getAmount() }}</th>
+    <input type="hidden" name="t-amount" id="t-amount-{{ $item->t_id }}" value="{{ $transactionValidation->getAmount() }}">
+
     <th scope="row">{{ $item->t_check_number }}</th>
     <th scope="row">
-     @if (($item->t_type == 'P' || $item->t_type == 'PM' || $item->t_type == 'PS') && $item->t_no_reversal != 1)
-      <button type="button" class="btn btn-primary btn-lg btn-warning button-reverse" 
-      data-toggle="modal" 
-      data-target="#Reverse-transaction" 
-      data-transaction-type="{{$item->t_type}}" 
+
+     @if ($transactionValidation->checkIfReverseIsAllow())
+      <button type="button" class="btn btn-primary btn-lg btn-warning button-reverse"
+      data-toggle="modal"
+      data-target="#Reverse-transaction"
+      data-transaction-type="{{$item->t_type}}"
       data-transaction="{{ $item->t_id }}" >Reverse</button>
      @endif
     </th>

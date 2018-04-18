@@ -2,32 +2,22 @@
 
 @section('content')
 <hr class="bail-remission">
-
 <div class="body-content">
   <h1>Remissions</h1>
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@fat">Edit Info</button>
-
   @include('chunks.editBailMasterInfo')
-
   <div class="col-md-10 offset-md-1" style="margin-bottom: 50px;">
     <hr class="my-3">
-    @include('chunks.defendantData')
-
+      @include('chunks.defendantData')
     <hr class="my-4">
-
-    @include('chunks.bailFinancialTable')
-
+      @include('chunks.bailFinancialTable')
     <hr class="my-3">
-
-    @include('chunks.comments')
-
-    @include('chunks.transactionHistory')
-
+      @include('chunks.comments')
+      @include('chunks.transactionHistory')
     <hr class="my-4">
     <div style="width: 100%; text-align: left;">
       <h2>Process Bail Options</h2>
     </div>
-
     <div class="container">
       <div class="row">
         <div class="col">
@@ -50,7 +40,6 @@
       </div>
     </div>
     @include('chunks.transactionOptions')
-
   </div>
 </div>
 <script type="text/javascript">
