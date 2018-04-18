@@ -86,11 +86,7 @@ class ProcessbailController extends Controller
         }
         session(['search_term' => $termToSearch]);
         $indexArray = BailMasterData::createViewArray($resultArray['m_id'], $module);
-        $bailMaster = $indexArray['bailMaster'];
-        unset($indexArray['bailMaster']);
-        $bailMaterComments = $indexArray['bailMaterComments'];
-        unset($indexArray['bailMaterComments']);
 
-        return view('processbail.refundbails', compact('bailMaster', 'bailMaterComments'))->with($indexArray);
+        return view('processbail.refundbails')->with($indexArray);
     }
 }

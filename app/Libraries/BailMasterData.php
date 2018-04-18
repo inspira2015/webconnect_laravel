@@ -32,22 +32,22 @@ class BailMasterData
         $balance = round($resultBalance[0], 2);
 
         return [
-        		 'bailMaster'     => $bailMaster,
-        		 'bailMaterComments' =>  $bailMaterComments,
-                 'jailRecords'    => array(),
-                 'bailMasterId'   => $bailMasterId,
-                 'balance'        => $balance,
-                 'stateList'      => $stateList,
-                 'courtList'      => $courtList,
-                 'courtCheckList' => $courtCheckList,
-                 'm_posted_date'  => $m_posted_date,
-                 'module'         => $module,
-                 'bailDetails'    => [
-                                      'total_balance'  => $balance,
-                                      'fee_percentaje' => CountyFee::getFeePercentaje(),
-                                      'fee_amount'     => CountyFee::getAmountFee($balance),
-                                      'remain_amount'  => CountyFee::getRemainAmountAfterFee($balance),
-                                     ],
+        		 'bailMaster'        => $bailMaster,
+        		 'bailMaterComments' => $bailMaterComments,
+                 'jailRecords'       => array(),
+                 'bailMasterId'      => $bailMasterId,
+                 'balance'           => $balance,
+                 'stateList'         => $stateList,
+                 'courtList'         => $courtList,
+                 'courtCheckList'    => $courtCheckList,
+                 'm_posted_date'     => $m_posted_date,
+                 'module'            => $module,
+                 'bailDetails'       => [
+                                         'total_balance'  => $balance,
+                                         'fee_percentaje' => CountyFee::getFeePercentaje(),
+                                         'fee_amount'     => CountyFee::getAmountFee($balance),
+                                         'remain_amount'  => CountyFee::getRemainAmountAfterFee($balance),
+                                        ],
                ];
 	}
 }
