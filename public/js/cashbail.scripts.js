@@ -29,13 +29,14 @@ var DatePickerObj = {
 };
 
 var AddNewComment = {
+  commentButton: '',
   urdata: '',
   bail_master_id: '',
   comment: '',
   target_comment: '',
   
   onReady: function() {
-    $('#commentButton').click(function (event) {
+    $('#' + this.commentButton).click(function (event) {
       event.preventDefault();
       var ajaxUrl = event.view.AddNewComment.urdata;
       var bail_master_id = event.view.AddNewComment.bail_master_id;
@@ -84,3 +85,51 @@ var AddNewComment = {
     });
   },
 };
+
+
+var RemoveComment = {
+  removeButton: '',
+  removeNowClass: '',
+
+  onReady: function () {
+    $('#' + this.removeButton).on('show.bs.modal', function (event) {
+      console.log('hereeeee');
+      var button = $(event.relatedTarget); // Button that triggered the modal
+      var comment_id = button.data('id');
+      var recipient = button.siblings("p").html(); // Extract info from data-* attributes
+      $('.modal-body').html(recipient);
+      $('.removeNow').data('id', comment_id);
+      console.log(comment_id);
+    });
+  },
+
+  removeNow: function () {
+    event.data = {test: 'test'};
+   $('.removeNow').click(function (event) {
+      var commentId = $(this).data('id');
+      console.log(event);
+      var src_remove = "{{ route('removeComment') }}";
+
+      $.ajax({
+        url: src_remove,
+        dataType: "json",
+        data: {
+                "_token": "{{ csrf_token() }}",
+                "type": "bailmaster",
+                "id": commentId,
+        },
+        success: function(data) {
+          if (data.remove_comment) {
+            $('#' + 'comment' + commentId).remove();
+          }
+        }
+      })
+
+      $('#removeComment').modal('toggle');
+    });
+  },
+
+};
+
+
+ 

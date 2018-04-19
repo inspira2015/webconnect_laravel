@@ -31,11 +31,17 @@
   DatePickerObj.container = $('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
   DatePickerObj.writeDate();
 
+  AddNewComment.commentButton = 'commentButton';
   AddNewComment.urdata = "{{ route('addComment') }}";
   AddNewComment.bail_master_id = $('#new-comment').data('id');
   AddNewComment.comment = 'new-comment';
   AddNewComment.target_comment = 'comment_list';
   $(document).ready(AddNewComment.onReady());
+
+
+  RemoveComment.removeButton = 'removeComment';
+  $(document).ready(RemoveComment.onReady());
+  $(document).ready(RemoveComment.removeNow());
 
 
   $(document).ready(function() {
@@ -127,34 +133,8 @@
    }
   });
 
-  $('#removeComment').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget); // Button that triggered the modal
-    var comment_id = button.data('id');
-    var recipient = button.siblings("p").html(); // Extract info from data-* attributes
-    $('.modal-body').html(recipient);
-    $('.removeNow').data('id', comment_id);
-  });
 
-  $('.removeNow').click(function () {
-    var commentId = $(this).data('id');
-    var src_remove = "{{ route('removeComment') }}";
 
-    $.ajax({
-      url: src_remove,
-      dataType: "json",
-      data: {
-              "_token": "{{ csrf_token() }}",
-              "type": "bailmaster",
-              "id": commentId,
-      },
-      success: function(data) {
-        if (data.remove_comment) {
-          $('#' + 'comment' + commentId).remove();
-        }
-      }
-    })
-    $('#removeComment').modal('toggle');
-  });
  });
 </script>
 @endsection

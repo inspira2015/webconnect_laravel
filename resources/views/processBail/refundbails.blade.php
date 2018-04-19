@@ -80,11 +80,12 @@
  DatePickerObj.container = $('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
  DatePickerObj.writeDate();
 
- AddNewComment.urdata = "{{ route('addComment') }}";
- AddNewComment.bail_master_id = $('#new-comment').data('id');
- AddNewComment.comment = 'new-comment';
- AddNewComment.target_comment = 'comment_list';
- $(document).ready(AddNewComment.onReady());
+  AddNewComment.commentButton = 'commentButton';
+  AddNewComment.urdata = "{{ route('addComment') }}";
+  AddNewComment.bail_master_id = $('#new-comment').data('id');
+  AddNewComment.comment = 'new-comment';
+  AddNewComment.target_comment = 'comment_list';
+  $(document).ready(AddNewComment.onReady());
 
   $(document).ready(function() {
 
