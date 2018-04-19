@@ -68,61 +68,25 @@
   </div>
 </div>
 <script type="text/javascript">
-
  var old_posted_date = '{{ old('m_posted_date', $m_posted_date) }}';
- var posted_date = new Date();
 
- if (old_posted_date) {
-  posted_date = old_posted_date;
- }
+ DatePickerObj.posted_date = old_posted_date;
+ DatePickerObj.date_input = $('input[name="m_posted_date"]'); //our date input has the name "date"
+ DatePickerObj.container = $('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+ DatePickerObj.writeDate();
 
- var date_input = $('input[name="m_posted_date"]'); //our date input has the name "date"
- var date_input_disabled = $('input[name="m_posted_date2"]');
- var container = $('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
- var options = {
-  format: 'mm/dd/yyyy',
-  container: container,
-  //todayHighlight: true,
-  autoclose: true,
-  forceParse: false,
- };
- date_input.datepicker(options).datepicker("setDate", posted_date);
- date_input_disabled.datepicker(options).datepicker("setDate", posted_date);
+ DatePickerObj.posted_date = old_posted_date;
+ DatePickerObj.date_input = $('input[name="m_posted_date2"]'); //our date input has the name "date"
+ DatePickerObj.container = $('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+ DatePickerObj.writeDate();
+
+ AddNewComment.urdata = "{{ route('addComment') }}";
+ AddNewComment.bail_master_id = $('#new-comment').data('id');
+ AddNewComment.comment = 'new-comment';
+ AddNewComment.target_comment = 'comment_list';
+ $(document).ready(AddNewComment.onReady());
 
   $(document).ready(function() {
-    src = "{{ route('addComment') }}";
-
-    $('#commentButton').click(function (event) {
-      event.preventDefault();
-
-      var bail_master_id = $('#new-comment').data('id');
-      var new_comment = $.trim($('#new-comment').val());
-
-      if (!new_comment) {
-        return ;
-      }
-
-      $.ajax({
-        url: src,
-        dataType: "json",
-        data: {
-               "_token": "{{ csrf_token() }}",
-               "type": "bailmaster",
-               "id": bail_master_id,
-               "newComment": new_comment,
-        },
-        success: function(data) {
-          console.log(data.comment);
-          $("#comment_list").append('<li><div class="commentText"><p class="">' + data.comment + '</p><span class="date sub-text">' + data.added_at + '</span>'+
-            '<button id="removeButton" data-id="' + data.id + '"  data-toggle="modal" data-target="#removeComment" class="removeComment btn btn-sm btn-danger">Remove</button>'
-            +'</li>');
-        }
-      });
-
-      $('#new-comment').val('');
-  });
-
-
 
   var balance = parseFloat({{ $balance }});
   var county_fee = parseFloat({{ $bailDetails['fee_percentaje'] }});
@@ -213,6 +177,7 @@
 
 
   $('#removeComment').on('show.bs.modal', function (event) {
+    console.log('here');
     var button = $(event.relatedTarget); // Button that triggered the modal
     var comment_id = button.data('id');
     var recipient = button.siblings("p").html(); // Extract info from data-* attributes
