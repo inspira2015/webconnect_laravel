@@ -46,22 +46,17 @@ class ProcessbailController extends Controller
     public function editbailmaster(Request $request)
     {
     	$formData = $request->all();
+        $formData['m_posted_date'] = $this->convertDateToMysqlFormat($formData['m_posted_date']);
         $redirectModule = $formData['module'];
-
+        $this->removePostIdData($formData);
     	$bailMaster = BailMaster::find($formData['m_id']);
-    	$bailMaster->m_def_first_name = trim($formData['m_def_first_name']);
-    	$bailMaster->m_def_last_name = trim($formData['m_def_last_name']);
-    	$bailMaster->m_index_number = trim($formData['m_index_number']);
-    	$bailMaster->m_index_year = trim($formData['m_index_year']);
-    	$bailMaster->m_posted_date = trim($formData['m_posted_date']);
-    	$bailMaster->m_surety_first_name = trim($formData['m_surety_first_name']);
-    	$bailMaster->m_surety_last_name = trim($formData['m_surety_last_name']);
-    	$bailMaster->m_surety_address = trim($formData['m_surety_address']);
-    	$bailMaster->m_surety_city = trim($formData['m_surety_city']);
-    	$bailMaster->m_surety_state = trim($formData['m_surety_state']);
-    	$bailMaster->m_surety_zip = trim($formData['m_surety_zip']);
+
+        foreach ($formData as $key => $value) {
+            $bailMaster->$key = trim($value);
+        }
     	$bailMaster->save();
-    	$searchTerm = "{$bailMaster->m_id} {$bailMaster->m_index_number}";
+        $searchTerm = "{$bailMaster->m_id} {$bailMaster->m_index_number}";
+        session(['search_term' => $searchTerm]);
 
         if ($redirectModule == 'remission') {
             return redirect()->route('remissionsearch');
@@ -88,5 +83,16 @@ class ProcessbailController extends Controller
         $indexArray = BailMasterData::createViewArray($resultArray['m_id'], $module);
 
         return view('processbail.refundbails')->with($indexArray);
+    }
+
+    private function removePostIdData(&$formData)
+    {
+        unset($formData['_token']);
+        unset($formData['module']);
+    }
+
+    private function convertDateToMysqlFormat($date)
+    {
+        return date('Y-m-d', strtotime($date));
     }
 }
