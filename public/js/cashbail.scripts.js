@@ -86,29 +86,25 @@ var AddNewComment = {
   },
 };
 
-
+var routeUrl = "{{ route('removeComment') }}";
 var RemoveComment = {
   removeButton: '',
-  removeNowClass: '',
+  removeNowClass: 'removeNow',
 
   onReady: function () {
     $('#' + this.removeButton).on('show.bs.modal', function (event) {
-      console.log('hereeeee');
       var button = $(event.relatedTarget); // Button that triggered the modal
       var comment_id = button.data('id');
+      $('#comment_notworking').attr('data-commentid', comment_id);
       var recipient = button.siblings("p").html(); // Extract info from data-* attributes
       $('.modal-body').html(recipient);
-      $('.removeNow').data('id', comment_id);
-      console.log(comment_id);
     });
   },
 
   removeNow: function () {
-    event.data = {test: 'test'};
    $('.removeNow').click(function (event) {
-      var commentId = $(this).data('id');
-      console.log(event);
-      var src_remove = "{{ route('removeComment') }}";
+      var commentId = $(this).data('commentid');
+      var src_remove = $('#removeNowRoute').val();
 
       $.ajax({
         url: src_remove,
