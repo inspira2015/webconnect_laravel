@@ -12,6 +12,7 @@ use App\Facades\PostedData;
 use App\Facades\ExcelHelper;
 use App\Facades\CreateTransaction;
 use App\Events\ValidateTransactionBalance;
+use App\Libraries\TransactionValidations;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Redirect;
@@ -46,7 +47,9 @@ class ForfeituresController extends Controller
     public function searchresults(Request $request)
     {
         $termToSearch   = $request->get('search_term','');
+        $module         = 'forfeitures';
         $resultArray    = PostedData::getTermFromUserInput($termToSearch);
+        $transactionValidation = new TransactionValidations($module);
         $forfeitureStatus = 0;
         $updatedAt = false;
         $userName = false;
@@ -78,6 +81,7 @@ class ForfeituresController extends Controller
         $indexArray = [
                         'jailRecords'    => array(),
                         'balance'        => $balance,
+                        'transactionValidation' => $transactionValidation,
                         'stateList'      => $stateList,
                         'courtList'      => $courtList,
                         'courtCheckList' => $courtCheckList,
