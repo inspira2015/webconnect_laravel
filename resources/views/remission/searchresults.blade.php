@@ -76,6 +76,7 @@
     }
   });
 
+  // Need to check when there is a reverse in Remission
   $('.button-reverse').on('click', function() {
     var transaction_id =  $(this).attr("data-transaction");
     var transaction_amount = $('#t-amount-' + transaction_id).val();
