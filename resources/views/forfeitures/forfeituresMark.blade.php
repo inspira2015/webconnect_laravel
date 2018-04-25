@@ -97,7 +97,7 @@
    </div>
   </form>
  </div>
- 
+
  <div class="col-md-10 offset-md-1" style="margin-bottom: 50px;">
   <hr class="my-3">
   <div class="form-row mt-4">
@@ -162,7 +162,7 @@
      <input type="text" class="form-control" id="m_surety_zip" name="m_surety_zip" value="{{ old('m_surety_zip', $bailMaster->m_surety_zip) }}" disabled>
     </div>
 
-   </div>  
+   </div>
 
    <hr class="my-3">
    <table width="100%" border="0" cellspacing="0" cellpadding="2">
@@ -206,7 +206,7 @@
  };
  date_input.datepicker(options).datepicker("setDate", posted_date);
  date_input_disabled.datepicker(options).datepicker("setDate", posted_date);
- 
+
  $(document).ready(function() {
   var balance = parseFloat({{ $balance }});
   var county_fee = parseFloat({{ $bailDetails['fee_percentaje'] }});
@@ -215,35 +215,47 @@
   var user_name = '{{ $bailForfeiture['user'] }}';
 
   var action_message = function(bf_active, updated_at) {
-   if (bf_active == 1) {
-    $('#forfeiture-action').html('<span class="green"><strong> Added to Forfeiture </strong></span>');
-    $('#forfeiture-title').removeClass('black');
-    $('#forfeiture-title').addClass('green');
-   } else if(updated_at) {
-    $('#forfeiture-title').removeClass('green');
-    $('#forfeiture-action').html('<strong> Remove from Forfiture </strong>');
-   } else {
-    $('#forfeiture-title').removeClass('green');
-    $('#forfeiture-action').html('<strong> Not Added </strong>');
-   }
+    if (bf_active == 1) {
+      $('#forfeiture-action').html('<span class="green"><strong> Added to Forfeiture </strong></span>');
+      $('#forfeiture-title').removeClass('black');
+      $('#forfeiture-title').addClass('green');
+    } else if(updated_at) {
+      $('#forfeiture-title').removeClass('green');
+      $('#forfeiture-action').html('<strong> Remove from Forfiture </strong>');
+    } else {
+      $('#forfeiture-title').removeClass('green');
+      $('#forfeiture-action').html('<strong> Not Added </strong>');
+    }
   };
 
   var update_info = function(updated_at) {
-   if (updated_at) {
-    $('#forfeiture-updated-date').html('Updated at: <strong>' + updated_at + '</strong>');
-   }
+    if (updated_at) {
+      $('#forfeiture-updated-date').html('Updated at: <strong>' + updated_at + '</strong>');
+    }
   };
 
   var username_info = function(user_name) {
-   if (user_name) {
-    $('#forfeiture-user').html('Last Updated By: <strong>' + user_name + '</strong>');
-   }
+    if (user_name) {
+      $('#forfeiture-user').html('Last Updated By: <strong>' + user_name + '</strong>');
+    }
+  };
+
+  var checkForfeitureStatus = function(bf_active) {
+    if (bf_active == 1) {
+      return 1;
+    } else {
+      return 0;
+    }
+  };
+
+  if (checkForfeitureStatus(bf_active) == 0) {
+    $('#forfeituresCheckbox').bootstrapToggle('off');
   }
 
   action_message(bf_active, updated_at);
   update_info(updated_at);
   username_info(user_name);
- 
+
   $('#forfeituresCheckbox').on('change', function () {
    var toggle_state = $("#forfeituresCheckbox").is(":checked");
    var m_id = "{{ $bailMaster->m_id }}";
@@ -276,7 +288,7 @@
     var remain_balance = parseFloat(balance - partial_plus_fee);
     var multicheck_payment_show = multicheck_payment;
    }
-     
+
    $('#multicheck-payment_modal').html(multicheck_payment_show);
    $('#check_court').html(check_court);
    $('#multicheck_amount_fee').html(partial_amount_fee);
@@ -313,12 +325,12 @@
    var partial_amount_fee = parseFloat(multicheck_payment * county_fee);
    var partial_plus_fee = parseFloat(multicheck_payment + partial_amount_fee);
    var remain_balance = parseFloat(balance - partial_plus_fee);
-   
+
    $('#multicheck-payment_modal').html(multicheck_payment);
    $('#check_court').html(check_court);
    $('#multicheck_amount_fee').html(partial_amount_fee);
    $('#muticheck_balance').html(remain_balance);
-  
+
    if (remain_balance < 0) {
     $('#refund-manual').attr("disabled", "disabled");
    } else {
@@ -329,12 +341,12 @@
   $('#Partial-payment').on('show.bs.modal', function () {
    var balance = parseFloat({{ $balance }});
    var county_fee = parseFloat({{ $bailDetails['fee_percentaje'] }});
-   
+
    var partial_amount = parseFloat($('#partial-payment').val());
    var partial_amount_fee = partial_amount * county_fee;
    var partial_plus_fee = partial_amount + partial_amount_fee;
    var remain_balance = parseFloat(balance - partial_plus_fee);
-   
+
    $('#partialAmount').html(partial_amount);
    $('#partial_amount_fee').html(partial_amount_fee);
    $('#remaining_balance').html(remain_balance);
@@ -346,6 +358,6 @@
    }
   });
 
- });  
+ });
 </script>
-@endsection                 
+@endsection
