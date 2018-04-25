@@ -86,23 +86,59 @@ var AddNewComment = {
   },
 };
 
-var routeUrl = "{{ route('removeComment') }}";
+var removeButtonId = 'removeComment';
+var testVariable = 'outside var';
+
+var removeButton = function() {
+  $('#' + removeButtonId).on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget); // Button that triggered the modal
+    var comment_id = button.data('id');
+    $('#comment_notworking').attr('data-commentid', comment_id);
+    var recipient = button.siblings("p").html(); // Extract info from data-* attributes
+    $('.modal-body').html(recipient);
+  });
+}
+
+
+var removeModalClass = 'removeNow';
+var commentType = 'bailmaster';
+var removeCommentSectionId = 'removeComment'
+
+var removeModalBox = function () {
+   $('.' + removeModalClass).click(function (event) {
+      var commentId = $(this).data('commentid');
+      var src_remove = $('#removeNowRoute').val();
+
+      $.ajax({
+        url: src_remove,
+        dataType: "json",
+        data: {
+                "_token": "{{ csrf_token() }}",
+                "type": commentType,
+                "id": commentId,
+        },
+        success: function(data) {
+          if (data.remove_comment) {
+            $('#' + 'comment' + commentId).remove();
+          }
+        }
+      })
+
+      $('#' + removeCommentSectionId).modal('toggle');
+    });
+}
+
+
+
+
 var RemoveComment = {
   removeButton: '',
-  removeNowClass: 'removeNow',
+  removeNowClass: '',
 
-  onReady: function () {
-    $('#' + this.removeButton).on('show.bs.modal', function (event) {
-      var button = $(event.relatedTarget); // Button that triggered the modal
-      var comment_id = button.data('id');
-      $('#comment_notworking').attr('data-commentid', comment_id);
-      var recipient = button.siblings("p").html(); // Extract info from data-* attributes
-      $('.modal-body').html(recipient);
-    });
-  },
 
   removeNow: function () {
-   $('.removeNow').click(function (event) {
+    var test = 'test';
+   $('.' + this.removeNowClass).click(function (event) {
       var commentId = $(this).data('commentid');
       var src_remove = $('#removeNowRoute').val();
 

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app', ['route3' => 'test'])
 
 @section('content')
 <hr class="bail-remission">
@@ -39,14 +39,11 @@
   $(document).ready(AddNewComment.onReady());
 
 
-  RemoveComment.removeButton = 'removeComment';
-  $(document).ready(RemoveComment.onReady());
-  $(document).ready(RemoveComment.removeNow());
+  $(document).ready(removeButton);
+  $(document).ready(removeModalBox);
 
 
   $(document).ready(function() {
-
-
   var balance = parseFloat({{ $balance }});
   var county_fee = parseFloat({{ $bailDetails['fee_percentaje'] }});
 

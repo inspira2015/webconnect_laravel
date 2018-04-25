@@ -41,7 +41,11 @@
  <script src="{{ asset('js/bootstrap_4/bootstrap.min.js')}}"></script>
  <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
  <script src="{{ asset('js/cashbail.scripts.js')}}"></script>
+ <script type="text/javascript">
+    var bladeVar = '{{ $route3}}';
+    console.log('layout: ' + bladeVar);
 
+ </script>
 </head>
 <body>
 <div id="container">
