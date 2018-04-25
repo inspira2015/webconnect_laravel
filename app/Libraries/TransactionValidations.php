@@ -41,6 +41,10 @@ class TransactionValidations
             return $this->transaction->t_total_refund;
         } elseif ($this->transaction->t_type == 'K') {
             return $this->transaction->t_amount;
+        } elseif ($this->transaction->t_type == 'A') {
+            return $this->transaction->t_fee_percentage;
+        } elseif ($this->transaction->t_type == 'F') {
+            return $this->transaction->t_total_refund;
         }
     }
 
