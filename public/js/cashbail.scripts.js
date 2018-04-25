@@ -23,7 +23,6 @@ var DatePickerObj = {
     forceParse: false,
   },
   writeDate: function() {
-    console.log(this.posted_date);
     this.date_input.datepicker(this.options).datepicker("setDate", this.posted_date);
   }
 };
@@ -59,7 +58,6 @@ var AddNewComment = {
  
 
   ApiCall: function (objData) {
-    console.log(objData);
     $.ajax({
         url: objData.ajaxUrl,
         dataType: "json",
