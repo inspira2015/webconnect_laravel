@@ -151,7 +151,7 @@ class BailRefundProcessController extends EnterBailController
         $transactionInfo = new \stdClass();
         $transactionInfo->m_id = $objInfo->bailMaster->m_id;
         $transactionInfo->t_type = 'K';
-        $transactionInfo->t_amount = $objInfo->bailTransactions->t_total_refund;
+        $transactionInfo->t_amount = $this->getTransactionAmountForReversal($objInfo->bailTransactions);
         $transactionInfo->t_check_number = 'REVERSAL';
         $transactionResultArray = $this->getTransactionArray($transactionInfo);
 
@@ -163,6 +163,16 @@ class BailRefundProcessController extends EnterBailController
         return $transactionArray;
     }
 
+    private function getTransactionAmountForReversal($transaction)
+    {
+        $transactionRefund = (float) $transaction->t_total_refund;
+        $transactionFee  = (float) $transaction->t_fee_percentage;
+
+        if ($transactionRefund == 0) {
+            return $transactionFee;
+        }
+        return $transactionRefund;
+    }
 
     private function createTransactionArray($objInfo)
     {
