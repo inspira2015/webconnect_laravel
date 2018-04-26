@@ -77,18 +77,7 @@
   });
 
   // Need to check when there is a reverse in Remission
-  $('.button-reverse').on('click', function() {
-    var transaction_id =  $(this).attr("data-transaction");
-    var transaction_amount = $('#t-amount-' + transaction_id).val();
-    var transaction_type = $(this).data('transaction-type');
-
-    if (transaction_type == 'P') {
-      var transaction_type_text = "Payment";
-    }
-    $('#t_id').val(transaction_id);
-    $('#transaction-type').html(transaction_type_text);
-    $('#transaction-amount').html('$' + transaction_amount);
-  });
+  buttonReverse('remission');
 
   $('#Reverse-transaction').on('show.bs.modal', function () {
     var transaction_id =  $('#t_id').val();

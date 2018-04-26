@@ -161,5 +161,22 @@ var RemoveComment = {
 
 };
 
-
  
+var buttonReverse = function (module_var) {
+    var test2 = module_var;
+
+  $('.button-reverse').on('click', function() {
+    var transaction_id =  $(this).attr("data-transaction");
+    var transaction_amount = $('#t-amount-' + transaction_id).val();
+    var transaction_type = $(this).data('transaction-type');
+
+    if (transaction_type == 'P') {
+      var transaction_type_text = "Payment";
+    }
+
+    $('#module_name').val(test2);
+    $('#t_id').val(transaction_id);
+    $('#transaction-type').html(transaction_type_text);
+    $('#transaction-amount').html('$' + transaction_amount);
+  });
+};

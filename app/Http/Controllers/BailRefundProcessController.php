@@ -113,21 +113,38 @@ class BailRefundProcessController extends EnterBailController
     {
          if ($request->isMethod('post')) {
             $userInput = $request->all();
+            $redirectModule = $userInput['module_name'];
             $bailMaster = BailMaster::find(array('m_id' => $userInput['m_id']))->first();
             $bailTransactions = BailTransactions::find(array('t_id' => $userInput['t_id']))->first();
 
-            $stdObject = new \stdClass();
-            $stdObject->refundType           = 'Reversal';
-            $stdObject->bailMaster           = $bailMaster;
-            $stdObject->bailTransactions     = $bailTransactions;
+            if ($bailTransactions->t_no_reversal != 1) {
+                $stdObject = new \stdClass();
+                $stdObject->refundType           = 'Reversal';
+                $stdObject->bailMaster           = $bailMaster;
+                $stdObject->bailTransactions     = $bailTransactions;
 
-            $transactionDetails = $this->createReversalTransaction($stdObject);
-            $newTransaction = Event::fire(new RefundTransaction($transactionDetails));
+                $transactionDetails = $this->createReversalTransaction($stdObject);
+                $newTransaction = Event::fire(new RefundTransaction($transactionDetails));
+            }
         }
         $searchTerm = "{$bailMaster->m_id} {$bailMaster->m_index_number}";
-        return redirect()->route('processbailresults', ['search_term' => $searchTerm]);
+        session(['search_term' => $searchTerm]);
+        return $this->redirectToInputModule($redirectModule);
     }
 
+
+    private function redirectToInputModule($module)
+    {
+        $redirectRoute = '';
+
+        if ($module == 'processbail') {
+            $redirectRoute = 'processbailresults';
+        } elseif($module == 'remission') {
+            $redirectRoute = 'remissionsearch';
+        }
+
+        return redirect()->route($redirectRoute);
+    }
 
     private function createReversalTransaction($objInfo)
     {
