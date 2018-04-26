@@ -49,6 +49,7 @@ class ForfeituresController extends Controller
         $termToSearch   = $request->get('search_term','');
         $module         = 'forfeitures';
         $resultArray    = PostedData::getTermFromUserInput($termToSearch);
+        $termToSearch   = $resultArray['search_term'];
         $transactionValidation = new TransactionValidations($module);
         $forfeitureStatus = 0;
         $updatedAt = false;

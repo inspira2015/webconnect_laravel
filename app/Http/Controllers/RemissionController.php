@@ -63,6 +63,7 @@ class RemissionController extends Controller
         $termToSearch   = $request->get('search_term','');
         $module         = 'remission';
         $resultArray    = PostedData::getTermFromUserInput($termToSearch);
+        $termToSearch   = $resultArray['search_term'];
 
         if (is_numeric($resultArray['m_id']) == false) {
             $messages = [
@@ -71,6 +72,7 @@ class RemissionController extends Controller
             $returnRoute = PostedData::getErrorRedirectRoute($module);
             return redirect()->route($returnRoute)->withErrors($messages);
         }
+        echo $termToSearch;
         session(['search_term' => $termToSearch]);
         $indexArray = BailMasterData::createViewArray($resultArray['m_id'], $module);
 

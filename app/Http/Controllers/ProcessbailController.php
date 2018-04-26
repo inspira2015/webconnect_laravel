@@ -71,6 +71,8 @@ class ProcessbailController extends Controller
         $termToSearch   = $request->get('search_term', '');
         $module         = 'processbail';
         $resultArray    = PostedData::getTermFromUserInput($termToSearch);
+        $termToSearch   = $resultArray['search_term'];
+        //dd($resultArray );
 
         if (is_numeric($resultArray['m_id']) == false) {
             $messages = [
@@ -79,7 +81,7 @@ class ProcessbailController extends Controller
             $returnRoute = PostedData::getErrorRedirectRoute($module);
             return redirect()->route($returnRoute)->withErrors($messages);
         }
-        session(['search_term' => $termToSearch]);
+        Session(['search_term' => $termToSearch]);
         $indexArray = BailMasterData::createViewArray($resultArray['m_id'], $module);
 
         return view('processbail.refundbails')->with($indexArray);

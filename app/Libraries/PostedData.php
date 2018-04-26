@@ -14,9 +14,10 @@ class PostedData
     	}
 
     	$splitArray = explode(" ", $find);
-  		Session::forget('search_term');
+  		//Session::forget('search_term');
     	return [
     			 'm_id' 		  => $splitArray[0],
+                 'search_term'    => $find,
     		   ];
     }
 
