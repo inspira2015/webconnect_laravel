@@ -305,28 +305,7 @@
 
 
   buttonReverse('forfeitures');
-
-
-  $('#Reverse-transaction').on('show.bs.modal', function () {
-   var transaction_id =  $('#t_id').val();
-   console.log('test: ' + transaction_id);
-   var multicheck_payment = parseFloat($('#multicheck-payment').val());
-   var check_court = $("#select_court_check option:selected").text();
-   var partial_amount_fee = parseFloat(multicheck_payment * county_fee);
-   var partial_plus_fee = parseFloat(multicheck_payment + partial_amount_fee);
-   var remain_balance = parseFloat(balance - partial_plus_fee);
-
-   $('#multicheck-payment_modal').html(multicheck_payment);
-   $('#check_court').html(check_court);
-   $('#multicheck_amount_fee').html(partial_amount_fee);
-   $('#muticheck_balance').html(remain_balance);
-
-   if (remain_balance < 0) {
-    $('#refund-manual').attr("disabled", "disabled");
-   } else {
-    $('#refund-manual').removeAttr("disabled");
-   }
-  });
+  reverseTransactionModel(county_fee, balance);
 
   $('#Partial-payment').on('show.bs.modal', function () {
    var balance = parseFloat({{ $balance }});

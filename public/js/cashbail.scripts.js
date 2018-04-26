@@ -126,13 +126,9 @@ var removeModalBox = function () {
     });
 }
 
-
-
-
 var RemoveComment = {
   removeButton: '',
   removeNowClass: '',
-
 
   removeNow: function () {
     var test = 'test';
@@ -161,7 +157,6 @@ var RemoveComment = {
 
 };
 
- 
 var buttonReverse = function (module_var) {
     var test2 = module_var;
 
@@ -178,5 +173,29 @@ var buttonReverse = function (module_var) {
     $('#t_id').val(transaction_id);
     $('#transaction-type').html(transaction_type_text);
     $('#transaction-amount').html('$' + transaction_amount);
+  });
+};
+
+
+var reverseTransactionModel = function (county_fee, balance) {
+
+  $('#Reverse-transaction').on('show.bs.modal', function () {
+    var transaction_id =  $('#t_id').val();
+    var multicheck_payment = parseFloat($('#multicheck-payment').val());
+    var check_court = $("#select_court_check option:selected").text();
+    var partial_amount_fee = parseFloat(multicheck_payment * county_fee);
+    var partial_plus_fee = parseFloat(multicheck_payment + partial_amount_fee);
+    var remain_balance = parseFloat(balance - partial_plus_fee);
+
+    $('#multicheck-payment_modal').html(multicheck_payment);
+    $('#check_court').html(check_court);
+    $('#multicheck_amount_fee').html(partial_amount_fee);
+    $('#muticheck_balance').html(remain_balance);
+
+    if (remain_balance < 0) {
+      $('#refund-manual').attr("disabled", "disabled");
+    } else {
+      $('#refund-manual').removeAttr("disabled");
+    }
   });
 };
