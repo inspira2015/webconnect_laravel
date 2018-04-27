@@ -72,7 +72,6 @@ class RemissionController extends Controller
             $returnRoute = PostedData::getErrorRedirectRoute($module);
             return redirect()->route($returnRoute)->withErrors($messages);
         }
-        echo $termToSearch;
         session(['search_term' => $termToSearch]);
         $indexArray = BailMasterData::createViewArray($resultArray['m_id'], $module);
 
