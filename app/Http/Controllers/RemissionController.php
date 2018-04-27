@@ -78,4 +78,6 @@ class RemissionController extends Controller
         return view('remission.searchresults')->with($indexArray);
     }
 
+
+
 }

@@ -205,6 +205,9 @@ var remitBalanceModel = function(balance) {
   $('#Remit-Balance').on('show.bs.modal', function () {
     var check_number = $('#check-number').val();
     $('#remitAmount').html(balance);
+    $('#check-number-html').html(check_number);
+
+    
     console.log('here' + balance);
   });
 };

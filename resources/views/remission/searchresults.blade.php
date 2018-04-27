@@ -28,7 +28,7 @@
 
 
 <div class="modal fade" id="Remit-Balance" tabindex="-1" role="dialog" aria-labelledby="exampleRemit-Balance">
-  <form name="bails" id="manual-bail-entry" method="post" action="{{ route('partialrefund') }}" >
+  <form name="bails" id="manual-bail-entry" method="post" action="{{ route('remitbalance') }}" >
     {{ csrf_field() }}
     <input type="hidden" id="m_id" name="m_id" value="{{ old('m_id', $bailMaster->m_id) }}">
     <input type="hidden" id="refund_amount" name="refund_amount" value="">
@@ -40,13 +40,13 @@
         </div>
         <div class="modal-body">
           <div class="form-group">
-            <label for="m_def_first_name">Do you want to proceed with this?</label>
+            <label for="m_def_first_name">Do you want to proceed with this transaction?</label>
           </div>
           <div class="form-group">
             Remit Balance: <strong>$ <span id="remitAmount"> </span></strong>
           </div>
           <div class="form-group">
-            Check Number: <strong><span id="check-number"> </span></strong>
+            Check Number: <strong><span id="check-number-html"> </span></strong>
           </div>
         </div>
         <div class="modal-footer">
