@@ -199,3 +199,12 @@ var reverseTransactionModel = function (county_fee, balance) {
     }
   });
 };
+
+
+var remitBalanceModel = function(balance) {
+  $('#Remit-Balance').on('show.bs.modal', function () {
+    var check_number = $('#check-number').val();
+    $('#remitAmount').html(balance);
+    console.log('here' + balance);
+  });
+};

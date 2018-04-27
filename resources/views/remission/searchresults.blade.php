@@ -14,21 +14,20 @@
     <hr class="my-3">
       @include('chunks.comments')
     <hr class="my-4">
+    <div style="width: 25%;">
+      <div class="col">
+        <input type="text" class="form-control" id="check-number" name="check-number" value="" style="margin-bottom: 5px;"  placeholder="Check Number">
 
-      <div style="width: 25%;">
-        <div class="col">
-          <input type="text" class="form-control" id="partial-payment" name="partial-payment" value="" style="margin-bottom: 5px;"  placeholder="Check Number">
-
-          <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#Remit-Balance" data-whatever="@fat">Remit Balance</button>
-        </div>
+        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#Remit-Balance" data-whatever="@fat">Remit Balance</button>
       </div>
+    </div>
       @include('chunks.transactionHistory')
     <hr class="my-4">
   </div>
 </div>
 
 
-<div class="modal fade" id="Remit-Balance" tabindex="-1" role="dialog" aria-labelledby="examplePartial-payment">
+<div class="modal fade" id="Remit-Balance" tabindex="-1" role="dialog" aria-labelledby="exampleRemit-Balance">
   <form name="bails" id="manual-bail-entry" method="post" action="{{ route('partialrefund') }}" >
     {{ csrf_field() }}
     <input type="hidden" id="m_id" name="m_id" value="{{ old('m_id', $bailMaster->m_id) }}">
@@ -41,16 +40,13 @@
         </div>
         <div class="modal-body">
           <div class="form-group">
-            <label for="m_def_first_name">Do you want to proceed with this Partial Payment?</label>
+            <label for="m_def_first_name">Do you want to proceed with this?</label>
           </div>
           <div class="form-group">
-            Partial Payment Amount: <strong>$ <span id="partialAmount"> </span></strong>
+            Remit Balance: <strong>$ <span id="remitAmount"> </span></strong>
           </div>
           <div class="form-group">
-            Partial Payment Fee: <strong>$ <span id="partial_amount_fee"> </span></strong>
-          </div>
-          <div class="form-group">
-            Remaining Balace After Payment: <strong>$ <span id="remaining_balance"> </span></strong>
+            Check Number: <strong><span id="check-number"> </span></strong>
           </div>
         </div>
         <div class="modal-footer">
@@ -83,8 +79,14 @@
   AddNewComment.target_comment = 'comment_list';
   $(document).ready(AddNewComment.onReady());
 
+  var balance2 = parseFloat({{ $balance }});
+
+  console.log('balance: ' + balance2);
+
   $(document).ready(removeButton);
   $(document).ready(removeModalBox);
+  $(document).ready(remitBalanceModel(balance2));
+
 
   $(document).ready(function() {
   var balance = parseFloat({{ $balance }});
@@ -125,7 +127,6 @@
   buttonReverse('remission');
   reverseTransactionModel(county_fee, balance);
 
-
   $('#Partial-payment').on('show.bs.modal', function () {
     var balance = parseFloat({{ $balance }});
     var county_fee = parseFloat({{ $bailDetails['fee_percentaje'] }});
@@ -145,6 +146,11 @@
       $('#refund-manual').removeAttr("disabled");
     }
   });
+
+
+
+
+
 
 });
 </script>
