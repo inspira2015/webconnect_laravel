@@ -78,6 +78,10 @@ class RemissionController extends Controller
         return view('remission.searchresults')->with($indexArray);
     }
 
-
+    public function remitbalance(Request $request)
+    {
+        $postData = $request->all();
+        dd($postData);
+    }
 
 }
