@@ -15,6 +15,8 @@ use App\Facades\PostedData;
 use App\Facades\CountyFee;
 use App\Events\ValidateTransactionBalance;
 use App\Facades\BailMasterData;
+use App\Libraries\TransactionDetails;
+use App\Events\RefundTransaction;
 use Carbon\Carbon;
 use Event;
 use Redirect;
@@ -78,10 +80,42 @@ class RemissionController extends Controller
         return view('remission.searchresults')->with($indexArray);
     }
 
+    /**
+     * [remitbalance Add a new transaction with the remaining balance and creates a record into Payee BD table]
+     * @param  Request $request [Post Variables]
+     * @return [type]           [Redirect to Remission]
+     */
     public function remitbalance(Request $request)
     {
         $postData = $request->all();
-        dd($postData);
+        $m_id = $postData['m_id'];
+        $amount = $postData['remit_amount'];
+        $checkNumber = $postData['remit_check'];
+
+        if ($request->isMethod('post')) {
+            $bailMaster = BailMaster::find(array('m_id' => $m_id))->first();
+            $balance = Event::fire(new ValidateTransactionBalance($bailMaster));
+
+            if ($balance[0] <= 0) {
+                echo "no Balance";
+                exit;
+            }
+            $transactionDetails = new TransactionDetails();
+            $transactionDetails->setTransactionDetails('t_debit_credit_index', 'O');
+            $transactionDetails->setTransactionDetails('m_id', $m_id);
+            $transactionDetails->setTransactionDetails('t_type', 'M');
+            $transactionDetails->setTransactionDetails('t_total_refund', $amount);
+            $transactionDetails->setTransactionDetails('t_check_number', $checkNumber);
+
+            $transactionDetails = $transactionDetails->getTransactionArray();
+            $transactionErrors = Event::fire(new RefundTransaction(array($transactionDetails)));
+
+            if (!empty($transactionErrors)) {
+                echo "Transaction Erros";
+                exit;
+            }
+        }
+        return redirect()->route('remissionsearch');
     }
 
 }

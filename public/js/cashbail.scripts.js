@@ -207,7 +207,8 @@ var remitBalanceModel = function(balance) {
     $('#remitAmount').html(balance);
     $('#check-number-html').html(check_number);
 
-    
+    $('#refund_amount').val(balance);
+    $('#remit_check').val(check_number);
     console.log('here' + balance);
   });
 };

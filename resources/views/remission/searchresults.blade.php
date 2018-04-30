@@ -32,7 +32,7 @@
     {{ csrf_field() }}
     <input type="hidden" id="m_id" name="m_id" value="{{ old('m_id', $bailMaster->m_id) }}">
     <input type="hidden" id="refund_amount" name="remit_amount" value="">
-    <input type="hidden" id="refund_amount" name="remit_check" value="">
+    <input type="hidden" id="remit_check" name="remit_check" value="">
 
     <div class="modal-dialog" role="document">
       <div class="modal-content">
