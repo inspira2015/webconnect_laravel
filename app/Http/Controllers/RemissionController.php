@@ -77,6 +77,8 @@ class RemissionController extends Controller
         session(['search_term' => $termToSearch]);
         $indexArray = BailMasterData::createViewArray($resultArray['m_id'], $module);
 
+       // dd($indexArray);
+
         return view('remission.searchresults')->with($indexArray);
     }
 
