@@ -11,13 +11,14 @@ use App\Models\BailConfiguration;
 use App\Models\BailComments;
 use App\Events\ValidateTransactionBalance;
 use App\Libraries\TransactionValidations;
+use App\Libraries\Services\BuildCorrectState;
 use Event;
 use Session;
 
 class BailMasterData
 {
 
-	public function createViewArray($bailMasterId, $module)
+	public function createViewArray($bailMasterId, $module, BuildCorrectState $stateValidate)
 	{
 		$bailMasterId          = (int) $bailMasterId;
         $transactionValidation = new TransactionValidations($module);
@@ -28,6 +29,7 @@ class BailMasterData
         $bailMaterComments     = BailComments::GetBailMasterComments($bailMasterId);
         $dt = new Carbon($bailMaster->m_posted_date);
 		$m_posted_date =  $dt->format("m/d/Y");
+        $stateConfiguration = $stateValidate->getStateArray($bailMaster->m_surety_state);
 
 
         $resultBalance = Event::fire(new ValidateTransactionBalance($bailMaster));
@@ -45,6 +47,7 @@ class BailMasterData
                  'courtCheckList'        => $courtCheckList,
                  'm_posted_date'         => $m_posted_date,
                  'module'                => $module,
+                 'stConfig'              => $stateConfiguration,
                  'bailDetails'           => [
                                              'total_balance'  => $balance,
                                              'fee_percentaje' => CountyFee::getFeePercentaje(),

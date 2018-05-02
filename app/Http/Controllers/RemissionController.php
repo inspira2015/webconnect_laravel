@@ -17,6 +17,7 @@ use App\Events\ValidateTransactionBalance;
 use App\Facades\BailMasterData;
 use App\Libraries\TransactionDetails;
 use App\Events\RefundTransaction;
+use App\Libraries\Services\BuildCorrectState;
 use Carbon\Carbon;
 use Event;
 use Redirect;
@@ -60,7 +61,7 @@ class RemissionController extends Controller
 
     }
 
-    public function searchresults(Request $request)
+    public function searchresults(Request $request, BuildCorrectState $stateValidate)
     {
         $termToSearch   = $request->get('search_term','');
         $module         = 'remission';
@@ -75,9 +76,7 @@ class RemissionController extends Controller
             return redirect()->route($returnRoute)->withErrors($messages);
         }
         session(['search_term' => $termToSearch]);
-        $indexArray = BailMasterData::createViewArray($resultArray['m_id'], $module);
-
-       // dd($indexArray);
+        $indexArray = BailMasterData::createViewArray($resultArray['m_id'], $module, $stateValidate);
 
         return view('remission.searchresults')->with($indexArray);
     }
@@ -113,7 +112,7 @@ class RemissionController extends Controller
             $transactionErrors = Event::fire(new RefundTransaction(array($transactionDetails)));
 
             if (!empty($transactionErrors)) {
-                echo "Transaction Erros";
+                echo "Transaction Error";
                 exit;
             }
         }

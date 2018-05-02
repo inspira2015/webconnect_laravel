@@ -50,11 +50,34 @@
   </div>
   <div class="col-sm-2 pb-3">
     <label for="m_surety_state">State</label>
-    {!! Form::select('m_surety_state', $stateList, $bailMaster->m_surety_state, array('class' => 'form-control',
-              'disabled' => 'disabled')) !!}
+    {!! Form::select('m_surety_state', $stateList, $stConfig['us_state_id'], array('class' => 'form-control',
+              'disabled' => 'disabled', 'id' => 'm_surety_state__show')) !!}
   </div>
-  <div class="col-sm-2 pb-3">
+  <div class="col-sm-2 pb-3 outside-state-show">
+    <label for="non_us_state">State Outside US:</label>
+    <input type="text" class="form-control"  id="non_us_state_show" name="non_us_state_show" value="" disabled>
+  </div>
+  <div class="col-sm-2 pb-3 ">
     <label for="m_surety_zip">Zip Code</label>
     <input type="text" class="form-control" id="m_surety_zip" name="m_surety_zip" value="{{ old('m_surety_zip', $bailMaster->m_surety_zip) }}" disabled>
   </div>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+      var state_id__show         = "{{ $stConfig['us_state_id'] }}";
+      var state_outside_us__show = "{{ $stConfig['non_us_state_string'] }}";
+      var outside_length__show = state_outside_us__show.length;
+
+      if (outside_length__show > 0) {
+        $('.outside-state-show').show();
+        $('#m_surety_state__show').val(state_id__show);
+        $('#non_us_state_show').val(state_outside_us__show);
+      } else {
+        $('.outside-state-show').hide();
+      }
+
+
+    });
+
+</script>

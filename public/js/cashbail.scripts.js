@@ -212,3 +212,33 @@ var remitBalanceModel = function(balance) {
     console.log('here' + balance);
   });
 };
+
+
+var stateSelector = function (state_id, state_outside_us) {
+
+  if (state_outside_us) {
+    var outside_length = state_outside_us.length;
+
+    if (outside_length > 0) {
+      $('.outside-state').show();
+      $('#m_surety_state').val(state_id);
+      $('#non_us_state').val(state_outside_us);
+    } else {
+      $('.outside-state').hide();
+    }
+  } else {
+    $('.outside-state').hide();
+    $('#m_surety_state').val(state_id);
+  }
+    $('#m_surety_state').change(function() {
+      let state_id = $(this).val();
+      let state_string = $("#m_surety_state option:selected" ).text();
+
+      if (state_string == 'Other State (Outside US)') {
+        $('.outside-state').show();
+      } else {
+        $('.outside-state').hide();
+      }
+    });
+
+};

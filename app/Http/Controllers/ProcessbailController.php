@@ -11,8 +11,8 @@ use App\Models\BailComments;
 use App\Facades\CountyFee;
 use App\Facades\PostedData;
 use App\Facades\BailMasterData;
-
 use App\Events\ValidateTransactionBalance;
+use App\Libraries\Services\BuildCorrectState;
 use Redirect;
 use Event;
 use Session;
@@ -66,13 +66,12 @@ class ProcessbailController extends Controller
     }
 
 
-    public function searchresults(Request $request)
+    public function searchresults(Request $request, BuildCorrectState $stateValidate)
     {
         $termToSearch   = $request->get('search_term', '');
         $module         = 'processbail';
         $resultArray    = PostedData::getTermFromUserInput($termToSearch);
         $termToSearch   = $resultArray['search_term'];
-        //dd($resultArray );
 
         if (is_numeric($resultArray['m_id']) == false) {
             $messages = [
@@ -82,7 +81,7 @@ class ProcessbailController extends Controller
             return redirect()->route($returnRoute)->withErrors($messages);
         }
         Session(['search_term' => $termToSearch]);
-        $indexArray = BailMasterData::createViewArray($resultArray['m_id'], $module);
+        $indexArray = BailMasterData::createViewArray($resultArray['m_id'], $module, $stateValidate);
 
         return view('processbail.refundbails')->with($indexArray);
     }
@@ -91,6 +90,7 @@ class ProcessbailController extends Controller
     {
         unset($formData['_token']);
         unset($formData['module']);
+        unset($formData['non_us_state']);
     }
 
     private function convertDateToMysqlFormat($date)

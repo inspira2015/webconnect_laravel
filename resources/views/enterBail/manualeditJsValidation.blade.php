@@ -1,11 +1,14 @@
 <script>
- $(document).ready(function() {
+  var state_id         = "{{ $stConfig['us_state_id'] }}";
+  var state_outside_us = "{{ $stConfig['non_us_state_string'] }}";
+  $(document).ready(stateSelector(state_id, state_outside_us));
 
-  var src = "{{ route('validateindexyear') }}";
-  var old_posted_date = '{{ old('m_posted_date', $m_posted_date) }}';
-  var old_date_of_record = '{{ old('date_of_record') }}';
-  var date_of_record = new Date();
-  var posted_date = new Date();
+  $(document).ready(function() {
+    var src = "{{ route('validateindexyear') }}";
+    var old_posted_date = '{{ old('m_posted_date', $m_posted_date) }}';
+    var old_date_of_record = '{{ old('date_of_record') }}';
+    var date_of_record = new Date();
+    var posted_date = new Date();
 
   if (old_posted_date) {
    posted_date = old_posted_date;

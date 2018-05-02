@@ -9,6 +9,7 @@ use App\Models\Courts;
 use App\Models\BailMaster;
 use App\Models\BailTransactions;
 use App\Facades\CreateTransaction;
+use App\Libraries\Services\BuildCorrectState;
 
 use Carbon\Carbon;
 use Redirect;
@@ -112,16 +113,23 @@ class EnterBailManualController extends EnterBailController
         }
         $bailMaster = BailMaster::find($bailMasterId);
         $transaction = $bailMaster->BailTransactions->where('t_type', '=', 'R')->first();
+
+
+
         return view('enterBail.processmanualentry', compact('bailMaster'))->with(['transaction' => $transaction]);
     }
 
-    public function editManualRecord(Request $request)
+    public function editManualRecord(Request $request, BuildCorrectState $stateValidate)
     {
         $courtList = Courts::pluck('c_name', 'c_id')->toArray();
         $stateList = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
         $manualEntry = $request->all();
         $bailMaster = BailMaster::firstOrNew(array('m_id' => (int) $manualEntry['master_id']));
         $transaction = $bailMaster->BailTransactions->where('t_type', '=', 'R')->first();
+        $bailState = BailConfiguration::GetStateIdByAbv($bailMaster->m_surety_state);
+        $stateConfiguration = $stateValidate->getStateArray($bailMaster->m_surety_state);
+
+        //dd($stateConfiguration);
 
         $dt = new Carbon($bailMaster->m_posted_date);
         $m_posted_date =  $dt->format("m/d/Y");
@@ -130,6 +138,7 @@ class EnterBailManualController extends EnterBailController
 
         }
         $indexArray = [
+                        'stConfig'       => $stateConfiguration,
                         'courtList'      => $courtList,
                         'stateList'      => $stateList,
                         'edit'           => true,

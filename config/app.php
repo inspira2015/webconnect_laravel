@@ -187,6 +187,7 @@ return [
         App\Providers\ExcelHelperProvider::class,
         App\Providers\CreateTransactionProvider::class,
         App\Providers\BailMasterDataProvider::class,
+        App\Providers\BuildCorrectStateProvider::class,
     ],
 
     /*
