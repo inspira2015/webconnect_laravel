@@ -34,22 +34,19 @@ class BailRefundProcessController extends EnterBailController
             $bailMaster       = BailMaster::find(array('m_id' => $userInput['m_id']))->first();
             $bailTransactions = new BailTransactions();
             $balance          = Event::fire(new ValidateTransactionBalance($bailMaster));
+            $searchTerm       = "{$bailMaster->m_id} {$bailMaster->m_index_number}";
 
             if ($balance[0] <= 0) {
-                echo "no Balance";
-                exit;
+               return $this->redirectNoBalance($searchTerm);
             }
             $stdObject = new \stdClass();
             $stdObject->refundType = $userInput['refund_type'];
             $stdObject->bailMaster = $bailMaster;
             $stdObject->balance    = $balance[0];
             $stdObject->fee        = CountyFee::getFeePercentaje();
-
             $transactionDetails = $this->createTransactionArray($stdObject);
             $newTransaction     = Event::fire(new RefundTransaction($transactionDetails));
         }
-
-        $searchTerm = "{$bailMaster->m_id} {$bailMaster->m_index_number}";
         return redirect()->route('processbailresults', ['search_term' => $searchTerm]);
     }
 
@@ -60,10 +57,10 @@ class BailRefundProcessController extends EnterBailController
             $bailMaster = BailMaster::find(array('m_id' => $userInput['m_id']))->first();
             $bailTransactions = new BailTransactions();
             $balance = Event::fire(new ValidateTransactionBalance($bailMaster));
+            $searchTerm = "{$bailMaster->m_id} {$bailMaster->m_index_number}";
 
             if ($balance[0] <= 0) {
-                echo "no Balance";
-                exit;
+                return $this->redirectNoBalance($searchTerm);
             }
             $stdObject = new \stdClass();
             $stdObject->refundType = 'Partial';
@@ -74,7 +71,6 @@ class BailRefundProcessController extends EnterBailController
             $transactionDetails = $this->createTransactionArray($stdObject);
             $newTransaction = Event::fire(new RefundTransaction($transactionDetails));
         }
-        $searchTerm = "{$bailMaster->m_id} {$bailMaster->m_index_number}";
         return redirect()->route('processbailresults', ['search_term' => $searchTerm]);
     }
 
@@ -85,10 +81,10 @@ class BailRefundProcessController extends EnterBailController
             $bailMaster = BailMaster::find(array('m_id' => $userInput['m_id']))->first();
             $bailTransactions = new BailTransactions();
             $balance = Event::fire(new ValidateTransactionBalance($bailMaster));
+            $searchTerm = "{$bailMaster->m_id} {$bailMaster->m_index_number}";
 
             if ($balance[0] <= 0) {
-                echo "no Balance";
-                exit;
+                return $this->redirectNoBalance($searchTerm);
             }
             $stdObject = new \stdClass();
             $stdObject->refundType           = 'Multicheck';
@@ -101,7 +97,6 @@ class BailRefundProcessController extends EnterBailController
             $transactionDetails = $this->createTransactionArray($stdObject);
             $newTransaction = Event::fire(new RefundTransaction($transactionDetails));
         }
-        $searchTerm = "{$bailMaster->m_id} {$bailMaster->m_index_number}";
         return redirect()->route('processbailresults', ['search_term' => $searchTerm]);
     }
 
@@ -156,6 +151,14 @@ class BailRefundProcessController extends EnterBailController
         $transactionArray['Reversal'] = $transactionResultArray;
         $transactionArray['Reversal_id'] = $objInfo->bailTransactions->t_id;
         return $transactionArray;
+    }
+
+    private function redirectNoBalance($searchTerm)
+    {
+        $messages = [
+                                'Insufficient Bail Balance',
+                    ];
+        return redirect()->route('processbailresults', ['search_term' => $searchTerm])->withErrors($messages);
     }
 
     private function getTransactionAmountForReversal($transaction)

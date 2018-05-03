@@ -11,6 +11,18 @@
 
   <div class="col-md-10 offset-md-1" style="margin-bottom: 50px;">
     <hr class="my-3">
+    @if (count($errors) > 0)
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        <hr class="my-3">
+    @endif
+
+
     @include('chunks.defendantData')
 
     <hr class="my-4">
