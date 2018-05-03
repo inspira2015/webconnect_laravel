@@ -195,6 +195,8 @@
   var bf_active  = '{{ $bailForfeiture['bf_active'] }}';
   var updated_at = '{{ $bailForfeiture['bf_updated_at'] }}';
   var user_name  = '{{ $bailForfeiture['user'] }}';
+  var m_id       = "{{ $bailMaster->m_id }}";
+  var src_url    = "{{ route('forfeituresControl') }}";
 
   if (checkForfeitureStatus(bf_active) == 0) {
     $('#forfeituresCheckbox').bootstrapToggle('on');
@@ -205,15 +207,9 @@
   action_message(bf_active, updated_at);
   update_info(updated_at);
   username_info(user_name);
-
-  var m_id = "{{ $bailMaster->m_id }}";
-  var src_url = "{{ route('forfeituresControl') }}";
-
   forfeituresAddRemove(m_id, src_url);
-
   buttonReverse('forfeitures');
   reverseTransactionModel(county_fee, balance);
-
  });
 </script>
 @endsection
