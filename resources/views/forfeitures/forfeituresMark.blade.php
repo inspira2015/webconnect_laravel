@@ -187,27 +187,14 @@
  </div>
 </div>
 <script type="text/javascript">
- var old_posted_date = '{{ old('m_posted_date', $m_posted_date) }}';
- var posted_date = new Date();
-
- if (old_posted_date) {
-  posted_date = old_posted_date;
- }
-
- var date_input = $('input[name="m_posted_date"]'); //our date input has the name "date"
- var date_input_disabled = $('input[name="m_posted_date2"]');
- var container = $('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
- var options = {
-  format: 'mm/dd/yyyy',
-  container: container,
-  //todayHighlight: true,
-  autoclose: true,
-  forceParse: false,
- };
- date_input.datepicker(options).datepicker("setDate", posted_date);
- date_input_disabled.datepicker(options).datepicker("setDate", posted_date);
+  var old_posted_date       = '{{ old('m_posted_date', $m_posted_date) }}';
+  DatePickerObj.posted_date = old_posted_date;
+  DatePickerObj.date_input  = $('input[name="m_posted_date2"]'); //our date input has the name "date"
+  DatePickerObj.container   = $('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+  DatePickerObj.writeDate();
 
  $(document).ready(function() {
+
   var balance = parseFloat({{ $balance }});
   var county_fee = parseFloat({{ $bailDetails['fee_percentaje'] }});
   var bf_active = '{{ $bailForfeiture['bf_active'] }}';
