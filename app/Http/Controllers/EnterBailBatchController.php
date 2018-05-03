@@ -10,7 +10,6 @@ use App\Models\Courts;
 use App\Facades\CheckNumberRecords;
 use App\Events\ImportJailRecord;
 use App\Facades\CreateTransaction;
-
 use Event;
 use Session;
 
@@ -27,7 +26,6 @@ class EnterBailBatchController extends EnterBailController
         $this->middleware('auth');
     }
 
-
     /**
      * [jailImport Display Enter Bail by Jail Import]
      * @return [type] [description]
@@ -35,7 +33,6 @@ class EnterBailBatchController extends EnterBailController
     public function index()
     {
         $courtList = Courts::pluck('c_name', 'c_id')->toArray();
-
         $indexArray = [
                         'jailRecords' => array(),
                         'totalCheckAmount' => '',
@@ -52,11 +49,9 @@ class EnterBailBatchController extends EnterBailController
      */
     public function processbails(Request $request)
     {
-
         if ($request->isMethod('post')) {
             $jailIdArray = Session::get('JailIdArray');
             $userInputData = $request->all();
-
             $processDate = date('Y-m-d G:i:s');
             $checkNumber = Session::get('checkNumber');
 
@@ -131,7 +126,6 @@ class EnterBailBatchController extends EnterBailController
                             'jailRecords' => $jailRecords,
                             'courtList' => $courtList,
                             'processBail' => CheckNumberRecords::validateRecordsBetweenJailAndMaster($checkNumber),
-
                           ];
         return view('enterBail.jailImport')->with($indexArray);
         }

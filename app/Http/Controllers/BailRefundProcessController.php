@@ -11,10 +11,8 @@ use App\Models\BailTransactions;
 use App\Events\ValidateTransactionBalance;
 use App\Events\RefundTransaction;
 use App\Facades\CountyFee;
-
 use Event;
 use Session;
-
 
 class BailRefundProcessController extends EnterBailController
 {
@@ -32,10 +30,10 @@ class BailRefundProcessController extends EnterBailController
     public function refundbalance(Request $request)
     {
         if ($request->isMethod('post')) {
-            $userInput = $request->all();
-            $bailMaster = BailMaster::find(array('m_id' => $userInput['m_id']))->first();
+            $userInput        = $request->all();
+            $bailMaster       = BailMaster::find(array('m_id' => $userInput['m_id']))->first();
             $bailTransactions = new BailTransactions();
-            $balance = Event::fire(new ValidateTransactionBalance($bailMaster));
+            $balance          = Event::fire(new ValidateTransactionBalance($bailMaster));
 
             if ($balance[0] <= 0) {
                 echo "no Balance";
@@ -48,7 +46,7 @@ class BailRefundProcessController extends EnterBailController
             $stdObject->fee        = CountyFee::getFeePercentaje();
 
             $transactionDetails = $this->createTransactionArray($stdObject);
-            $newTransaction = Event::fire(new RefundTransaction($transactionDetails));
+            $newTransaction     = Event::fire(new RefundTransaction($transactionDetails));
         }
 
         $searchTerm = "{$bailMaster->m_id} {$bailMaster->m_index_number}";
@@ -67,7 +65,6 @@ class BailRefundProcessController extends EnterBailController
                 echo "no Balance";
                 exit;
             }
-
             $stdObject = new \stdClass();
             $stdObject->refundType = 'Partial';
             $stdObject->bailMaster = $bailMaster;
@@ -93,7 +90,6 @@ class BailRefundProcessController extends EnterBailController
                 echo "no Balance";
                 exit;
             }
-
             $stdObject = new \stdClass();
             $stdObject->refundType           = 'Multicheck';
             $stdObject->bailMaster           = $bailMaster;
@@ -142,7 +138,6 @@ class BailRefundProcessController extends EnterBailController
         } elseif($module == 'remission') {
             $redirectRoute = 'remissionsearch';
         }
-
         return redirect()->route($redirectRoute);
     }
 
@@ -218,7 +213,6 @@ class BailRefundProcessController extends EnterBailController
                 }
                 $transactionArray['Payment'] = $transactionResultArray;
             }
-
 
             if ($multiCheckTransaction['suretyAmount'] > 0) {
                 $transactionInfo                       = new \stdClass();
@@ -306,7 +300,6 @@ class BailRefundProcessController extends EnterBailController
             return false;
         }
 
-
         if (isset($objInfo->t_numis_doc_id)) {
             $t_numis_doc_id = $objInfo->t_numis_doc_id;
         }
@@ -358,6 +351,4 @@ class BailRefundProcessController extends EnterBailController
 
         ];
     }
-
 }
-

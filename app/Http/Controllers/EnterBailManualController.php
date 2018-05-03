@@ -10,7 +10,6 @@ use App\Models\BailMaster;
 use App\Models\BailTransactions;
 use App\Facades\CreateTransaction;
 use App\Libraries\Services\BuildCorrectState;
-
 use Carbon\Carbon;
 use Redirect;
 use Auth;
@@ -46,7 +45,6 @@ class EnterBailManualController extends EnterBailController
                         't_numis_doc_id' => '',
                         'm_posted_date'  => $m_posted_date,
                       ];
-
         return view('enterBail.jailImportManualEntry', compact('bailMaster'))->with($indexArray);
     }
 
@@ -73,7 +71,6 @@ class EnterBailManualController extends EnterBailController
             if (isset($userInputData['m_comments_ind'])) {
                 $bailComments = 'Y';
             }
-
             $bailMasterData = [
                                     "m_id"                => $userInputData['m_id'],
                                     "j_check_number"      => '',
@@ -109,13 +106,9 @@ class EnterBailManualController extends EnterBailController
                                     "t_reversal_index"     => '',
                                    ];
             CreateTransaction::add($bailTransactionData, $bailMasterId);
-
         }
         $bailMaster = BailMaster::find($bailMasterId);
         $transaction = $bailMaster->BailTransactions->where('t_type', '=', 'R')->first();
-
-
-
         return view('enterBail.processmanualentry', compact('bailMaster'))->with(['transaction' => $transaction]);
     }
 
@@ -128,9 +121,6 @@ class EnterBailManualController extends EnterBailController
         $transaction = $bailMaster->BailTransactions->where('t_type', '=', 'R')->first();
         $bailState = BailConfiguration::GetStateIdByAbv($bailMaster->m_surety_state);
         $stateConfiguration = $stateValidate->getStateArray($bailMaster->m_surety_state);
-
-        //dd($stateConfiguration);
-
         $dt = new Carbon($bailMaster->m_posted_date);
         $m_posted_date =  $dt->format("m/d/Y");
 
@@ -153,7 +143,6 @@ class EnterBailManualController extends EnterBailController
         $userInputData = $request->all();
         $indexNumber = $userInputData['number'];
         $indexYear = $userInputData['year'];
-
         $queryResults = BailMaster::ValidateUniqueRecord([
                                                             'index_number' => $indexNumber,
                                                             'index_year'   => $indexYear,
@@ -166,5 +155,4 @@ class EnterBailManualController extends EnterBailController
         return response()->json(['result' => 'duplicate',
                                  'record' =>  $bailMasterRow]);
     }
-
 }

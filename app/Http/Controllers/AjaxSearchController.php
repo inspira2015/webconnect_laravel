@@ -46,20 +46,20 @@ class AjaxSearchController extends Controller
     public function searchBailMaster(Request $request)
     {
         $termToSearch = $request->get('term','');
-        $termType = $request->get('search_term','');
-        $resultArray = $this->getResultsFromUserInput($termType, $termToSearch);
-        $data = $this->builtSelectResponse($resultArray);
-        
+        $termType     = $request->get('search_term','');
+        $resultArray  = $this->getResultsFromUserInput($termType, $termToSearch);
+        $data         = $this->builtSelectResponse($resultArray);
+
         if (count($data)) {
              return $data;
         }
-        return ['value'=>'No Result Found','id'=>''];    
+        return ['value'=>'No Result Found','id'=>''];
     }
 
     public function ajaxForfeituresAddRemove(Request $request)
     {
         $checkBoxAction = $request->get('checkbox');
-        $bailMasterId = $request->get('bailMaster_id');
+        $bailMasterId   = $request->get('bailMaster_id');
         $bailForfeiture = BailForfeitures::firstOrNew([
                                                         'm_id' => $bailMasterId
                                                      ]);
@@ -69,7 +69,6 @@ class AjaxSearchController extends Controller
         } else {
             $bailForfeiture->bf_active = 0;
             $bailForfeiture->save();
-
         }
 
         return response()->json([
@@ -98,9 +97,9 @@ class AjaxSearchController extends Controller
         }
 
         return array_merge(
-                            array('Index' => $bailMaster->GetArrayIndexNumberLike($find)),
+                            array('Index'     => $bailMaster->GetArrayIndexNumberLike($find)),
                             array('Defendant' => $bailMaster->GetArrayDefendantNameLike($find)),
-                            array('Surety' => $bailMaster->GetArraySuretyNameLike($find))
+                            array('Surety'    => $bailMaster->GetArraySuretyNameLike($find))
                           );
     }
 
@@ -112,13 +111,11 @@ class AjaxSearchController extends Controller
             foreach ($currentResult as $dummykey => $currentRecord) {
                         $value = $currentRecord['m_id'] . ' ' .
                         $key . ' ' .
-                        $currentRecord['m_index_number'] . '/' . 
+                        $currentRecord['m_index_number'] . '/' .
                         $currentRecord['m_index_year'] . " " .
                         $this->builtNameForAjaxControl($currentRecord, $key);
                 $data[] = ['value'=> $value, 'id'=> $currentRecord['m_id']];
             }
-
-
         }
         return $data;
     }
@@ -133,5 +130,4 @@ class AjaxSearchController extends Controller
         return trim($currentDbRecord['m_surety_first_name']) . " " .
                trim($currentDbRecord['m_surety_last_name']);
     }
-
 }

@@ -246,6 +246,4 @@ class ForfeituresController extends Controller
         }
         return $resultArray;
     }
-
-
 }

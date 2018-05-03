@@ -46,7 +46,6 @@ class TransactionDetails
 		return $this;
 	}
 
-
 	public function getTransaction($key)
 	{
 		if (isset($this->transactionArray[$key])) {

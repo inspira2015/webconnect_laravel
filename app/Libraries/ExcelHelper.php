@@ -6,13 +6,12 @@ class ExcelHelper
 {
 	public function CreateHeader(&$sheet, array $optionData)
 	{
-		$columnStart = $optionData['Column']['start'];
-		$currentColumn = $columnStart;
-		$rowStart = $optionData['Row']['start'];
-		$titles =  $optionData['Values'];
-
+		$columnStart    = $optionData['Column']['start'];
+		$currentColumn  = $columnStart;
+		$rowStart       = $optionData['Row']['start'];
+		$titles         = $optionData['Values'];
 		$startingColumn = 'B';
-        $startingRow = 2;
+        $startingRow    = 2;
 
         foreach ($titles as $key => $currentTitle) {
             $sheet->setCellValue($currentColumn . $rowStart, $currentTitle);
@@ -35,11 +34,10 @@ class ExcelHelper
 
 	public function CreateBody(&$sheet, array $optionData)
 	{
-		$columnStart = $optionData['Column']['start'];
+		$columnStart   = $optionData['Column']['start'];
 		$currentColumn = $columnStart;
-		$rowStart = $optionData['Row']['start'];
-		$values =  $optionData['Values'];
-
+		$rowStart      = $optionData['Row']['start'];
+		$values        = $optionData['Values'];
 
         foreach ($values as $key => $currentValue) {
         	$currentColumn = $columnStart;
@@ -49,7 +47,7 @@ class ExcelHelper
         	foreach ($currentValue as $dummyKey => $cellValue) {
             	$sheet->setCellValue($currentColumn . $rowStart, $cellValue);
             	$sheet->getColumnDimension($currentColumn)->setAutoSize(true);
-        	    
+
         	    $currentColumn++;
         	}
         	$cellRange = "{$columnStart}{$rowStart}:{$currentColumn}{$rowStart}";
@@ -66,6 +64,4 @@ class ExcelHelper
             $rowStart++;
         }
 	}
-
-
 }

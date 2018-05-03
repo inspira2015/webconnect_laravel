@@ -53,14 +53,6 @@ class RemissionController extends Controller
         return view('remission.index')->with($indexArray);
     }
 
-    public function searchresults33(Request $request)
-    {
-        $formData = $request->all();
-        dd($formData);
-        exit;
-
-    }
-
     public function searchresults(Request $request, BuildCorrectState $stateValidate)
     {
         $termToSearch   = $request->get('search_term','');
@@ -118,5 +110,4 @@ class RemissionController extends Controller
         }
         return redirect()->route('remissionsearch');
     }
-
 }
