@@ -26,7 +26,6 @@ class BailRefundProcessController extends EnterBailController
         $this->middleware('auth');
     }
 
-
     public function refundbalance(Request $request)
     {
         if ($request->isMethod('post')) {
@@ -44,8 +43,8 @@ class BailRefundProcessController extends EnterBailController
             $stdObject->bailMaster = $bailMaster;
             $stdObject->balance    = $balance[0];
             $stdObject->fee        = CountyFee::getFeePercentaje();
-            $transactionDetails = $this->createTransactionArray($stdObject);
-            $newTransaction     = Event::fire(new RefundTransaction($transactionDetails));
+            $transactionDetails    = $this->createTransactionArray($stdObject);
+            $newTransaction        = Event::fire(new RefundTransaction($transactionDetails));
         }
         return redirect()->route('processbailresults', ['search_term' => $searchTerm]);
     }
@@ -53,11 +52,11 @@ class BailRefundProcessController extends EnterBailController
     public function partialrefund(Request $request)
     {
         if ($request->isMethod('post')) {
-            $userInput = $request->all();
-            $bailMaster = BailMaster::find(array('m_id' => $userInput['m_id']))->first();
+            $userInput        = $request->all();
+            $bailMaster       = BailMaster::find(array('m_id' => $userInput['m_id']))->first();
             $bailTransactions = new BailTransactions();
-            $balance = Event::fire(new ValidateTransactionBalance($bailMaster));
-            $searchTerm = "{$bailMaster->m_id} {$bailMaster->m_index_number}";
+            $balance          = Event::fire(new ValidateTransactionBalance($bailMaster));
+            $searchTerm       = "{$bailMaster->m_id} {$bailMaster->m_index_number}";
 
             if ($balance[0] <= 0) {
                 return $this->redirectNoBalance($searchTerm);
@@ -69,7 +68,7 @@ class BailRefundProcessController extends EnterBailController
             $stdObject->fee        = CountyFee::getFeePercentaje();
 
             $transactionDetails = $this->createTransactionArray($stdObject);
-            $newTransaction = Event::fire(new RefundTransaction($transactionDetails));
+            $newTransaction     = Event::fire(new RefundTransaction($transactionDetails));
         }
         return redirect()->route('processbailresults', ['search_term' => $searchTerm]);
     }
@@ -77,16 +76,16 @@ class BailRefundProcessController extends EnterBailController
     public function multicheck(Request $request)
     {
         if ($request->isMethod('post')) {
-            $userInput = $request->all();
-            $bailMaster = BailMaster::find(array('m_id' => $userInput['m_id']))->first();
+            $userInput        = $request->all();
+            $bailMaster       = BailMaster::find(array('m_id' => $userInput['m_id']))->first();
             $bailTransactions = new BailTransactions();
-            $balance = Event::fire(new ValidateTransactionBalance($bailMaster));
-            $searchTerm = "{$bailMaster->m_id} {$bailMaster->m_index_number}";
+            $balance          = Event::fire(new ValidateTransactionBalance($bailMaster));
+            $searchTerm       = "{$bailMaster->m_id} {$bailMaster->m_index_number}";
 
             if ($balance[0] <= 0) {
                 return $this->redirectNoBalance($searchTerm);
             }
-            $stdObject = new \stdClass();
+            $stdObject                       = new \stdClass();
             $stdObject->refundType           = 'Multicheck';
             $stdObject->bailMaster           = $bailMaster;
             $stdObject->multiCheckAmount     = $userInput['multicheck_amount'];
@@ -95,7 +94,7 @@ class BailRefundProcessController extends EnterBailController
             $stdObject->t_multi_court_number = $userInput['courtcheck_id'];
 
             $transactionDetails = $this->createTransactionArray($stdObject);
-            $newTransaction = Event::fire(new RefundTransaction($transactionDetails));
+            $newTransaction     = Event::fire(new RefundTransaction($transactionDetails));
         }
         return redirect()->route('processbailresults', ['search_term' => $searchTerm]);
     }
@@ -103,26 +102,25 @@ class BailRefundProcessController extends EnterBailController
     public function reversetransaction(Request $request)
     {
          if ($request->isMethod('post')) {
-            $userInput = $request->all();
-            $redirectModule = $userInput['module_name'];
-            $bailMaster = BailMaster::find(array('m_id' => $userInput['m_id']))->first();
+            $userInput        = $request->all();
+            $redirectModule   = $userInput['module_name'];
+            $bailMaster       = BailMaster::find(array('m_id' => $userInput['m_id']))->first();
             $bailTransactions = BailTransactions::find(array('t_id' => $userInput['t_id']))->first();
 
             if ($bailTransactions->t_no_reversal != 1) {
-                $stdObject = new \stdClass();
-                $stdObject->refundType           = 'Reversal';
-                $stdObject->bailMaster           = $bailMaster;
-                $stdObject->bailTransactions     = $bailTransactions;
+                $stdObject                   = new \stdClass();
+                $stdObject->refundType       = 'Reversal';
+                $stdObject->bailMaster       = $bailMaster;
+                $stdObject->bailTransactions = $bailTransactions;
 
                 $transactionDetails = $this->createReversalTransaction($stdObject);
-                $newTransaction = Event::fire(new RefundTransaction($transactionDetails));
+                $newTransaction     = Event::fire(new RefundTransaction($transactionDetails));
             }
         }
         $searchTerm = "{$bailMaster->m_id} {$bailMaster->m_index_number}";
         session(['search_term' => $searchTerm]);
         return $this->redirectToInputModule($redirectModule);
     }
-
 
     private function redirectToInputModule($module)
     {
@@ -138,17 +136,17 @@ class BailRefundProcessController extends EnterBailController
 
     private function createReversalTransaction($objInfo)
     {
-        $transactionInfo = new \stdClass();
-        $transactionInfo->m_id = $objInfo->bailMaster->m_id;
-        $transactionInfo->t_type = 'K';
-        $transactionInfo->t_amount = $this->getTransactionAmountForReversal($objInfo->bailTransactions);
+        $transactionInfo                 = new \stdClass();
+        $transactionInfo->m_id           = $objInfo->bailMaster->m_id;
+        $transactionInfo->t_type         = 'K';
+        $transactionInfo->t_amount       = $this->getTransactionAmountForReversal($objInfo->bailTransactions);
         $transactionInfo->t_check_number = 'REVERSAL';
-        $transactionResultArray = $this->getTransactionArray($transactionInfo);
+        $transactionResultArray          = $this->getTransactionArray($transactionInfo);
 
         if ($transactionResultArray == false) {
                 throw new \Exception('Invalid Transaction Array Type: ' . $objInfo->refundType);
         }
-        $transactionArray['Reversal'] = $transactionResultArray;
+        $transactionArray['Reversal']    = $transactionResultArray;
         $transactionArray['Reversal_id'] = $objInfo->bailTransactions->t_id;
         return $transactionArray;
     }
@@ -164,7 +162,7 @@ class BailRefundProcessController extends EnterBailController
     private function getTransactionAmountForReversal($transaction)
     {
         $transactionRefund = (float) $transaction->t_total_refund;
-        $transactionFee  = (float) $transaction->t_fee_percentage;
+        $transactionFee    = (float) $transaction->t_fee_percentage;
 
         if ($transactionRefund == 0) {
             return $transactionFee;
@@ -175,11 +173,11 @@ class BailRefundProcessController extends EnterBailController
     private function createTransactionArray($objInfo)
     {
         if ($objInfo->refundType == 'full') {
-            $transactionInfo = new \stdClass();
-            $transactionInfo->m_id = $objInfo->bailMaster->m_id;
-            $transactionInfo->t_type = 'P';
+            $transactionInfo                 = new \stdClass();
+            $transactionInfo->m_id           = $objInfo->bailMaster->m_id;
+            $transactionInfo->t_type         = 'P';
             $transactionInfo->t_total_refund = $objInfo->balance;
-            $transactionResultArray = $this->getTransactionArray($transactionInfo);
+            $transactionResultArray          = $this->getTransactionArray($transactionInfo);
 
             if ($transactionResultArray == false) {
                 throw new \Exception('Invalid Transaction Array Type: ' . $objInfo->refundType);
@@ -233,19 +231,19 @@ class BailRefundProcessController extends EnterBailController
             }
 
         } else {
-            $transactionInfo = new \stdClass();
-            $transactionInfo->m_id = $objInfo->bailMaster->m_id;
-            $transactionInfo->t_type = 'C';
+            $transactionInfo                   = new \stdClass();
+            $transactionInfo->m_id             = $objInfo->bailMaster->m_id;
+            $transactionInfo->t_type           = 'C';
             $transactionInfo->t_fee_percentage = CountyFee::getAmountFee($objInfo->balance);
-            $transactionResultArray = $this->getTransactionArray($transactionInfo);
+            $transactionResultArray            = $this->getTransactionArray($transactionInfo);
 
             if ($transactionResultArray == false) {
                 throw new \Exception('Invalid Transaction Array Type: ' . $objInfo->refundType);
             }
             $transactionArray['Fee'] = $transactionResultArray;
 
-            $transactionInfo = new \stdClass();
-            $transactionInfo->m_id = $objInfo->bailMaster->m_id;
+            $transactionInfo         = new \stdClass();
+            $transactionInfo->m_id   = $objInfo->bailMaster->m_id;
             $transactionInfo->t_type = 'P';
 
             if ($objInfo->refundType == 'Partial') {
@@ -288,14 +286,14 @@ class BailRefundProcessController extends EnterBailController
     private function getTransactionArray($objInfo)
     {
         $t_debit_credit_index = 'O';
-        $t_numis_doc_id = 1;
-        $t_fee_percentage = 0;
-        $t_total_refund = 0;
-        $t_amount = 0;
-        $t_reversal_index = 0;
-        $t_check_number = 'NIFS';
-        $t_mult_check_index = 0;
-        $t_created_at = date('Y-m-d G:i:s');
+        $t_numis_doc_id       = 1;
+        $t_fee_percentage     = 0;
+        $t_total_refund       = 0;
+        $t_amount             = 0;
+        $t_reversal_index     = 0;
+        $t_check_number       = 'NIFS';
+        $t_mult_check_index   = 0;
+        $t_created_at         = date('Y-m-d G:i:s');
 
        if (isset($objInfo->m_id)) {
             $m_id = $objInfo->m_id;

@@ -45,11 +45,11 @@ class ProcessbailController extends Controller
 
     public function editbailmaster(Request $request)
     {
-    	$formData = $request->all();
+    	$formData                  = $request->all();
         $formData['m_posted_date'] = $this->convertDateToMysqlFormat($formData['m_posted_date']);
-        $redirectModule = $formData['module'];
+        $redirectModule            = $formData['module'];
         $this->removePostIdData($formData);
-    	$bailMaster = BailMaster::find($formData['m_id']);
+    	$bailMaster                = BailMaster::find($formData['m_id']);
 
         foreach ($formData as $key => $value) {
             $bailMaster->$key = trim($value);

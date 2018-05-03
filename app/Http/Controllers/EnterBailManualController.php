@@ -32,11 +32,11 @@ class EnterBailManualController extends EnterBailController
      */
     public function index()
     {
-        $courtList = Courts::pluck('c_name', 'c_id')->toArray();
-        $stateList = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
-        $bailMaster = BailMaster::firstOrNew(array('m_id' => 0));
-        $dt = new Carbon($bailMaster->m_posted_date);
-        $m_posted_date =  $dt->format("m/d/Y");
+        $courtList     = Courts::pluck('c_name', 'c_id')->toArray();
+        $stateList     = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
+        $bailMaster    = BailMaster::firstOrNew(array('m_id' => 0));
+        $dt            = new Carbon($bailMaster->m_posted_date);
+        $m_posted_date = $dt->format("m/d/Y");
 
         $indexArray = [
                         'courtList'      => $courtList,
@@ -114,15 +114,15 @@ class EnterBailManualController extends EnterBailController
 
     public function editManualRecord(Request $request, BuildCorrectState $stateValidate)
     {
-        $courtList = Courts::pluck('c_name', 'c_id')->toArray();
-        $stateList = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
-        $manualEntry = $request->all();
-        $bailMaster = BailMaster::firstOrNew(array('m_id' => (int) $manualEntry['master_id']));
-        $transaction = $bailMaster->BailTransactions->where('t_type', '=', 'R')->first();
-        $bailState = BailConfiguration::GetStateIdByAbv($bailMaster->m_surety_state);
+        $courtList          = Courts::pluck('c_name', 'c_id')->toArray();
+        $stateList          = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
+        $manualEntry        = $request->all();
+        $bailMaster         = BailMaster::firstOrNew(array('m_id' => (int) $manualEntry['master_id']));
+        $transaction        = $bailMaster->BailTransactions->where('t_type', '=', 'R')->first();
+        $bailState          = BailConfiguration::GetStateIdByAbv($bailMaster->m_surety_state);
         $stateConfiguration = $stateValidate->getStateArray($bailMaster->m_surety_state);
-        $dt = new Carbon($bailMaster->m_posted_date);
-        $m_posted_date =  $dt->format("m/d/Y");
+        $dt                 = new Carbon($bailMaster->m_posted_date);
+        $m_posted_date      = $dt->format("m/d/Y");
 
         if (empty($queryResults)) {
 
@@ -141,9 +141,9 @@ class EnterBailManualController extends EnterBailController
     public function validateindexyear(Request $request)
     {
         $userInputData = $request->all();
-        $indexNumber = $userInputData['number'];
-        $indexYear = $userInputData['year'];
-        $queryResults = BailMaster::ValidateUniqueRecord([
+        $indexNumber   = $userInputData['number'];
+        $indexYear     = $userInputData['year'];
+        $queryResults  = BailMaster::ValidateUniqueRecord([
                                                             'index_number' => $indexNumber,
                                                             'index_year'   => $indexYear,
                                                          ]);

@@ -34,10 +34,10 @@ class EnterBailBatchController extends EnterBailController
     {
         $courtList = Courts::pluck('c_name', 'c_id')->toArray();
         $indexArray = [
-                        'jailRecords' => array(),
+                        'jailRecords'      => array(),
                         'totalCheckAmount' => '',
-                        'courtList' => $courtList,
-                        'processBail' => true,
+                        'courtList'        => $courtList,
+                        'processBail'      => true,
                       ];
         return view('enterBail.jailImport')->with($indexArray);
     }
@@ -50,25 +50,24 @@ class EnterBailBatchController extends EnterBailController
     public function processbails(Request $request)
     {
         if ($request->isMethod('post')) {
-            $jailIdArray = Session::get('JailIdArray');
+            $jailIdArray   = Session::get('JailIdArray');
             $userInputData = $request->all();
-            $processDate = date('Y-m-d G:i:s');
-            $checkNumber = Session::get('checkNumber');
+            $processDate   = date('Y-m-d G:i:s');
+            $checkNumber   = Session::get('checkNumber');
 
             foreach ($jailIdArray AS $key => $value) {
+
                 if (!isset($userInputData['selected'][$value])) {
                     continue;
                 }
-                $validMaster = Event::fire(new ImportJailRecord($userInputData, $value));
-
+                $validMaster      = Event::fire(new ImportJailRecord($userInputData, $value));
                 $jailImportRecord = JailImport::GetJailRecordSplitById($value);
-                $bailAmount = $jailImportRecord->j_bail_amount /100;
-                $comment = 'N';
+                $bailAmount       = $jailImportRecord->j_bail_amount /100;
+                $comment          = 'N';
 
                 if ($jailImportRecord->j_def_suffix == "*") {
                     $comment = 'Y';
                 }
-
                 $courtNumberValues = [
                                        "defualtValue"     => (int) $jailImportRecord->j_court_number,
                                        "globalValue"      => (int) $userInputData['court_number'],
@@ -112,20 +111,20 @@ class EnterBailBatchController extends EnterBailController
             }
 
             $checkNumber = Session::get('checkNumber');
-            $jailImport = new JailImport();
+            $jailImport  = new JailImport();
             $jailRecords = $jailImport->GetJailRecordsByCheckNumber($checkNumber);
 
             $totalJailRecords = $jailImport->GetJailRecordsTotalByCheckNumber($checkNumber);
-            $jailIdArray = $jailImport->GetAllJailIds();
-            $courtList = Courts::pluck('c_name', 'c_id')->toArray();
+            $jailIdArray      = $jailImport->GetAllJailIds();
+            $courtList        = Courts::pluck('c_name', 'c_id')->toArray();
             Session::put('JailIdArray', $jailIdArray);
             Session::put('checkNumber', $checkNumber);
             $indexArray = [
-                            'checkNumber' => $checkNumber,
+                            'checkNumber'      => $checkNumber,
                             'totalCheckAmount' => $totalJailRecords,
-                            'jailRecords' => $jailRecords,
-                            'courtList' => $courtList,
-                            'processBail' => CheckNumberRecords::validateRecordsBetweenJailAndMaster($checkNumber),
+                            'jailRecords'      => $jailRecords,
+                            'courtList'        => $courtList,
+                            'processBail'      => CheckNumberRecords::validateRecordsBetweenJailAndMaster($checkNumber),
                           ];
         return view('enterBail.jailImport')->with($indexArray);
         }
@@ -138,7 +137,7 @@ class EnterBailBatchController extends EnterBailController
     public function searchchecknumber(Request $request)
     {
         $checkNumber = $request->input('check_no');
-        $jailImport = new JailImport();
+        $jailImport  = new JailImport();
         $jailRecords = $jailImport->GetJailRecordsByCheckNumber($checkNumber);
 
         if (empty($checkNumber) || empty($jailRecords)) {
@@ -148,16 +147,16 @@ class EnterBailBatchController extends EnterBailController
             return redirect()->route('jailcheck')->withErrors($messages);
         }
         $totalJailRecords = $jailImport->GetJailRecordsTotalByCheckNumber($checkNumber);
-        $jailIdArray = $jailImport->GetAllJailIds();
-        $courtList = Courts::pluck('c_name', 'c_id')->toArray();
+        $jailIdArray      = $jailImport->GetAllJailIds();
+        $courtList        = Courts::pluck('c_name', 'c_id')->toArray();
         Session::put('JailIdArray', $jailIdArray);
         Session::put('checkNumber', $checkNumber);
         $indexArray = [
-                        'checkNumber' => $checkNumber,
+                        'checkNumber'      => $checkNumber,
                         'totalCheckAmount' => $totalJailRecords,
-                        'jailRecords' => $jailRecords,
-                        'courtList' => $courtList,
-                        'processBail' => CheckNumberRecords::validateRecordsBetweenJailAndMaster($checkNumber),
+                        'jailRecords'      => $jailRecords,
+                        'courtList'        => $courtList,
+                        'processBail'      => CheckNumberRecords::validateRecordsBetweenJailAndMaster($checkNumber),
                       ];
         return view('enterBail.jailImport')->with($indexArray);
     }
