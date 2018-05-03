@@ -206,21 +206,10 @@
   update_info(updated_at);
   username_info(user_name);
 
-  $('#forfeituresCheckbox').on('change', function () {
-   var toggle_state = $("#forfeituresCheckbox").is(":checked");
-   var m_id = "{{ $bailMaster->m_id }}";
+  var m_id = "{{ $bailMaster->m_id }}";
+  var src_url = "{{ route('forfeituresControl') }}";
 
-   $.ajax({
-     url: "{{ route('forfeituresControl') }}",
-     dataType: "json",
-     data : { checkbox : toggle_state, bailMaster_id : m_id },
-     success: function(data) {
-      action_message(data.bf_active, data.bf_updated_at);
-      update_info(data.bf_updated_at);
-      username_info(data.user);
-     }
-    });
-  });
+  forfeituresAddRemove(m_id, src_url);
 
   buttonReverse('forfeitures');
   reverseTransactionModel(county_fee, balance);

@@ -279,4 +279,19 @@ var checkForfeitureStatus = function(bf_active) {
   }
 };
 
+var forfeituresAddRemove = function (m_id, src__add_remove){
+  $('#forfeituresCheckbox').on('change', function () {
+    var toggle_state = $("#forfeituresCheckbox").is(":checked");
 
+    $.ajax({
+      url: src__add_remove,
+      dataType: "json",
+      data : { checkbox : toggle_state, bailMaster_id : m_id },
+      success: function(data) {
+        action_message(data.bf_active, data.bf_updated_at);
+        update_info(data.bf_updated_at);
+        username_info(data.user);
+      }
+    });
+  });
+};
