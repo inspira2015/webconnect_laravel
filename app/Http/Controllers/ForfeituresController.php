@@ -46,14 +46,14 @@ class ForfeituresController extends Controller
 
     public function searchresults(Request $request)
     {
-        $termToSearch   = $request->get('search_term','');
-        $module         = 'forfeitures';
-        $resultArray    = PostedData::getTermFromUserInput($termToSearch);
-        $termToSearch   = $resultArray['search_term'];
+        $termToSearch          = $request->get('search_term', '');
+        $module                = 'forfeitures';
+        $resultArray           = PostedData::getTermFromUserInput($termToSearch);
+        $termToSearch          = $resultArray['search_term'];
         $transactionValidation = new TransactionValidations($module);
-        $forfeitureStatus = 0;
-        $updatedAt = false;
-        $userName = false;
+        $forfeitureStatus      = 0;
+        $updatedAt             = false;
+        $userName              = false;
 
         if (is_numeric($resultArray['m_id']) == false) {
             $messages = [
@@ -66,27 +66,26 @@ class ForfeituresController extends Controller
         $courtList      = Courts::pluck('c_name', 'c_id')->toArray();
         $stateList      = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
         $courtCheckList = BailConfiguration::where('bc_category', 'check_court')->pluck('bc_value', 'bc_id')->toArray();
-        $dt = new Carbon($bailMaster->m_posted_date);
-        $m_posted_date =  $dt->format("m/d/Y");
-
-        $resultBalance = Event::fire(new ValidateTransactionBalance($bailMaster));
-        $balance = round($resultBalance[0], 2);
+        $dt             = new Carbon($bailMaster->m_posted_date);
+        $m_posted_date  = $dt->format("m/d/Y");
+        $resultBalance  = Event::fire(new ValidateTransactionBalance($bailMaster));
+        $balance        = round($resultBalance[0], 2);
 
         if (isset($bailMaster->BailForfeitures->bf_id)) {
             $forfeitureStatus = $bailMaster->BailForfeitures->bf_active;
-            $carbonDate = new Carbon($bailMaster->BailForfeitures->bf_updated_at);
-            $updatedAt = $carbonDate->toDayDateTimeString();
-            $userName = $bailMaster->BailForfeitures->User->name;
+            $carbonDate       = new Carbon($bailMaster->BailForfeitures->bf_updated_at);
+            $updatedAt        = $carbonDate->toDayDateTimeString();
+            $userName         = $bailMaster->BailForfeitures->User->name;
         }
 
         $indexArray = [
-                        'jailRecords'    => array(),
-                        'balance'        => $balance,
+                        'jailRecords'           => array(),
+                        'balance'               => $balance,
                         'transactionValidation' => $transactionValidation,
-                        'stateList'      => $stateList,
-                        'courtList'      => $courtList,
-                        'courtCheckList' => $courtCheckList,
-                        'm_posted_date'  => $m_posted_date,
+                        'stateList'             => $stateList,
+                        'courtList'             => $courtList,
+                        'courtCheckList'        => $courtCheckList,
+                        'm_posted_date'         => $m_posted_date,
                         'bailDetails'    => [
                                              'total_balance'  => $balance,
                                              'fee_percentaje' => CountyFee::getFeePercentaje(),
@@ -110,8 +109,8 @@ class ForfeituresController extends Controller
             $reportDate = date("Y-m-d", strtotime($request->input('report_date')));
         }
         $bailForfeiture = BailForfeitures::GetForfeitureReportByDate($reportDate);
-        $dt = new Carbon($reportDate);
-        $reportDate =  $dt->format("m/d/Y");
+        $dt             = new Carbon($reportDate);
+        $reportDate     = $dt->format("m/d/Y");
         $indexArray = [
                         'report_date' => $reportDate,
                       ];
@@ -129,18 +128,18 @@ class ForfeituresController extends Controller
                     'Forfeit Do After Date'
                   ];
         $bailForfeiture = BailForfeitures::GetForfeitureReport();
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
+        $spreadsheet    = new Spreadsheet();
+        $sheet          = $spreadsheet->getActiveSheet();
 
         $optionData = [
                         'Column' => [
                                       'start' => 'B',
                                     ],
-                        'Row' => [
-                                    'start' => 2,
-                                 ],
-                        'Values' => $titles,
-                        'Bold' => true,
+                        'Row'    => [
+                                      'start' => 2,
+                                    ],
+                        'Values'    => $titles,
+                        'Bold'      => true,
                         'Font_Size' => 11,
                       ];
 
@@ -169,21 +168,20 @@ class ForfeituresController extends Controller
     public function processForfeitures(Request $request)
     {
         if ($request->isMethod('post')) {
-            $processForm = $request->all();
+            $processForm         = $request->all();
             $bailForfeitureArray = $request->input('bf_id');
 
             foreach ($bailForfeitureArray as $key => $value) {
-                $formDetails['amount'] = $processForm['amount'][$value];
+                $formDetails['amount']         = $processForm['amount'][$value];
                 $formDetails['t_check_number'] = $processForm['t_check_number'];
                 CreateTransaction::AddForfeiture($formDetails, $value);
             }
         }
 
-        $bailForfeiture = BailForfeitures::GetForfeitureReport();
-        $stateList = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
+        $bailForfeiture     = BailForfeitures::GetForfeitureReport();
+        $stateList          = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
         $forfeituresDetails = $this->prepareForfeitureProcess($bailForfeiture);
-        $formDetails = [];
-
+        $formDetails        = [];
         $indexArray = [
                         'stateList'      => $stateList,
                         'ffdetails'      => $forfeituresDetails,
@@ -201,12 +199,11 @@ class ForfeituresController extends Controller
         }
         $bailForfeiture = BailForfeitures::GetProcessedForfeitureReportByDate($reportDate);
 
-        $dt = new Carbon($reportDate);
-        $reportDate =  $dt->format("m/d/Y");
+        $dt         = new Carbon($reportDate);
+        $reportDate = $dt->format("m/d/Y");
         $indexArray = [
                         'report_date' => $reportDate,
                       ];
-
         return view('forfeitures.PostReport', compact('bailForfeiture'))->with($indexArray);
     }
 

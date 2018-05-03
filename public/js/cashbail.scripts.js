@@ -240,5 +240,43 @@ var stateSelector = function (state_id, state_outside_us) {
         $('.outside-state').hide();
       }
     });
-
 };
+
+//forfeitures
+var action_message = function(bf_active, updated_at) {
+  if (bf_active == 1) {
+    $('#forfeiture-action').html('<span class="green"><strong> Added to Forfeiture </strong></span>');
+    $('#forfeiture-title').removeClass('black');
+    $('#forfeiture-title').addClass('green');
+  } else if(updated_at) {
+    $('#forfeiture-title').removeClass('green');
+    $('#forfeiture-action').html('<strong> Remove from Forfiture </strong>');
+  } else {
+    $('#forfeiture-title').removeClass('green');
+    $('#forfeiture-action').html('<strong> Not Added </strong>');
+  }
+};
+
+//forfeitures
+var update_info = function(updated_at) {
+  if (updated_at) {
+    $('#forfeiture-updated-date').html('Updated at: <strong>' + updated_at + '</strong>');
+  }
+};
+
+//forfeitures
+var username_info = function(user_name) {
+  if (user_name) {
+    $('#forfeiture-user').html('Last Updated By: <strong>' + user_name + '</strong>');
+  }
+};
+
+var checkForfeitureStatus = function(bf_active) {
+  if (bf_active == 1) {
+    return 1;
+  } else {
+    return 0;
+  }
+};
+
+

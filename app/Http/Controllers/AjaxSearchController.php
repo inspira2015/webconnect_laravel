@@ -63,7 +63,7 @@ class AjaxSearchController extends Controller
         $bailForfeiture = BailForfeitures::firstOrNew([
                                                         'm_id' => $bailMasterId
                                                      ]);
-        if ($checkBoxAction == 'true') {
+        if ($checkBoxAction == 'false') {
             $bailForfeiture->bf_active = 1;
             $bailForfeiture->save();
         } else {
