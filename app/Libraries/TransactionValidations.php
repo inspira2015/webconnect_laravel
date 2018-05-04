@@ -52,6 +52,10 @@ class TransactionValidations
 
     public function checkIfReverseIsAllow()
     {
+        if ($this->module == 'forfeitures') {
+            return false;
+        }
+
         if ($this->module == 'processbail') {
             if (($this->transaction->t_type == 'P'
                  || $this->transaction->t_type == 'PM'

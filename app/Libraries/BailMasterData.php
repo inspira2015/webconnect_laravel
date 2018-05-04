@@ -20,6 +20,9 @@ class BailMasterData
 
 	public function createViewArray($bailMasterId, $module, BuildCorrectState $stateValidate)
 	{
+        $forfeitureStatus      = 0;
+        $updatedAt             = false;
+        $userName              = false;
 		$bailMasterId          = (int) $bailMasterId;
         $transactionValidation = new TransactionValidations($module);
 		$bailMaster            = BailMaster::find($bailMasterId);
@@ -32,6 +35,13 @@ class BailMasterData
         $stateConfiguration    = $stateValidate->getStateArray($bailMaster->m_surety_state);
         $resultBalance         = Event::fire(new ValidateTransactionBalance($bailMaster));
         $balance               = round($resultBalance[0], 2);
+
+        if (isset($bailMaster->BailForfeitures->bf_id)) {
+            $forfeitureStatus = $bailMaster->BailForfeitures->bf_active;
+            $carbonDate       = new Carbon($bailMaster->BailForfeitures->bf_updated_at);
+            $updatedAt        = $carbonDate->toDayDateTimeString();
+            $userName         = $bailMaster->BailForfeitures->User->name;
+        }
 
         return [
         		 'bailMaster'            => $bailMaster,
@@ -51,6 +61,11 @@ class BailMasterData
                                              'fee_percentaje' => CountyFee::getFeePercentaje(),
                                              'fee_amount'     => CountyFee::getAmountFee($balance),
                                              'remain_amount'  => CountyFee::getRemainAmountAfterFee($balance),
+                                            ],
+                 'bailForfeiture'        => [
+                                             'bf_active'     => $forfeitureStatus,
+                                             'bf_updated_at' => $updatedAt,
+                                             'user'          => $userName,
                                             ],
                ];
 	}
