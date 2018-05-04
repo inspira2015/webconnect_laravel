@@ -2,6 +2,8 @@
   <form name="bails" id="manual-bail-entry" method="post" action="{{ route('editbailmaster') }}" >
     {{ csrf_field() }}
     <input type="hidden" id="m_id" name="m_id" value="{{ old('m_id', $bailMaster->m_id) }}">
+    <input type="hidden" id="module" name="module" value="{{ $module }}">
+
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -52,7 +54,12 @@
               </div>
               <div class="col-xs-4 col-sm-6">
                 <label for="m_surety_state">State</label>
-                {!! Form::select('m_surety_state', $stateList, $bailMaster->m_surety_state, array('class' => 'form-control')) !!}
+                {!! Form::select('m_surety_state', $stateList, $bailMaster->m_surety_state, array('class' => 'form-control', 'id' => 'm_surety_state')) !!}
+                <div class="outside-state">
+                  <label for="m_surety_state" class="" style="margin-top: 5px;">State Outside US:</label>
+                  <input type="text" class="form-control"  id="non_us_state" name="non_us_state" value="">
+                </div>
+
               </div>
             </div>
             <div class="form-group">
@@ -65,6 +72,13 @@
           <button type="type" id="update-info" class="btn btn-primary">Save Changes</button>
          </div>
         </div>
-      </div>
-    </form>
-  </div>
+    </div>
+  </form>
+</div>
+
+<script type="text/javascript">
+  var state_id         = "{{ $stConfig['us_state_id'] }}";
+  var state_outside_us = "{{ $stConfig['non_us_state_string'] }}";
+  $(document).ready(stateSelector(state_id, state_outside_us));
+
+</script>

@@ -77,5 +77,4 @@ class CommentController extends Controller
             return 'bail_master';
         }
     }
-
 }

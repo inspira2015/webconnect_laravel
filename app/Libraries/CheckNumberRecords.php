@@ -14,12 +14,10 @@ class CheckNumberRecords
 		$checkNumber = (string) $checkNumber;
 		$jailImportCheckCount = (int) JailImport::where('j_check_number', '=', $checkNumber)->count();
 		$bailMasterCheckCount = (int) BailMaster::where('j_check_number', '=', $checkNumber)->count();
-		
+
 		if ($jailImportCheckCount == $bailMasterCheckCount) {
 			return false;
 		}
 		return true;
 	}
-
-
 }

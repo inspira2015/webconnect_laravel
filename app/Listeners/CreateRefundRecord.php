@@ -32,9 +32,11 @@ class CreateRefundRecord
         $transactionDetails = $event->transactionDetails;
         DB::beginTransaction();
         $event->transactionError = false;
+       // dd($transactionDetails);
 
         foreach ($transactionDetails as $key => $currentTransaction) {
-            if ($key == 'Reversal_id') {
+
+            if (strcmp($key, 'Reversal_id') == 0) {
                 $transaction = BailTransactions::find(array('t_id' => $currentTransaction))->first();
                 $transaction->t_no_reversal = 1;
                 $transaction->save();

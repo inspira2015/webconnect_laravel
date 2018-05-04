@@ -10,9 +10,12 @@ use App\Models\BailConfiguration;
 use App\Models\BailComments;
 use App\Facades\CountyFee;
 use App\Facades\PostedData;
+use App\Facades\BailMasterData;
 use App\Events\ValidateTransactionBalance;
+use App\Libraries\Services\BuildCorrectState;
 use Redirect;
 use Event;
+use Session;
 
 class ProcessbailController extends Controller
 {
@@ -37,70 +40,60 @@ class ProcessbailController extends Controller
                         'message' => 'Sub Menu',
                       ];
 
-
         return view('processbail.index')->with($indexArray);
     }
 
     public function editbailmaster(Request $request)
     {
-    	$formData = $request->all();
-    	$bailMaster = BailMaster::find($formData['m_id']);
-    	$bailMaster->m_def_first_name = trim($formData['m_def_first_name']);
-    	$bailMaster->m_def_last_name = trim($formData['m_def_last_name']);
-    	$bailMaster->m_index_number = trim($formData['m_index_number']);
-    	$bailMaster->m_index_year = trim($formData['m_index_year']);
-    	$bailMaster->m_posted_date = trim($formData['m_posted_date']);
-    	$bailMaster->m_surety_first_name = trim($formData['m_surety_first_name']);
-    	$bailMaster->m_surety_last_name = trim($formData['m_surety_last_name']);
-    	$bailMaster->m_surety_address = trim($formData['m_surety_address']);
-    	$bailMaster->m_surety_city = trim($formData['m_surety_city']);
-    	$bailMaster->m_surety_state = trim($formData['m_surety_state']);
-    	$bailMaster->m_surety_zip = trim($formData['m_surety_zip']);
+    	$formData                  = $request->all();
+        $formData['m_posted_date'] = $this->convertDateToMysqlFormat($formData['m_posted_date']);
+        $redirectModule            = $formData['module'];
+        $this->removePostIdData($formData);
+    	$bailMaster                = BailMaster::find($formData['m_id']);
+
+        foreach ($formData as $key => $value) {
+            $bailMaster->$key = trim($value);
+        }
     	$bailMaster->save();
-    	$searchTerm = "{$bailMaster->m_id} {$bailMaster->m_index_number}";
-		return redirect()->route('processbailresults', ['search_term' => $searchTerm]);
+        $searchTerm = "{$bailMaster->m_id} {$bailMaster->m_index_number}";
+        session(['search_term' => $searchTerm]);
+
+        if ($redirectModule == 'remission') {
+            return redirect()->route('remissionsearch');
+        } else {
+            return redirect()->route('processbailresults');
+        }
     }
 
 
-    public function searchresults(Request $request)
+    public function searchresults(Request $request, BuildCorrectState $stateValidate)
     {
-        $termToSearch   = $request->get('search_term','');
+        $termToSearch   = $request->get('search_term', '');
+        $module         = 'processbail';
         $resultArray    = PostedData::getTermFromUserInput($termToSearch);
+        $termToSearch   = $resultArray['search_term'];
 
         if (is_numeric($resultArray['m_id']) == false) {
             $messages = [
                             "\"{$resultArray['m_id']}\" was not found",
                         ];
-            return redirect()->route('processbailsearch')->withErrors($messages);
+            $returnRoute = PostedData::getErrorRedirectRoute($module);
+            return redirect()->route($returnRoute)->withErrors($messages);
         }
-        $bailMasterId      = (int) $resultArray['m_id'];
-		$bailMaster        = BailMaster::find($bailMasterId);
-        $courtList         = Courts::pluck('c_name', 'c_id')->toArray();
-        $stateList         = BailConfiguration::where('bc_category', 'states')->pluck('bc_value', 'bc_id')->toArray();
-        $courtCheckList    = BailConfiguration::where('bc_category', 'check_court')->pluck('bc_value', 'bc_id')->toArray();
-        $bailMaterComments = BailComments::GetBailMasterComments($bailMasterId);
+        Session(['search_term' => $termToSearch]);
+        $indexArray = BailMasterData::createViewArray($resultArray['m_id'], $module, $stateValidate);
+        return view('processbail.refundbails')->with($indexArray);
+    }
 
-        $dt = new Carbon($bailMaster->m_posted_date);
-		$m_posted_date =  $dt->format("m/d/Y");
+    private function removePostIdData(&$formData)
+    {
+        unset($formData['_token']);
+        unset($formData['module']);
+        unset($formData['non_us_state']);
+    }
 
-        $resultBalance = Event::fire(new ValidateTransactionBalance($bailMaster));
-        $balance = round($resultBalance[0], 2);
-
-        $indexArray = [
-                        'jailRecords'    => array(),
-                        'bailMasterId'   => $bailMasterId,
-                        'balance'        => $balance,
-                        'stateList'      => $stateList,
-                        'courtList'      => $courtList,
-                        'courtCheckList' => $courtCheckList,
-                        'm_posted_date'  => $m_posted_date,
-                        'bailDetails'    => [
-                                             'total_balance'  => $balance,
-                                             'fee_percentaje' => CountyFee::getFeePercentaje(),
-                                             'fee_amount'     => CountyFee::getAmountFee($balance),
-                                             'remain_amount'  => CountyFee::getRemainAmountAfterFee($balance),
-                                            ],
-                      ];
-        return view('processbail.refundbails', compact('bailMaster', 'bailMaterComments'))->with($indexArray);
+    private function convertDateToMysqlFormat($date)
+    {
+        return date('Y-m-d', strtotime($date));
     }
 }

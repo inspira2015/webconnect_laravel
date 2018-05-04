@@ -10,7 +10,6 @@ use App\Models\BailMaster;
 use App\Models\BailTransactions;
 use App\Models\BailConfiguration;
 use App\Facades\CreateTransaction;
-
 use Redirect;
 use Auth;
 use Input;
@@ -41,8 +40,6 @@ class EnterBailController extends Controller
         $indexArray = [
                         'message' => 'Sub Menu',
                       ];
-
-
         return view('enterBail.index')->with($indexArray);
     }
 
@@ -88,17 +85,14 @@ class EnterBailController extends Controller
 
             if ($courtValues['defualtValue'] == $courtValues['rowValue']) {
                 return $courtValues['globalValue'];
-            } else {
-                return $courtValues['rowValue'];
             }
+            return $courtValues['rowValue'];
         } else {
+
             if ($courtValues['defualtValue'] == $courtValues['rowValue']) {
-
                 return $courtValues['defualtValue'];
-            } else {
-                return $courtValues['rowValue'];
             }
+            return $courtValues['rowValue'];
         }
-
     }
 }

@@ -1,77 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<style type="text/css">
 
-.detailBox {
-    width: 95%;
-    border:1px solid #bbb;
-    margin: 20px;
-}
-.titleBox {
-    background-color:#fdfdfd;
-    padding: 5px;
-}
-.titleBox label{
-  color:#444;
-  margin:0;
-  display:inline-block;
-}
-
-.commentBox {
-    padding:10px;
-    border-top:1px dotted #bbb;
-}
-.commentBox .form-group:first-child, .actionBox .form-group:first-child {
-    width:80%;
-}
-.commentBox .form-group:nth-child(2), .actionBox .form-group:nth-child(2) {
-    width:18%;
-}
-.actionBox .form-group * {
-    width:100%;
-}
-.taskDescription {
-    margin-top:10px 0;
-}
-.commentList {
-    padding:0;
-    list-style:none;
-    max-height: 300px;
-    overflow:auto;
-}
-.commentList li {
-    margin:0;
-    margin-top:7px;
-}
-.commentList li > div {
-    display:table-cell;
-}
-.commenterImage {
-    width:30px;
-    margin-right:5px;
-    height:100%;
-    float:left;
-}
-.commenterImage img {
-    width:100%;
-    border-radius:50%;
-}
-.commentText p {
-    margin:0;
-}
-.sub-text {
-    color:#aaa;
-    font-family:verdana;
-    font-size:11px;
-}
-.actionBox {
-    border-top:1px dotted #bbb;
-    padding:10px;
-}
-</style>
-
-
+<hr class="bail-process">
 <div class="body-content">
   <h1>Process Bail Refund</h1>
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@fat">Edit Info</button>
@@ -80,66 +11,20 @@
 
   <div class="col-md-10 offset-md-1" style="margin-bottom: 50px;">
     <hr class="my-3">
-    <div class="form-row mt-4">
-      <div style="width: 100%; text-align: left;">
-        <h2>Defendant Data</h2>
-      </div>
-      <div class="col-sm-3 pb-3">
-        <label for="m_def_first_name">Defendant First Name</label>
-        <input type="text" class="form-control" id="m_def_first_name" name="m_def_first_name" value="{{ old('m_def_first_name',  $bailMaster->m_def_first_name) }}"  disabled>
-      </div>
-      <div class="col-sm-3 pb-3">
-        <label for="m_def_last_name">Defendant Last Name</label>
-        <input type="text" class="form-control" id="m_def_last_name" name="m_def_last_name" value="{{ old('m_def_last_name', $bailMaster->m_def_last_name) }}" disabled>
-      </div>
-      <div class="col-sm-1 pb-3">
-        <label for="m_index_number">Indx Number: </label>
-        <input type="text" class="form-control" id="m_index_number" name="m_index_number" placeholder="" value="{{ old('m_index_number', $bailMaster->m_index_number) }}" disabled>
-        <div id="indexyear_message" class="" style="padding-top: 0px; overflow: hidden; font-size: 11px; font-weight: bold;"></div>
-      </div>
-      <div class="col-sm-1 pb-3">
-        <label for="m_index_year">Index Year:</label>
-        <input type="text" class="form-control" maxlength="2" id="m_index_year" name="m_index_year" placeholder="" value="{{ old('m_index_year', $bailMaster->m_index_year) }}" disabled>
-      </div>
-      <div class="col-sm-2 pb-3">
-        <label for="exampleAccount">Date Posted:</label>
-        <input type="text" class="form-control" disabled id="m_posted_date2" name="m_posted_date2" placeholder="MM/DD/YYY">
-      </div>
-      <div class="col-sm-2 pb-3">
-        <label for="m_court_number">Court Number: </label>
-        {!! Form::select('m_court_number', $courtList, $bailMaster->m_court_number, array('class' => 'form-control',
-       'disabled' => 'disabled')) !!}
-      </div>
-      <hr class="my-5">
-      <div style="width: 100%; text-align: left;">
-        <h2>Surety Data</h2>
-      </div>
-      <div class="col-sm-3 pb-3">
-        <label for="m_surety_first_name">Surety First Name</label>
-        <input type="text" class="form-control" id="m_surety_first_name" name="m_surety_first_name" value="{{ old('m_surety_first_name', $bailMaster->m_surety_first_name) }}" disabled>
-      </div>
-      <div class="col-sm-3 pb-3">
-        <label for="m_surety_last_name">Surety Last Name</label>
-        <input type="text" class="form-control" id="m_surety_last_name" name="m_surety_last_name" value="{{ old('m_surety_last_name', $bailMaster->m_surety_last_name) }}" disabled>
-      </div>
-      <div class="col-sm-4 pb-3">
-        <label for="m_surety_address">Address</label>
-        <input type="text" class="form-control" id="m_surety_address" name="m_surety_address"  value="{{ old('m_surety_address', $bailMaster->m_surety_address) }}" disabled>
-      </div>
-      <div class="col-sm-2 pb-3">
-        <label for="m_surety_city">City</label>
-        <input type="text" class="form-control" id="m_surety_city" name="m_surety_city" value="{{ old('m_surety_city', $bailMaster->m_surety_city) }}" disabled>
-      </div>
-      <div class="col-sm-2 pb-3">
-        <label for="m_surety_state">State</label>
-        {!! Form::select('m_surety_state', $stateList, $bailMaster->m_surety_state, array('class' => 'form-control',
-                            'disabled' => 'disabled')) !!}
-      </div>
-      <div class="col-sm-2 pb-3">
-        <label for="m_surety_zip">Zip Code</label>
-        <input type="text" class="form-control" id="m_surety_zip" name="m_surety_zip" value="{{ old('m_surety_zip', $bailMaster->m_surety_zip) }}" disabled>
-      </div>
-    </div>
+    @if (count($errors) > 0)
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        <hr class="my-3">
+    @endif
+
+
+    @include('chunks.defendantData')
+
     <hr class="my-4">
 
     <table width="100%" border="0" cellspacing="0" cellpadding="2">
@@ -195,61 +80,26 @@
   </div>
 </div>
 <script type="text/javascript">
-
  var old_posted_date = '{{ old('m_posted_date', $m_posted_date) }}';
- var posted_date = new Date();
 
- if (old_posted_date) {
-  posted_date = old_posted_date;
- }
+ DatePickerObj.posted_date = old_posted_date;
+ DatePickerObj.date_input = $('input[name="m_posted_date"]'); //our date input has the name "date"
+ DatePickerObj.container = $('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+ DatePickerObj.writeDate();
 
- var date_input = $('input[name="m_posted_date"]'); //our date input has the name "date"
- var date_input_disabled = $('input[name="m_posted_date2"]');
- var container = $('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
- var options = {
-  format: 'mm/dd/yyyy',
-  container: container,
-  //todayHighlight: true,
-  autoclose: true,
-  forceParse: false,
- };
- date_input.datepicker(options).datepicker("setDate", posted_date);
- date_input_disabled.datepicker(options).datepicker("setDate", posted_date);
+ DatePickerObj.posted_date = old_posted_date;
+ DatePickerObj.date_input = $('input[name="m_posted_date2"]'); //our date input has the name "date"
+ DatePickerObj.container = $('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+ DatePickerObj.writeDate();
+
+  AddNewComment.commentButton = 'commentButton';
+  AddNewComment.urdata = "{{ route('addComment') }}";
+  AddNewComment.bail_master_id = $('#new-comment').data('id');
+  AddNewComment.comment = 'new-comment';
+  AddNewComment.target_comment = 'comment_list';
+  $(document).ready(AddNewComment.onReady());
 
   $(document).ready(function() {
-    src = "{{ route('addComment') }}";
-
-    $('#commentButton').click(function (event) {
-      event.preventDefault();
-
-      var bail_master_id = $('#new-comment').data('id');
-      var new_comment = $.trim($('#new-comment').val());
-
-      if (!new_comment) {
-        return ;
-      }
-
-      $.ajax({
-        url: src,
-        dataType: "json",
-        data: {
-               "_token": "{{ csrf_token() }}",
-               "type": "bailmaster",
-               "id": bail_master_id,
-               "newComment": new_comment,
-        },
-        success: function(data) {
-          console.log(data.comment);
-          $("#comment_list").append('<li><div class="commentText"><p class="">' + data.comment + '</p><span class="date sub-text">' + data.added_at + '</span>'+
-            '<button id="removeButton" data-id="' + data.id + '"  data-toggle="modal" data-target="#removeComment" class="removeComment btn btn-sm btn-danger">Remove</button>'
-            +'</li>');
-        }
-      });
-
-      $('#new-comment').val('');
-  });
-
-
 
   var balance = parseFloat({{ $balance }});
   var county_fee = parseFloat({{ $bailDetails['fee_percentaje'] }});
@@ -285,38 +135,8 @@
    }
   });
 
-  $('.button-reverse').on('click', function() {
-   var transaction_id =  $(this).attr("data-transaction");
-   var transaction_amount = $('#t-amount-' + transaction_id).val();
-   var transaction_type = $(this).data('transaction-type');
-
-   if (transaction_type == 'P') {
-    var transaction_type_text = "Payment";
-   }
-   $('#t_id').val(transaction_id);
-   $('#transaction-type').html(transaction_type_text);
-   $('#transaction-amount').html('$' + transaction_amount);
-  });
-
-  $('#Reverse-transaction').on('show.bs.modal', function () {
-   var transaction_id =  $('#t_id').val();
-   var multicheck_payment = parseFloat($('#multicheck-payment').val());
-   var check_court = $("#select_court_check option:selected").text();
-   var partial_amount_fee = parseFloat(multicheck_payment * county_fee);
-   var partial_plus_fee = parseFloat(multicheck_payment + partial_amount_fee);
-   var remain_balance = parseFloat(balance - partial_plus_fee);
-
-    $('#multicheck-payment_modal').html(multicheck_payment);
-    $('#check_court').html(check_court);
-    $('#multicheck_amount_fee').html(partial_amount_fee);
-    $('#muticheck_balance').html(remain_balance);
-
-    if (remain_balance < 0) {
-     $('#refund-manual').attr("disabled", "disabled");
-    } else {
-     $('#refund-manual').removeAttr("disabled");
-    }
-  });
+  buttonReverse('processbail');
+  reverseTransactionModel(county_fee, balance);
 
   $('#Partial-payment').on('show.bs.modal', function () {
    var balance = parseFloat({{ $balance }});
@@ -340,6 +160,7 @@
 
 
   $('#removeComment').on('show.bs.modal', function (event) {
+    console.log('here');
     var button = $(event.relatedTarget); // Button that triggered the modal
     var comment_id = button.data('id');
     var recipient = button.siblings("p").html(); // Extract info from data-* attributes
@@ -370,8 +191,6 @@
 
     $('#removeComment').modal('toggle');
   });
-
-
 
 
  });

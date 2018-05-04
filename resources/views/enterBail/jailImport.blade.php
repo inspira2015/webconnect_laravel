@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<hr class="bail-entry">
 
 <div style=" background-position:top left; background-repeat:no-repeat;  padding:10px;">
   <table width="100%" border="0" cellspacing="0" cellpadding="2">
@@ -68,7 +69,7 @@
         @endif
     @endif
     <br><br>
-  </form> 
+  </form>
 </div>
 
 <script>
@@ -110,7 +111,7 @@
     });
 
     $("#form-bails").validate({
-     
+
     });
 </script>
 @endsection

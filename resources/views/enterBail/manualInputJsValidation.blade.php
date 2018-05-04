@@ -1,6 +1,11 @@
 <script>
+  var state_id         = "";
+  var state_outside_us = "";
+  $(document).ready(stateSelector(state_id, state_outside_us));
 
- $(document).ready(function() {
+  $(document).ready(function() {
+    $('.outside-state').hide();
+
   var src = "{{ route('validateindexyear') }}";
   var old_posted_date = '{{ old('m_posted_date', $m_posted_date) }}';
   var old_date_of_record = '{{ old('date_of_record') }}';
@@ -31,7 +36,7 @@
      success: function (data) {
       if (data.result == 'empty') {
        result = true;
-      } 
+      }
      }
     });
     return result;
@@ -47,7 +52,7 @@
    forceParse: false,
   };
   date_input.datepicker(options).datepicker("setDate", posted_date);
- 
+
   var date_input = $('input[name="date_of_record"]'); //our date input has the name "date"
   var container = $('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
   var options = {
@@ -57,7 +62,7 @@
    setDate: 0,
   };
   date_input.datepicker(options).datepicker("setDate", date_of_record);
-  
+
   var validate_index_number = function() {
    var index_number = $('#m_index_number').val();
    var index_year = $('#m_index_year').val();
@@ -72,13 +77,13 @@
        $('#indexyear_message').removeClass("error");
        $('#indexyear_message').addClass("green");
        $('#indexyear_message').html('Index Number/Year are unique');
-       $('#valid_indexyear').val(0);                            
+       $('#valid_indexyear').val(0);
       } else {
        $('#indexyear_message').removeClass("green");
        $('#indexyear_message').addClass("error");
        $('#indexyear_message').html('Index Number/Year are duplicate');
        $('#valid_indexyear').val(1);
-      }                        
+      }
      }
     });
    }

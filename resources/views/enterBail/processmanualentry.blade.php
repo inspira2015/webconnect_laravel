@@ -62,7 +62,7 @@
  </div>
  <div class="center-screen row text-center container-800">
   <div class="col-xs-6 col-md-6">State:</div>
-  <div class="col-xs-6 col-md-6"><strong>{{ $bailMaster->BailConfiguration->bc_value }}</strong></div>
+  <div class="col-xs-6 col-md-6"><strong>{{ $bailMaster->m_surety_state }}</strong></div>
  </div>
  <div class="center-screen row text-center container-800">
   <div class="col-xs-6 col-md-6">Zip Code:</div>

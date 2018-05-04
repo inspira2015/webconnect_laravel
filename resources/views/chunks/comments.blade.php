@@ -26,6 +26,7 @@
     </form>
   </div>
 </div>
+<input type="hidden" id="removeNowRoute" name="removeNowRoute" value="{{ route('removeComment') }}">
 
 <!-- Modal -->
 <div class="modal fade" id="removeComment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -42,7 +43,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" data-id="" class="removeNow btn btn-primary">Remove Comment</button>
+        <button type="button" data-commentid="" id="comment_notworking" class="removeNow btn btn-primary">Remove Comment</button>
       </div>
     </div>
   </div>

@@ -186,6 +186,8 @@ return [
         App\Providers\BailForfeituresProvider::class,
         App\Providers\ExcelHelperProvider::class,
         App\Providers\CreateTransactionProvider::class,
+        App\Providers\BailMasterDataProvider::class,
+        App\Providers\BuildCorrectStateProvider::class,
     ],
 
     /*
@@ -239,6 +241,7 @@ return [
         'CheckNumberRecords' => App\Facades\CheckNumberRecords::class,
         'PostedData' => App\Facades\PostedData::class,
         'ExcelHelper' => App\Facades\ExcelHelper::class,
+        'BailMasterData' => App\Facades\BailMasterData::class,
 
     ],
 

@@ -1,9 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
+<hr class="bail-entry">
 
 <div class="body-content">
-  <h1>Enter Bail Manually</h1>   
+  <h1>Enter Bail Manually</h1>
   <form name="bails" id="manual-bail-entry" method="post" action="{{ route('processmanualentry') }}" >
     {{ csrf_field() }}
     <div class="col-md-10 offset-md-1" style="margin-bottom: 50px;">
@@ -76,7 +77,11 @@
         </div>
         <div class="col-sm-2 pb-3">
           <label for="m_surety_state">State</label>
-          {!! Form::select('m_surety_state', $stateList, $bailMaster->m_surety_state, array('class' => 'form-control')) !!}
+          {!! Form::select('m_surety_state', $stateList, $bailMaster->m_surety_state, array('class' => 'form-control', 'id' => 'm_surety_state')) !!}
+          <div class="outside-state">
+            <label for="m_surety_state" class="" style="margin-top: 5px;">State Outside US:</label>
+            <input type="text" class="form-control"  id="non_us_state" name="non_us_state" value="">
+          </div>
         </div>
         <div class="col-sm-1 pb-3">
           <label for="m_surety_zip">Zip Code</label>
