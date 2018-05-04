@@ -15,7 +15,7 @@ class TransactionDetails
     private $t_mult_check_index;
     private $t_created_at;
 
-	public function __construct($objDetails)
+	public function __construct($objDetails = false)
 	{
 		$this->transactionArray['m_id'] = 0;
 		$this->transactionArray['t_debit_credit_index'] = 'O';
