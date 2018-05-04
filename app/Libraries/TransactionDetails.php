@@ -15,8 +15,9 @@ class TransactionDetails
     private $t_mult_check_index;
     private $t_created_at;
 
-	public function __construct()
+	public function __construct($objDetails)
 	{
+		$this->transactionArray['m_id'] = 0;
 		$this->transactionArray['t_debit_credit_index'] = 'O';
 		$this->transactionArray['t_numis_doc_id'] = 1;
 		$this->transactionArray['t_fee_percentage'] = 0;
@@ -26,6 +27,17 @@ class TransactionDetails
 		$this->transactionArray['t_check_number'] = 'NIFS';
 		$this->transactionArray['t_mult_check_index'] = 0;
 		$this->transactionArray['t_created_at'] = date('Y-m-d G:i:s');
+		$this->setObjDetails($objDetails);
+	}
+
+	public function setObjDetails($objDetails)
+	{
+		if (!is_object($objDetails)) {
+			return;
+		}
+		foreach ($objDetails as $key => $value) {
+			$this->transactionArray[$key] = $value;
+		}
 	}
 
 	public function setTransactionDetails($key, $value)

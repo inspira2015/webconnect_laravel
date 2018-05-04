@@ -11,6 +11,7 @@ use App\Models\BailTransactions;
 use App\Events\ValidateTransactionBalance;
 use App\Events\RefundTransaction;
 use App\Facades\CountyFee;
+use App\Libraries\TransactionDetails;
 use Event;
 use Session;
 
@@ -141,7 +142,8 @@ class BailRefundProcessController extends EnterBailController
         $transactionInfo->t_type         = 'K';
         $transactionInfo->t_amount       = $this->getTransactionAmountForReversal($objInfo->bailTransactions);
         $transactionInfo->t_check_number = 'REVERSAL';
-        $transactionResultArray          = $this->getTransactionArray($transactionInfo);
+        $transaction                     = new TransactionDetails($transactionInfo);
+        $transactionResultArray          = $transaction->getTransactionArray();
 
         if ($transactionResultArray == false) {
                 throw new \Exception('Invalid Transaction Array Type: ' . $objInfo->refundType);
@@ -177,7 +179,8 @@ class BailRefundProcessController extends EnterBailController
             $transactionInfo->m_id           = $objInfo->bailMaster->m_id;
             $transactionInfo->t_type         = 'P';
             $transactionInfo->t_total_refund = $objInfo->balance;
-            $transactionResultArray          = $this->getTransactionArray($transactionInfo);
+            $transaction                     = new TransactionDetails($transactionInfo);
+            $transactionResultArray          = $transaction->getTransactionArray();
 
             if ($transactionResultArray == false) {
                 throw new \Exception('Invalid Transaction Array Type: ' . $objInfo->refundType);
@@ -192,7 +195,8 @@ class BailRefundProcessController extends EnterBailController
                 $transactionInfo->m_id             = $objInfo->bailMaster->m_id;
                 $transactionInfo->t_type           = 'C';
                 $transactionInfo->t_fee_percentage = $multiCheckTransaction['countyFee'];
-                $transactionResultArray            = $this->getTransactionArray($transactionInfo);
+                $transaction                       = new TransactionDetails($transactionInfo);
+                $transactionResultArray            = $transaction->getTransactionArray();
 
                 if ($transactionResultArray == false) {
                     throw new \Exception('Invalid Transaction Array Type: ' . $objInfo->refundType);
@@ -206,8 +210,8 @@ class BailRefundProcessController extends EnterBailController
                 $transactionInfo->t_type               = 'PM';
                 $transactionInfo->t_total_refund       = $multiCheckTransaction['courtAmount'];
                 $transactionInfo->t_multi_court_number = $objInfo->t_multi_court_number;
-
-                $transactionResultArray = $this->getTransactionArray($transactionInfo);
+                $transaction                           = new TransactionDetails($transactionInfo);
+                $transactionResultArray                = $transaction->getTransactionArray();
 
                 if ($transactionResultArray == false) {
                     throw new \Exception('Invalid Transaction Array Type: ' . $objInfo->refundType);
@@ -221,8 +225,8 @@ class BailRefundProcessController extends EnterBailController
                 $transactionInfo->t_type               = 'PS';
                 $transactionInfo->t_total_refund       = $multiCheckTransaction['suretyAmount'];
                 $transactionInfo->t_multi_court_number = $objInfo->t_multi_court_number;
-
-                $transactionResultArray = $this->getTransactionArray($transactionInfo);
+                $transaction                           = new TransactionDetails($transactionInfo);
+                $transactionResultArray                = $transaction->getTransactionArray();
 
                 if ($transactionResultArray == false) {
                     throw new \Exception('Invalid Transaction Array Type: ' . $objInfo->refundType);
@@ -235,7 +239,8 @@ class BailRefundProcessController extends EnterBailController
             $transactionInfo->m_id             = $objInfo->bailMaster->m_id;
             $transactionInfo->t_type           = 'C';
             $transactionInfo->t_fee_percentage = CountyFee::getAmountFee($objInfo->balance);
-            $transactionResultArray            = $this->getTransactionArray($transactionInfo);
+            $transaction                       = new TransactionDetails($transactionInfo);
+            $transactionResultArray            = $transaction->getTransactionArray();
 
             if ($transactionResultArray == false) {
                 throw new \Exception('Invalid Transaction Array Type: ' . $objInfo->refundType);
@@ -251,8 +256,8 @@ class BailRefundProcessController extends EnterBailController
             } else {
                 $transactionInfo->t_total_refund = CountyFee::getRemainAmountAfterFee($objInfo->balance);
             }
-            $transactionResultArray = $this->getTransactionArray($transactionInfo);
-
+            $transaction                         = new TransactionDetails($transactionInfo);
+            $transactionResultArray              = $transaction->getTransactionArray();
             if ($transactionResultArray == false) {
                 throw new \Exception('Invalid Transaction Array Type: ' . $objInfo->refundType);
             }
@@ -283,73 +288,4 @@ class BailRefundProcessController extends EnterBailController
         ];
     }
 
-    private function getTransactionArray($objInfo)
-    {
-        $t_debit_credit_index = 'O';
-        $t_numis_doc_id       = 1;
-        $t_fee_percentage     = 0;
-        $t_total_refund       = 0;
-        $t_amount             = 0;
-        $t_reversal_index     = 0;
-        $t_check_number       = 'NIFS';
-        $t_mult_check_index   = 0;
-        $t_created_at         = date('Y-m-d G:i:s');
-
-       if (isset($objInfo->m_id)) {
-            $m_id = $objInfo->m_id;
-        } else {
-            return false;
-        }
-
-        if (isset($objInfo->t_numis_doc_id)) {
-            $t_numis_doc_id = $objInfo->t_numis_doc_id;
-        }
-
-        if (isset($objInfo->t_debit_credit_index)) {
-            $t_debit_credit_index = $objInfo->t_debit_credit_index;
-        }
-
-        if (isset($objInfo->t_type)) {
-            $t_type = $objInfo->t_type;
-        }
-
-        if (isset($objInfo->t_amount)) {
-            $t_amount = $objInfo->t_amount;
-        }
-
-        if (isset($objInfo->t_fee_percentage)) {
-            $t_fee_percentage = $objInfo->t_fee_percentage;
-        }
-
-        if (isset($objInfo->t_total_refund)) {
-            $t_total_refund = $objInfo->t_total_refund;
-        }
-
-        if (isset($objInfo->t_reversal_index)) {
-            $t_reversal_index = $objInfo->t_reversal_index;
-        }
-
-        if (isset($objInfo->t_check_number)) {
-            $t_check_number = $objInfo->t_check_number;
-        }
-
-        if (isset($objInfo->t_mult_check_index)) {
-            $t_mult_check_index = $objInfo->t_mult_check_index;
-        }
-
-        return [
-                 'm_id'                 => $m_id,
-                 't_created_at'         => $t_created_at,
-                 't_numis_doc_id'       => $t_numis_doc_id,
-                 't_debit_credit_index' => $t_debit_credit_index,
-                 't_type'               => $t_type,
-                 't_amount'             => $t_amount,
-                 't_fee_percentage'     => $t_fee_percentage,
-                 't_total_refund'       => $t_total_refund,
-                 't_reversal_index'     => $t_reversal_index,
-                 't_check_number'       => $t_check_number,
-                 't_mult_check_index'   => $t_mult_check_index,
-
-        ];
-    }
 }
